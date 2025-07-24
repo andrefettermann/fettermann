@@ -25,13 +25,23 @@ async function inclui(doc: any) {
      });
 }
 
+async function altera(id: string, doc: any) {
+    await repositorio.updatePessoa(id, doc).then((result) => {
+        return result;
+     }).catch(error=>{
+        throw error;
+    });
+}
+
 async function getPessoa(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
 
     const doc = await repositorio.getPessoa(id);
+    
     if (doc) {
         doc.data.nome = decripta(doc.data.nome);
-        doc.data.cpf = decripta(doc.data.cpf);
+
+        if (doc.data.cpf) doc.data.cpf = decripta(doc.data.cpf);
 
         doc.data.promocoes.forEach((p: { data_formatada: string; data: string; })=>{
             p.data_formatada = formatDateToDDMMYYYY(new Date(p.data));
@@ -52,7 +62,7 @@ async function getPessoas(req: Request, res: Response, next: NextFunction) {
     if (docs.status === 'Success') {
         docs.data?.forEach(d => {
             d.nome = decripta(d.nome);
-            d.cpf = decripta(d.cpf);
+            if (d.cpf) decripta(d.cpf);
         })
     }
     
@@ -60,8 +70,14 @@ async function getPessoas(req: Request, res: Response, next: NextFunction) {
 }
 
 async function getPessoasAtivas(req: Request, res: Response, next: NextFunction) {
-    const response = await repositorio.getPessoasAtivas();
-    res.json(response);
+    const docs = await repositorio.getPessoasAtivas();
+    if (docs.status === 'Success') {
+        docs.data?.forEach(d => {
+            d.nome = decripta(d.nome);
+            if (d.cpf) decripta(d.cpf);
+        })
+    }
+    res.json(docs);
 }
 
 async function postPessoa(req: Request, res: Response, next: NextFunction) {
@@ -105,5 +121,6 @@ export default {
     postPessoa,
     patchPessoa,
     deletePessoa,
-    inclui
+    inclui,
+    altera
 }

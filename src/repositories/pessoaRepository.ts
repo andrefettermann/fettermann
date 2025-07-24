@@ -63,6 +63,20 @@ export async function getPessoa(id: string) {
 export async function getPessoas(){
     try{
         const docs = await PessoaSchema.aggregate([lookupDojo]);
+
+        docs.sort((a, b) => {
+            var fa = a.nome.toLowerCase();
+            var fb = b.nome.toLowerCase();
+
+            if (fa < fb) {
+                return -1;
+            }
+            if (fa > fb) {
+                return 1;
+            }
+            return 0;
+        });
+
         return {
             status: 'Success',
             data: docs
@@ -78,13 +92,11 @@ export async function getPessoas(){
 
 export async function getPessoasAtivas() {
     try {
-        var pessoas:Pessoa[] = [];
         const docs = await PessoaSchema.find({situacao: 'Ativo'}).sort({ order: 1 }).lean();
-        docs.forEach(async (doc) => {
-            pessoas.push(await setBean(doc));
-        })
-        return pessoas;
-
+        return {
+            status: 'Success',
+            data: docs
+        }
     }
     catch(error){
         return {
@@ -115,9 +127,12 @@ export async function createPessoa(doc: any){
     }
 };
 
-export async function updatePessoa(id: string, data: any){
+export async function updatePessoa(id: string, doc: any){
     try{
-        const pessoa = await PessoaSchema.findByIdAndUpdate({"_id":id}, data, {new: true})
+        doc.nome = encripta(doc.nome);
+        doc.cpf = encripta(doc.cpf);
+
+        const pessoa = await PessoaSchema.findByIdAndUpdate({"_id":id}, doc, {new: true})
 
         if(!pessoa){
             return {
@@ -132,9 +147,11 @@ export async function updatePessoa(id: string, data: any){
         }
     }
     catch(error){
-        return {
-            status: "Failed",
-            data: error
-        }
+        console.log(error)
+        throw error
+//        return {
+//            status: "Failed",
+//            mensagem: error
+//        };
     }
 }

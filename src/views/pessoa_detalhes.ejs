@@ -44,38 +44,44 @@
           <div class="row pt-2">
             <div class="col">
                 <span class="fw-bold">Nome: </span>
-                <span id="name"><%= doc.nome %></span>
+                <span id="nome" name="nome"><%= doc.nome %></span>
             </div>
           </div>
           <div class="row pt-2">
             <div class="col">
                 <span class="fw-bold">Matrícula: </span>
-                <span id="regnbr"><%= doc.matricula %></span>
+                <span id="matricula" name="matricula"><%= doc.matricula %></span>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">CPF: </span>
+                <span id="cpf" name="cpf"><%= doc.cpf %></span>
             </div>
           </div>
           <div class="row pt-2">
             <div class="col">
                 <span class="fw-bold">Aniversário: </span>
-                <span id="birthdate"><%= doc.aniversario %></span>
+                <span id="aniversario" name="aniversario"><%= doc.aniversario %></span>
             </div>
           </div>
           <div class="row pt-2">
             <div class="col">
                 <span class="fw-bold">Graduação atual: </span>
-                <span id="rank"><%= doc.graduacao_atual %></span>
+                <span id="graduacao_atual" name="graduacao_atual"><%= doc.graduacao_atual %></span>
             </div>
           </div>
           <div class="row pt-2">
             <div class="col">
                 <span class="fw-bold">Situação: </span>
-                <span id="status"><%= doc.situacao %></span>
+                <span id="situacao" name="situacao"><%= doc.situacao %></span>
             </div>
           </div>
 
           <div class="card mb-3">
             <div class="card-header fw-bold">Promoções</div>
             <div class="card-body">
-              <ol class="list-group list-group-flush">
+              <ol id="promocoes" name="promocoes" class="list-group list-group-flush">
                 <% if (doc.promocoes) { %>
                       <% doc.promocoes.forEach(function(promocao){ %>
                         <li class="list-group-item"><%= promocao.data_formatada + " - " + promocao.graduacao %></li>
@@ -88,7 +94,7 @@
           <div class="card mb-3">
             <div class="card-header fw-bold">Pagamentos</div>
             <div class="card-body">    
-              <ol class="list-group list-group-flush">
+              <ol id="pagamentos" name="pagamentos" class="list-group list-group-flush">
                 <% if (doc.pagamentos) { %>
                       <% doc.pagamentos.forEach(function(pagamento){ %>
                         <li class="list-group-item"><%= pagamento.data_formatada 

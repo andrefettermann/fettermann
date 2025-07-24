@@ -52,5 +52,6 @@ export function decripta(text: string): string {
   const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
   let decrypted = decipher.update(encryptedText);
   decrypted = Buffer.concat([decrypted, decipher.final()]);
+  
   return decrypted.toString();
 }
