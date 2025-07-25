@@ -1,10 +1,7 @@
 import { Document, ObjectId } from "mongodb";
-import { GraduacaoSchema, PessoaSchema } from "../models/schema";
-import Pessoa from "../models/pessoa";
+import { PessoaSchema } from "../models/schema";
 import { decripta, encripta } from "../utils/crypto";
-import Promocao from "../models/promocao";
 import Dojo from "../models/dojo";
-import Graduacao from "../models/graduacao";
 
 const lookupDojo = {
     $lookup: {
@@ -22,21 +19,6 @@ const lookupGraduacao = {
         foreignField: "_id",
         as: "grads"
     }
-}
-
-function setBean(doc: Document): Pessoa {
-            var pessoa = new Pessoa(decripta(doc.nome), doc.situacao);
-            pessoa.setAniversario(doc.aniversario);
-            pessoa.setCpf(decripta(doc.cpf));
-            pessoa.setDataInicio(doc.data_inicio_aikido);
-            pessoa.setDataMatricula(doc.data_matricula);
-            pessoa.setMatricula(doc.matricula);
-
-            var dojo = new Dojo(doc.dojo.codigo, doc.dojo.nome);
-            pessoa.setDojo(dojo);
-            pessoa.setGraduacaoAtual("");
-
-            return pessoa;
 }
 
 export async function getPessoa(id: string) {
@@ -64,19 +46,6 @@ export async function getPessoas(){
     try{
         const docs = await PessoaSchema.aggregate([lookupDojo]);
 
-        docs.sort((a, b) => {
-            var fa = a.nome.toLowerCase();
-            var fb = b.nome.toLowerCase();
-
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        });
-
         return {
             status: 'Success',
             data: docs
@@ -90,15 +59,42 @@ export async function getPessoas(){
     }
 }
 
-export async function getPessoasAtivas() {
+export  async function getPessoasSituacao(situacao: string) {
     try {
-        const docs = await PessoaSchema.find({situacao: 'Ativo'}).sort({ order: 1 }).lean();
+        const docs = await PessoaSchema.aggregate([
+                    {
+                        $match: {'situacao': situacao}
+                    },  
+                    lookupDojo
+                ]);
         return {
             status: 'Success',
             data: docs
         }
     }
     catch(error){
+        console.log(error);
+        return {
+            status: "Failed",
+            message: error
+        }
+    }
+}
+
+export async function getPessoasAniversario(mes: string) {
+    try {
+        const docs = await PessoaSchema.aggregate([
+            {
+                $match: {'aniversario': { $regex: mes + '$', $options: 'i' }}
+            },  
+            lookupDojo
+        ]);
+        return {
+            status: 'Success',
+            data: docs
+        }
+    }    catch(error){
+        console.log(error);
         return {
             status: "Failed",
             message: error

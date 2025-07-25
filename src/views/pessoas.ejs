@@ -30,7 +30,7 @@
                     <!--
                     <svg class="bi me-2" width="40" height="32" aria-hidden="true"><use xlink:href="#bootstrap"></use></svg> 
                     -->
-                    <img src="images/logo-sm.png"/>
+                    <img src="<%= logo %>"/>
                     <span class="fs-4">Fettermann Aikidô</span>
                 </a> 
 
@@ -50,9 +50,9 @@
                             <div class="d-grid gap-3">
                                 <a class="btn btn-primary" href="/pessoas/novo">Nova pessoa</a>
                                 <a class="btn btn-primary" href="/pessoas">Todos</a>
-                                <a class="btn btn-primary disabled" href="/pessoas/filtro/ativos">Pessoas em atividade</a>
-                                <a class="btn btn-primary disabled" href="/pessoas/filtro/inativos">Pessoas inativas</a>
-                                <a class="btn btn-primary disabled" href="/pessoas/filtro/aniversariantes">Aniversariantes do mês</a>
+                                <a class="btn btn-primary" href="/pessoas/situacao/Ativo">Pessoas em atividade</a>
+                                <a class="btn btn-primary" href="/pessoas/situacao/Inativo">Pessoas inativas</a>
+                                <a class="btn btn-primary" href="/pessoas/aniversariantes/<%= mes %>">Aniversariantes do mês</a>
                             </div>
                         </div>
                         <div class="col-9">

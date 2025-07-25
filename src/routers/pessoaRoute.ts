@@ -8,6 +8,12 @@ const router = express.Router();
 
 var mensagem: string = "";
 
+function getCurrentMonth() {
+    const date = new Date();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return month;
+}
+
 function setDoc(req: any) {
     var totalPromocoes = req.body.total_promocoes;
     var totalPagamentos = req.body.total_pagamentos;
@@ -62,7 +68,7 @@ function setDoc(req: any) {
 
 router.get('/', async (req, res, next) => {
     try {
-        var response = await fetch('http://localhost:3000/pessoas/api/');
+        var response = await fetch('http://localhost:3000/api/pessoas');
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -76,6 +82,8 @@ router.get('/', async (req, res, next) => {
                 docs,
                 total: docs.length,
                 mensagem,
+                logo: 'images/logo-sm.png',
+                mes: getCurrentMonth()
             }
         );
     } catch (err) {
@@ -83,18 +91,48 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.get('/filtro/ativos', async (req, res, next) => {
+router.get('/situacao/:situacao', async (req, res, next) => {
     try {
-        var response = await fetch('http://localhost:3000/pessoas/api/filtro/ativos');
+        console.log('pessoarouter.situacao')
+        var response = await fetch('http://localhost:3000/api/pessoas/filtro/' + req.params.situacao);
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const docs = await response.json();
+
         res.render('pessoas',
             {
                 title: 'Pessoas cadastradas (em atividade)',
                 docs,
                 total: docs.length,
+                mensagem,
+                logo: '/images/logo-sm.png',
+                mes: getCurrentMonth()
+            }
+        );
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get('/aniversariantes/:mes', async (req, res, next) => {
+    try {
+        var response = await fetch('http://localhost:3000/api/pessoas/aniversariantes/' + req.params.mes);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const docs = await response.json();
+
+        res.render('pessoas',
+            {
+                title: 'Pessoas cadastradas (anievrsariantes do mês)',
+                docs,
+                total: docs.length,
+                mensagem,
+                logo: '/images/logo-sm.png',
+                mes: getCurrentMonth()
             }
         );
     } catch (err) {
@@ -219,16 +257,5 @@ router.post('/altera/:id', async (req, res, next) => {
     })
 });
 
-router.get('/api/:id', controlador.getPessoa);
-
-router.get('/api/', controlador.getPessoas);
-
-router.get('/api/filtro/ativos', controlador.getPessoasAtivas)
-
-router.post('/api/', controlador.postPessoa);
-
-router.patch('/api/:id', controlador.patchPessoa);
-
-router.delete('/api/:id', controlador.deletePessoa);
 
 export default router;

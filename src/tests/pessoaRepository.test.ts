@@ -2,7 +2,7 @@
 import Pagamento from "../models/pagamento";
 import { db, close } from "../db";
 import Pessoa from "../models/pessoa";
-import { createPessoa, getPessoas, updatePessoa } from "../repositories/pessoaRepository";
+import { createPessoa, getPessoas, getPessoasAniversario, getPessoasSituacao, updatePessoa } from "../repositories/pessoaRepository";
 import Promocao from "../models/promocao";
 import * as crypto from "../utils/crypto";
 
@@ -58,9 +58,24 @@ describe('Pessoa repository', () => {
     //const response = await updatePessoa('', newPessoa);
   });
 
-  test('should return everybody', async () => {
-    const response = await getPessoas();
-    expect(response).not.toBeNull();
+  test('deveria retornar todas as pessoas cadastradas', async () => {
+    const pessoas = await getPessoas();
+    expect(pessoas).not.toBeNull();
+  });
+
+  test('deveria retornar as pessoas em atividade', async () => {
+    const pessoas = await getPessoasSituacao('Ativo')
+    expect(pessoas.data?.length).toBe(5);
+  });
+
+  test('deveria retornar as pessoas sem atividade', async () => {
+    const pessoas = await getPessoasSituacao('Inativo')
+    expect(pessoas.data?.length).toBe(0);
+  });
+
+  test.only('deveria retornar os aniversariantes', async () => {
+    const response = await getPessoasAniversario('11');
+    expect(response.data?.length).toBe(0);
   });
 
 });
