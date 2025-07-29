@@ -2,6 +2,7 @@ import { Document, ObjectId } from "mongodb";
 import { PessoaSchema } from "../models/schema";
 import { decripta, encripta } from "../utils/crypto";
 import Dojo from "../models/dojo";
+import { response } from "express";
 
 const lookupDojo = {
     $lookup: {
@@ -24,9 +25,7 @@ const lookupGraduacao = {
 export async function findAll() {
     return new Promise(async (resolve, reject) => {
         await PessoaSchema.aggregate([lookupDojo])
-        .then((response) => {
-            resolve(response);
-        })
+        .then((response: any) => resolve(response))
         .catch((err)=>reject(err))}
     )};
 
@@ -38,9 +37,7 @@ export async function find(oId: string) {
             },  
             lookupDojo
             ])
-        .then((response) => {
-            resolve(response);
-        })
+        .then((response: any) => resolve(response))
         .catch((err)=>reject(err));
     });
 }
@@ -52,9 +49,7 @@ export async function findBySituacao(aSituacao: string) {
                 $match: {'situacao': aSituacao}
             },  
             lookupDojo
-        ]).then((response) => {
-            resolve(response);
-        })
+        ]).then((response: any) => resolve(response))
         .catch((err) => reject(err));
     });
 }
@@ -62,12 +57,22 @@ export async function findBySituacao(aSituacao: string) {
 export async function findByAniversarioMes(oMes: string) {
     return new Promise(async (resolve, reject) => {
         await PessoaSchema.aggregate([
-            {
-                $match: {'aniversario': { $regex: oMes + '$', $options: 'i' }}
-            },  
-            lookupDojo
-        ]).then((response) => {
-            resolve(response);
-        }).catch((err) => reject(err));
+                {
+                    $match: {'aniversario': { $regex: oMes + '$', $options: 'i' }}
+                },  
+                lookupDojo
+            ])
+            .then((response: any) => resolve(response))
+            .catch((err) => reject(err));
+    });
+}
+
+export async function insert(doc: any) {
+    return new Promise(async (resolve, reject) => {
+        doc.nome = encripta(doc.nome);
+        doc.cpf = encripta(doc.cpf);
+        await PessoaSchema.create(doc)
+            .then((response: any) => resolve(response) )
+            .catch((err) => reject(err));
     });
 }

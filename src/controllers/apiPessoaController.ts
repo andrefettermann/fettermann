@@ -1,18 +1,14 @@
 /* pessoaRouters.ts */
 import { Request, Response, NextFunction } from 'express';
-import Pessoa from '../models/pessoa';
-import * as repositorio from '../repositories/pessoaRepository';
-import * as pessoaRepositorio from '../repositories/PessoaRepositorio';
+import * as repositorio from '../repositories/apiPessoaRepository';
 import { decripta } from '../utils/crypto';
 import { formatDateToDDMMYYYY } from '../utils/date';
-
+import { IPessoa } from 'src/models/pessoa';
 
 async function getPessoa(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
-
-    //const doc = await repositorio.getPessoa(id);
-    const docs: any = await pessoaRepositorio.find(id);
-    
+/*
+    const docs: IPessoa[] = await repositorio.getPessoa(id);    
     if (docs) {
         const pessoa = docs[0];
         pessoa.nome = decripta(pessoa.nome);
@@ -31,104 +27,115 @@ async function getPessoa(req: Request, res: Response, next: NextFunction) {
     } else {
         res.sendStatus(404);
     }
+        */
 }
 
 async function getPessoas(req: Request, res: Response, next: NextFunction) {
-    const docs: any = await pessoaRepositorio.findAll();
-    if (docs) {
-        docs.forEach((d: { nome: string; cpf: string; }) => {
-            d.nome = decripta(d.nome);
-            if (d.cpf) decripta(d.cpf);
-        })
+    try {
+        const docs: IPessoa[] = await repositorio.getPessoas();
+        if (docs) {
+            docs.forEach((d: { nome: string; cpf: string; }) => {
+                d.nome = decripta(d.nome);
+                if (d.cpf) decripta(d.cpf);
+            })
         
-        docs.sort((a: { nome: string; }, b: { nome: string; }) => {
-            var fa = a.nome.toLowerCase();
-            var fb = b.nome.toLowerCase();
+            docs.sort((a: { nome: string; }, b: { nome: string; }) => {
+                var fa = a.nome.toLowerCase();
+                var fb = b.nome.toLowerCase();
 
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        });
-
-        res.json(docs);
-    } else {
-        res.sendStatus(404);
+                if (fa < fb) {
+                    return -1;
+                }
+                if (fa > fb) {
+                    return 1;
+                }
+                return 0;
+            });
+            res.status(200).json(docs);
+        }
+    } catch (error) {
+        res.status(500).json({ mensagem: error });
     }
 }
 
 async function getPessoasSituacao(req: Request, res: Response, next: NextFunction) {
     const situacao = req.params.situacao;
-    const docs: any = await pessoaRepositorio.findBySituacao(situacao);
-    if (docs) {
-        docs.forEach((d: { nome: string; cpf: string; }) => {
-            d.nome = decripta(d.nome);
-            if (d.cpf) decripta(d.cpf);
-        })
-        
-        docs.sort((a: { nome: string; }, b: { nome: string; }) => {
-            var fa = a.nome.toLowerCase();
-            var fb = b.nome.toLowerCase();
+    try {
+        const docs: IPessoa[] = await repositorio.getPessoasSituacao(situacao);
+        if (docs) {
+            docs.forEach((d: { nome: string; cpf: string; }) => {
+                d.nome = decripta(d.nome);
+                if (d.cpf) decripta(d.cpf);
+            })
+            
+            docs.sort((a: { nome: string; }, b: { nome: string; }) => {
+                var fa = a.nome.toLowerCase();
+                var fb = b.nome.toLowerCase();
 
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        });
+                if (fa < fb) {
+                    return -1;
+                }
+                if (fa > fb) {
+                    return 1;
+                }
+                return 0;
+            });
 
-        res.json(docs);
-    } else {
-        res.sendStatus(404);
+            res.json(docs);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (error) {
+        res.status(500).json({ mensagem: error });
     }
 }
 
 async function getPessoasAniversariantes(req: Request, res: Response, next: NextFunction) {
     const mes = req.params.mes;
+    try {
+        const docs: any = await repositorio.getPessoasAniversario(mes);
+        if (docs) {
+            docs.forEach((d: { nome: string; cpf: string; }) => {
+                d.nome = decripta(d.nome);
+                if (d.cpf) decripta(d.cpf);
+            })
+            
+            docs.sort((a: { nome: string; }, b: { nome: string; }) => {
+                var fa = a.nome.toLowerCase();
+                var fb = b.nome.toLowerCase();
 
-    const docs: any = await repositorio.getPessoasAniversario(mes);
-    if (docs) {
-        docs.forEach((d: { nome: string; cpf: string; }) => {
-            d.nome = decripta(d.nome);
-            if (d.cpf) decripta(d.cpf);
-        })
-        
-        docs.sort((a: { nome: string; }, b: { nome: string; }) => {
-            var fa = a.nome.toLowerCase();
-            var fb = b.nome.toLowerCase();
+                if (fa < fb) {
+                    return -1;
+                }
+                if (fa > fb) {
+                    return 1;
+                }
+                return 0;
+            });
 
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
-        });
-
-        res.json(docs);
-    } else {
-        res.sendStatus(404);
+            res.json(docs);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (error) {
+        res.status(500).json({ mensagem: error });
     }
 }
 
 async function postPessoa(req: Request, res: Response, next: NextFunction) {
+    /*
     const pessoa = req.body as Pessoa;
     const result = await repositorio.createPessoa(pessoa);
     if (result)
         res.status(201).json(result);
     else
         res.sendStatus(400);
+    */
 }
 
 async function patchPessoa(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
-
+/*
     const pessoa = req.body as Pessoa;
     /*
     const result = await repositorio.update(id, pessoa);

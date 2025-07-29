@@ -1,7 +1,6 @@
 import { Document, ObjectId } from "mongodb";
-import { PessoaSchema } from "../models/schema";
 import { decripta, encripta } from "../utils/crypto";
-import Dojo from "../models/dojo";
+import { IPessoa, Pessoa } from "../models/pessoa";
 
 const lookupDojo = {
     $lookup: {
@@ -23,82 +22,53 @@ const lookupGraduacao = {
 
 export async function getPessoa(id: string) {
     try {
-        const doc = await PessoaSchema.aggregate([
+        const doc: IPessoa[] = await Pessoa.aggregate([
                     {
                         $match: {"_id": new ObjectId(id)}
                     },  
                     lookupDojo
                 ])
-        return {
-            status: 'Success',
-            data: doc[0]
-        }
-    }
-    catch(error){
-        return {
-            status: "Failed",
-            message: error
-        }
+        return doc[0];
+    } catch(error){
+        return error;
     }
 }
 
 export async function getPessoas(){
     try{
-        const docs = await PessoaSchema.aggregate([lookupDojo]);
-
-        return {
-            status: 'Success',
-            data: docs
-        }
-    }
-    catch(error){
-        return {
-            status: "Failed",
-            message: error
-        }
+        const docs: IPessoa[] = await Pessoa.aggregate([lookupDojo]);
+        return docs;
+    } catch(error){
+        return error;
     }
 }
 
 export  async function getPessoasSituacao(situacao: string) {
     try {
-        const docs = await PessoaSchema.aggregate([
+        const docs: IPessoa[] = await Pessoa.aggregate([
                     {
                         $match: {'situacao': situacao}
                     },  
                     lookupDojo
                 ]);
-        return {
-            status: 'Success',
-            data: docs
-        }
+        return docs;
     }
     catch(error){
-        console.log(error);
-        return {
-            status: "Failed",
-            message: error
-        }
+        return error;
     }
 }
 
 export async function getPessoasAniversario(mes: string) {
     try {
-        const docs = await PessoaSchema.aggregate([
+        const docs: IPessoa[] = await Pessoa.aggregate([
             {
                 $match: {'aniversario': { $regex: mes + '$', $options: 'i' }}
             },  
             lookupDojo
         ]);
-        return {
-            status: 'Success',
-            data: docs
-        }
-    }    catch(error){
-        console.log(error);
-        return {
-            status: "Failed",
-            message: error
-        }
+        return docs
+    } catch(error){
+        return error;
     }
 }
 
@@ -107,15 +77,13 @@ export async function createPessoa(doc: any){
         doc.nome = encripta(doc.nome);
         doc.cpf = encripta(doc.cpf);
 
-        const newPessoa = await PessoaSchema.create(doc);
-
+        const pessoa = await Pessoa.create(doc);
         return {
             status: "Success",
-            data: newPessoa
+            data: pessoa
         };
     } catch (error) {
-        console.log(error)
-        throw error
+        return error
 //        return {
 //            status: "Failed",
 //            mensagem: error
@@ -128,7 +96,7 @@ export async function updatePessoa(id: string, doc: any){
         doc.nome = encripta(doc.nome);
         doc.cpf = encripta(doc.cpf);
 
-        const pessoa = await PessoaSchema.findByIdAndUpdate({"_id":id}, doc, {new: true})
+        const pessoa = await Pessoa.findByIdAndUpdate({"_id":id}, doc, {new: true})
 
         if(!pessoa){
             return {

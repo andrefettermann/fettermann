@@ -1,6 +1,6 @@
 /* pessoaController.ts */
 import { decripta, encripta } from '../utils/crypto';
-import * as repositorio from '../repositories/PessoaRepositorio';
+import * as repositorio from '../repositories/pessoaRepositorio';
 import { formatDateToDDMMYYYY } from '../utils/date';
 
 export async function buscaTodos() {
@@ -54,7 +54,7 @@ export async function buscaPorSituacao(aSituacao: string) {
                         return 0;
                     });
                 }
-                console.log(response)
+
                 resolve(response);
             }).catch((err) => reject(err));
     })
@@ -83,7 +83,6 @@ export async function buscaPorAniversarioMes(oMes: string) {
                         return 0;
                     });
                 }
-                console.log(response)
                 resolve(response);
             }).catch((err) => reject(err));
     })
@@ -107,7 +106,6 @@ export async function buscaPorId(oId: string) {
                     })
 
                 }
-                
                 resolve(response[0]);
             } )
             .catch((err)=> {reject(err)});
@@ -115,6 +113,11 @@ export async function buscaPorId(oId: string) {
 }
 
 async function inclui(doc: any) {
+    return new Promise(async (resolve, reject) => {
+        await repositorio.insert(doc).then((response: any) => {
+            resolve(response);
+        }).catch((err) => reject(err));
+    });
     /*
      await repositorio.createPessoa(doc).then((result) => {
             return result;

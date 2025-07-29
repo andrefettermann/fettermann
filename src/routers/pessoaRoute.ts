@@ -69,7 +69,13 @@ function setDoc(req: any) {
 /** Busca todas as pessoas */
 router.get('/', async (req, res, next) => {
     try {
-        const docs: any = await pessoaController.buscaTodos();
+        //const docs: any = await pessoaController.buscaTodos();
+        const response = await fetch('http://localhost:3000/api/pessoas');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const docs = await response.json();
         res.render('pessoas',
             {
                 title: 'Pessoas cadastradas',
@@ -87,8 +93,15 @@ router.get('/', async (req, res, next) => {
 
 /** Busca as pessoas ativas ou inativas */
 router.get('/situacao/:situacao', async (req, res, next) => {
-    await pessoaController.buscaPorSituacao(req.params.situacao)
-    .then((docs: any) => {
+    try {
+        const response = await fetch('http://localhost:3000/api/pessoas/situacao/' 
+            + req.params.situacao);
+
+            if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const docs = await response.json();
         res.render('pessoas',
             {
                 title: 'Pessoas cadastradas (em atividade)',
@@ -99,47 +112,57 @@ router.get('/situacao/:situacao', async (req, res, next) => {
                 mes: getCurrentMonth()
             }
         );
-    })
-    .catch((err)=>next(err));
+    } catch (err) {
+        next(err);
+    }
 });
 
 /** Busca os aniversariantes do mes informado */
 router.get('/aniversariantes/:mes', async (req, res, next) => {
-    await pessoaController.buscaPorAniversarioMes(req.params.mes)
-        .then((docs: any) => {
-            res.render('pessoas',
-                {
-                    title: 'Pessoas cadastradas (aniversariantes do mês)',
-                    docs,
-                    total: docs.length,
-                    mensagem,
-                    logo: '/images/logo-sm.png',
-                    mes: getCurrentMonth()
-                }
-            );
-        }).catch((err)=>next(err));
+    try {
+        const response = await fetch('http://localhost:3000/api/pessoas/aniversariantes/' 
+            + req.params.mes);
+
+            if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const docs = await response.json();
+        res.render('pessoas',
+            {
+                title: 'Pessoas cadastradas (aniversariantes do mês)',
+                docs,
+                total: docs.length,
+                mensagem,
+                logo: '/images/logo-sm.png',
+                mes: getCurrentMonth()
+            }
+        );
+    } catch (err) {
+        next(err);
+    }
 });
 
 /** Abre a tela de inclusao dos dados da pessoa*/
 router.get('/novo', async (req, res, next) => {
     try {
-        var dojos = await fetch('http://localhost:3000/dojos/api/');
-        var graduacoes = await fetch('http://localhost:3000/graduacoes/api/');
-        if (!dojos.ok) {
-            throw new Error(`HTTP error! status: ${dojos.status}`);
-        } else if (!graduacoes.ok) {
-            throw new Error(`HTTP error! status: ${graduacoes.status}`);
+        const responseDojos = await fetch('http://localhost:3000/dojos/api/');
+        const rsponseGraduacoes = await fetch('http://localhost:3000/graduacoes/api/');
+
+        if (!responseDojos.ok) {
+            throw new Error(`HTTP error! Dojos status: ${responseDojos.status}`);
+        } else if (!rsponseGraduacoes.ok) {
+            throw new Error(`HTTP error! Graduacoes status: ${rsponseGraduacoes.status}`);
         }
 
-        const docs_dojos = await dojos.json();
-        const docs_graduacoes = await graduacoes.json();
-
+        const docsDojos = await responseDojos.json();
+        const docsGraduacoes = await rsponseGraduacoes.json();
         res.render('pessoa',
             {
                 title: 'Dados da pessoa (Inclusão)',
                 doc: "",
-                docs_dojos,
-                docs_graduacoes,
+                docs_dojos: docsDojos,
+                docs_graduacoes: docsGraduacoes,
                 total_promocoes: 0,
                 total_pagamentos: 0,
                 action: '/pessoas/inclui/',

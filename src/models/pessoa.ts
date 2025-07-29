@@ -1,123 +1,105 @@
+import { Decimal128, model, Schema } from "mongoose";
+
 // Pessoa.ts
+interface IPessoa {
+    aniversario: string,
+    matricula: string,
+    nome: string,
+    situacao: string,
+    cpf: string,
+    data_inicio_aikido: string,
+    data_matricula: string,
+    codigo_dojo: string,
+    graduacao_atual: string,
+    pagamentos : [{
+        data: Date,
+        valor_devido: Decimal128,
+        valor_pago: Decimal128,
+        descricao: String,
+        observacoes: String
+    }],
+    promocoes: [{
+        data: Date,
+        graduacao: string,
+        codigo_graduacao: string
+    }]
+};
 
-import { ObjectId } from "mongodb";
-import Pagamento from "./pagamento";
-import Promocao from "./promocao";
-import Dojo from "./dojo";
-
-/**
- * Dados da pessoa.
- * 
- * @author Andre Fettermann
- */
-export default class Pessoa {
-
-    private _id?: ObjectId;
-    private nome: string;
-    private cpf: string = "";
-    private aniversario: string = "";
-    private matricula: string = "";
-    private situacao: string;
-    private data_inicio_aikido: string = "";
-    private data_matricula: string = "";
-    private pagamentos: Pagamento[] = [];
-    private promocoes: Promocao[] = [];
-    private graduacao_atual: string = "";
-    private dojo?: Dojo;
-
-    constructor(nome: string, aSituacao: string) {
-        this.nome = nome;
-        this.situacao = aSituacao;
-    }
-
-    public setNome(oNome: string) {
-        this.nome = oNome;
-    }
-    public getNome() {
-        return this.nome;
-    }
-
-    public setCpf(oCpf: string) {
-        this.cpf = oCpf;
-    }
-    public getCpf() {
-        return this.cpf;
-    }
-
-    public setAniversario(oAniversario: string) {
-        this.aniversario = oAniversario;
-    }
-    public getAniversario() {
-        return this.aniversario;
-    }
-
-    public setMatricula(aMatricula: string) {
-        this.matricula = aMatricula;
-    }
-    public getMatricula() {
-        return this.matricula;
-    }
-
-    public setSituacao(aSituacao: string) {
-        this.situacao = aSituacao;
-    }
-    public getSituacao() {
-        return this.situacao;
-    }
-
-    public setDataInicio(aData: string) {
-        this.data_inicio_aikido = aData;
-    }
-    public getDataInicio() {
-        return this.data_inicio_aikido;
-    }
-
-    public setDataMatricula(aData: string) {
-        this.data_matricula = aData;
-    }
-    public getDataMatricula() {
-        return this.data_matricula;
-    }
-
-    public setPagamentos(osPagamentos: Pagamento[]) {
-        this.pagamentos = osPagamentos;
-    }
-    public getPagamentos() {
-        return this.pagamentos;
-    }
-    public addPagamento(oPagamento: Pagamento) {
-        this.pagamentos.push(oPagamento);
-    }
-
-    public setPromocoes(asPromocoes: Promocao[]) {
-        this.promocoes = asPromocoes;
-    }
-    public getPromocoes() {
-        return this.promocoes;
-    }
-    public addPromocao(aPromocao: Promocao) {
-        this.promocoes.push(aPromocao);
-    }
-
-    public getGraduacaoAtual() {
-        this.graduacao_atual
-    }
-    public setGraduacaoAtual(aGraduacao: string) {
-        if (aGraduacao) {
-            this.graduacao_atual = aGraduacao;
-        } else {
-            if (this.promocoes.length > 0) {
-                this.graduacao_atual = this.promocoes[this.promocoes.length-1].getGraduacao();
-            } else {
-                this.graduacao_atual = "";
+const PessoaSchema = new Schema<IPessoa>({
+    aniversario: {
+        type: String,
+        required: false
+    },
+    matricula: {
+        type: String,
+        required: false
+    },
+    nome: {
+        type: String,
+        required: true
+    },
+    situacao: {
+        type: String,
+        required: true
+    },
+    cpf: {
+        type: String,
+        required: false
+    },
+    data_inicio_aikido: {
+        type: String,
+        required: false
+    },
+    data_matricula: {
+        type: String,
+        required: false
+    },
+    codigo_dojo: {
+        type: String,
+        required: false
+    },
+    graduacao_atual: {
+        type: String,
+        required: false
+    },
+    pagamentos: [
+        {
+            data: {
+                type: Date,
+                required: true
+            },
+            valor_devido: {
+                type: Number,
+                required: false
+            },
+            valor_pago: {
+                type: Number,
+                required: true
+            },
+            descricao: {
+                type: String,
+                required: false
+            },
+            observacoes: {
+                type: String,
+                required: false
+            },
+        }
+    ],
+    promocoes: [
+        {
+            data: {
+                type: Date,
+                required: true
+            },
+            graduacao: {
+                type: String,
+                required: true
             }
         }
-    }
+    ]
+})
 
-    public getDojo() {
-        return this.dojo;
-    }
-    public setDojo(oDojo: Dojo) {
-        this.dojo = oDojo;
-    }
-}
+const Pessoa = model<IPessoa>('Pessoa', PessoaSchema);
+
+export { Pessoa, IPessoa };
