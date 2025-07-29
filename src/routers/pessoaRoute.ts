@@ -1,8 +1,8 @@
 /* pessoaRoute.ts */
-
 import express from 'express';
 import controlador from '../controllers/pessoaController';
 import { convertDdMmYyyyToDate } from '../utils/date';
+import * as pessoaController from '../controllers/pessoaController';
 
 const router = express.Router();
 
@@ -66,16 +66,10 @@ function setDoc(req: any) {
     return doc;
 }
 
+/** Busca todas as pessoas */
 router.get('/', async (req, res, next) => {
     try {
-        var response = await fetch('http://localhost:3000/api/pessoas');
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const docs = await response.json();
-
+        const docs: any = await pessoaController.buscaTodos();
         res.render('pessoas',
             {
                 title: 'Pessoas cadastradas',
@@ -91,16 +85,10 @@ router.get('/', async (req, res, next) => {
     }
 });
 
+/** Busca as pessoas ativas ou inativas */
 router.get('/situacao/:situacao', async (req, res, next) => {
-    try {
-        console.log('pessoarouter.situacao')
-        var response = await fetch('http://localhost:3000/api/pessoas/filtro/' + req.params.situacao);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const docs = await response.json();
-
+    await pessoaController.buscaPorSituacao(req.params.situacao)
+    .then((docs: any) => {
         res.render('pessoas',
             {
                 title: 'Pessoas cadastradas (em atividade)',
@@ -111,35 +99,28 @@ router.get('/situacao/:situacao', async (req, res, next) => {
                 mes: getCurrentMonth()
             }
         );
-    } catch (err) {
-        next(err);
-    }
+    })
+    .catch((err)=>next(err));
 });
 
+/** Busca os aniversariantes do mes informado */
 router.get('/aniversariantes/:mes', async (req, res, next) => {
-    try {
-        var response = await fetch('http://localhost:3000/api/pessoas/aniversariantes/' + req.params.mes);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const docs = await response.json();
-
-        res.render('pessoas',
-            {
-                title: 'Pessoas cadastradas (anievrsariantes do mês)',
-                docs,
-                total: docs.length,
-                mensagem,
-                logo: '/images/logo-sm.png',
-                mes: getCurrentMonth()
-            }
-        );
-    } catch (err) {
-        next(err);
-    }
+    await pessoaController.buscaPorAniversarioMes(req.params.mes)
+        .then((docs: any) => {
+            res.render('pessoas',
+                {
+                    title: 'Pessoas cadastradas (aniversariantes do mês)',
+                    docs,
+                    total: docs.length,
+                    mensagem,
+                    logo: '/images/logo-sm.png',
+                    mes: getCurrentMonth()
+                }
+            );
+        }).catch((err)=>next(err));
 });
 
+/** Abre a tela de inclusao dos dados da pessoa*/
 router.get('/novo', async (req, res, next) => {
     try {
         var dojos = await fetch('http://localhost:3000/dojos/api/');
@@ -169,16 +150,10 @@ router.get('/novo', async (req, res, next) => {
     }
 });
 
+/** Abre a tela com os detalhes da pessoa */
 router.get('/detalhes/:id', async (req, res, next) => {
     try {
-        var docs = await fetch('http://localhost:3000/pessoas/api/' + req.params.id);
-        if (!docs.ok) {
-            throw new Error(`HTTP error! status: ${docs.status}`);
-        }
-
-        const result = await docs.json();
-        const doc = result.data;
-
+        const doc: any = await pessoaController.buscaPorId(req.params.id);
         res.render('pessoa_detalhes',
             {
                 title: 'Dados da pessoa (Consulta)',
@@ -190,6 +165,7 @@ router.get('/detalhes/:id', async (req, res, next) => {
     }
 });
 
+/** Abre a tela para alteracao dos dados da pessoa */
 router.get('/edita/:id', async (req, res, next) => {
     var id = req.params.id;
 
@@ -231,6 +207,7 @@ router.get('/edita/:id', async (req, res, next) => {
     }
 });
 
+/** Inclui os dados da pessoa */
 router.post('/inclui', async (req, res, next) => {
     var doc = setDoc(req);
 
@@ -243,6 +220,7 @@ router.post('/inclui', async (req, res, next) => {
     })
 });
 
+/** Altera os dados da pessoa */
 router.post('/altera/:id', async (req, res, next) => {
     var id = req.params.id;
 

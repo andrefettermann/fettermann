@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --detectOpenHandles",
+    "test:cucumber": "npx cucumber-js",
     "dev": "npx nodemon src/server.ts --watch 'src/' -e ts",
     "compile": "npx tsc",
     "start": "node ./dist/server.js"
@@ -13,7 +14,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@cucumber/cucumber-expressions": "^18.0.1",
+    "chai": "^5.2.1",
     "cors": "^2.8.5",
+    "cucumber-html-reporter": "^7.2.0",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
