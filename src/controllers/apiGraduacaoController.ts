@@ -1,7 +1,7 @@
 /* graduacaoRouters.ts */
 import { Request, Response, NextFunction } from 'express';
 import Graduacao from '../models/graduacao';
-import * as repositorio from '../repositories/graduacaoRepository';
+import * as repositorio from '../repositories/apiGraduacaoRepository';
 
 async function inclui(doc: Graduacao) {
      await repositorio.createGraduacao(doc).then((result) => {

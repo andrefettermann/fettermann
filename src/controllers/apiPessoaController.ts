@@ -7,32 +7,36 @@ import { IPessoa } from 'src/models/pessoa';
 
 async function getPessoa(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
-/*
-    const docs: IPessoa[] = await repositorio.getPessoa(id);    
-    if (docs) {
-        const pessoa = docs[0];
-        pessoa.nome = decripta(pessoa.nome);
 
-        if (pessoa.cpf) pessoa.cpf = decripta(pessoa.cpf);
+    try {
+        const pessoa: IPessoa | any = await repositorio.getPessoa(id);
+        
+        if (pessoa) {
+            pessoa.nome = decripta(pessoa.nome);
 
-        pessoa.promocoes.forEach((p: { data_formatada: string; data: string; })=>{
-            p.data_formatada = formatDateToDDMMYYYY(new Date(p.data));
-        })
+            if (pessoa.cpf) pessoa.cpf = decripta(pessoa.cpf);
 
-        pessoa.pagamentos.forEach((p: { data_formatada: string; data: string; })=>{
-            p.data_formatada = formatDateToDDMMYYYY(new Date(p.data));
-        })
+            pessoa.promocoes.forEach((p: { data_formatada: string; data: string; })=>{
+                p.data_formatada = formatDateToDDMMYYYY(new Date(p.data));
+            })
 
-        res.json(pessoa);
-    } else {
-        res.sendStatus(404);
+            pessoa.pagamentos.forEach((p: { data_formatada: string; data: string; })=>{
+                p.data_formatada = formatDateToDDMMYYYY(new Date(p.data));
+            })
+
+            res.json(pessoa);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ mensagem: error });
     }
-        */
 }
 
 async function getPessoas(req: Request, res: Response, next: NextFunction) {
     try {
-        const docs: IPessoa[] = await repositorio.getPessoas();
+        const docs: IPessoa[] |  any = await repositorio.getPessoas();
         if (docs) {
             docs.forEach((d: { nome: string; cpf: string; }) => {
                 d.nome = decripta(d.nome);
@@ -61,7 +65,7 @@ async function getPessoas(req: Request, res: Response, next: NextFunction) {
 async function getPessoasSituacao(req: Request, res: Response, next: NextFunction) {
     const situacao = req.params.situacao;
     try {
-        const docs: IPessoa[] = await repositorio.getPessoasSituacao(situacao);
+        const docs: IPessoa[] | any = await repositorio.getPessoasSituacao(situacao);
         if (docs) {
             docs.forEach((d: { nome: string; cpf: string; }) => {
                 d.nome = decripta(d.nome);
@@ -93,7 +97,7 @@ async function getPessoasSituacao(req: Request, res: Response, next: NextFunctio
 async function getPessoasAniversariantes(req: Request, res: Response, next: NextFunction) {
     const mes = req.params.mes;
     try {
-        const docs: any = await repositorio.getPessoasAniversario(mes);
+        const docs: IPessoa[] | any = await repositorio.getPessoasAniversario(mes);
         if (docs) {
             docs.forEach((d: { nome: string; cpf: string; }) => {
                 d.nome = decripta(d.nome);
@@ -123,27 +127,22 @@ async function getPessoasAniversariantes(req: Request, res: Response, next: Next
 }
 
 async function postPessoa(req: Request, res: Response, next: NextFunction) {
-    /*
-    const pessoa = req.body as Pessoa;
-    const result = await repositorio.createPessoa(pessoa);
+    const doc = req.body;
+    const result = await repositorio.createPessoa(doc);
     if (result)
         res.status(201).json(result);
     else
         res.sendStatus(400);
-    */
 }
 
 async function patchPessoa(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
-/*
-    const pessoa = req.body as Pessoa;
-    /*
-    const result = await repositorio.update(id, pessoa);
+    const pessoa = req.body;
+    const result = await repositorio.updatePessoa(id, pessoa);
     if (result)
         res.json(result);
     else
         res.sendStatus(404);
-    */
 }
 
 async function deletePessoa(req: Request, res: Response, next: NextFunction) {

@@ -1,47 +1,27 @@
 /* graduacao.ts */
+import { model, ObjectId, Schema } from "mongoose";
 
-/**
- * Os dados da graduacao.
- * 
- * @author Andre Fettermann
- */
-export default class Graduacao {
+interface IGraduacao {
+    ordem: number,
+    nome: string,
+    faixa: string,
+};
 
-    private id: string = "";
-    private ordem: number = 0;
-    private nome: string = "";
-    private faixa: string = "";
+const GraduacaoSchema = new Schema<IGraduacao>({
+    ordem: {
+        type: Number,
+        required: true
+    },
+    nome: {
+        type: String,
+        required: true
+    },
+    faixa: {
+        type: String,
+        required: false
+    }
+})
 
-    constructor(aOrdem: number, oNome: string) {
-        this.ordem = aOrdem;
-        this.nome = oNome;
-    }
+const Graduacao = model<IGraduacao>('graduacoes', GraduacaoSchema);
 
-    public setId(oId: string) {
-        this.id = oId;
-    }
-    public getId(): string {
-        return this.id;
-    }
-
-    public setOrdem(aOrdem: number) {
-        this.ordem = aOrdem;
-    }
-    public getOrdem(): number {
-        return this.ordem;
-    }
-
-    public setNome(oNome: string) {
-        this.nome = oNome;
-    }
-    public getNome(): string {
-        return this.nome;
-    }
-
-    public setFaixa(aFaixa: string) {
-        this.faixa = aFaixa;
-    }
-    public getFaixa(): string {
-        return this.faixa;
-    }
-}
+export { Graduacao, IGraduacao };

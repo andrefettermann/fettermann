@@ -71,31 +71,5 @@ const dojoSchema = new Schema<IDojo>({
     ],
 })
 
-interface IGraduacao {
-    id: string,
-    ordem: number,
-    nome: string,
-    faixa: string,
-};
-
-const graduacaoSchema = new Schema<IGraduacao>({
-    id: {
-        type: String,
-        required: false
-    },
-    ordem: {
-        type: Number,
-        required: true
-    },
-    nome: {
-        type: String,
-        required: true
-    },
-    faixa: {
-        type: String,
-        required: false
-    }
-})
-
 export const DojoSchema = model<IDojo>('dojos', dojoSchema )
-export const GraduacaoSchema = model<IGraduacao>('graduacoes', graduacaoSchema )
+

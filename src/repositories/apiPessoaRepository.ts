@@ -78,16 +78,9 @@ export async function createPessoa(doc: any){
         doc.cpf = encripta(doc.cpf);
 
         const pessoa = await Pessoa.create(doc);
-        return {
-            status: "Success",
-            data: pessoa
-        };
+        return pessoa;
     } catch (error) {
         return error
-//        return {
-//            status: "Failed",
-//            mensagem: error
-//        };
     }
 };
 

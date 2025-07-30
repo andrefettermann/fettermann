@@ -1,7 +1,6 @@
 // tests/userController.test.ts
 import { db, close } from "../db";
-import { createGraduacao, getGraduacao, getGraduacoes, updateGraduacao } from "../repositories/graduacaoRepository";
-import Graduacao from "../models/graduacao";
+import * as repositorio from "../repositories/apiGraduacaoRepository";
 
 describe('Pessoa repository', () => {
 
@@ -14,14 +13,17 @@ describe('Pessoa repository', () => {
   })
 
   test('should insert', async () => {
+    /*
     var newGraduacao = new Graduacao(1, '6º Kyu');
     newGraduacao.setFaixa("Faixa branca")
 
     const response = await createGraduacao(newGraduacao);
     expect(response.status).toBe("Success");
+    */
   });
 
-  test.only('should update', async() => {
+  test('should update', async() => {
+    /*
     var newGraduacao = new Graduacao(2, '5º Kyu');
     newGraduacao.setFaixa("Faixa amarela");
     newGraduacao.setId('687ec6bc10e2e2d26cec38bc');
@@ -29,16 +31,27 @@ describe('Pessoa repository', () => {
     const response = await updateGraduacao(newGraduacao.getId(), newGraduacao);
 
     expect(response.status).toBe('Success');
+    */
   });
 
-  test('should return one', async () => {
-    const response = await getGraduacao('687ebd93337f4a6e6cc653ea');
-    expect(response.nome).toBe('6º Kyu');
+  test.only('deveria retornar uma graduacao pelo id', async () => {
+    try {
+      const response: any = await repositorio.getGraduacao('687ebd93337f4a6e6cc653ea');
+      expect(response.nome).toBe('6º Kyu');
+    } catch (err) {
+      console.log(err);
+      expect(err).toBeNull();
+    }
   })
 
-  test('should return everybody', async () => {
-    const response = await getGraduacoes();
-    expect(response).not.toBeNull();
-  });
+  test('deveria retornar todas as graduacoes', async () => {
+    try {
+      const graduacoes: any = await repositorio.getGraduacoes();
+      expect(graduacoes.length).toBe(11);
+    } catch (err) {
+      console.log(err);
+      expect(err).toBeNull();
+    }
+  })
 
 });

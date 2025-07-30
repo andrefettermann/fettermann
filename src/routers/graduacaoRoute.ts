@@ -1,8 +1,6 @@
 /* graduacaoRoute.ts */
 
 import express from 'express';
-import controlador from '../controllers/graduacaoController';
-import Graduacao from '../models/graduacao';
 
 const router = express.Router();
 
@@ -10,7 +8,7 @@ var mensagem = "";
 
 router.get('/', async (req, res, next) => {
     try {
-        var response = await fetch('http://localhost:3000/graduacoes/api/');
+        var response = await fetch('http://localhost:3000/api/graduacoes');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -46,7 +44,7 @@ router.get('/edita/:id', async (req, res, next) => {
     var id = req.params.id;
 
     try {
-        var response = await fetch('http://localhost:3000/graduacoes/api/' + id);
+        var response = await fetch('http://localhost:3000/api/graduacao/' + id);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -64,8 +62,11 @@ router.get('/edita/:id', async (req, res, next) => {
 });
 
 router.post('/inclui', async (req, res, next) => {
-    var doc = new Graduacao(req.body.ordem, req.body.nome);
+    /*
+        var doc = new Graduacao(req.body.ordem, req.body.nome);
     doc.setFaixa(req.body.faixa);
+
+
 
     controlador.inclui(doc).then((response => {
         mensagem = 'Graduação incluída com sucesso!';
@@ -74,9 +75,11 @@ router.post('/inclui', async (req, res, next) => {
         mensagem = err;
         res.redirect('/graduacoes');
     })
+    */
 });
 
 router.post('/altera/:id', async (req, res, next) => {
+    /*
     var doc = new Graduacao(req.body.ordem, req.body.nome);
     doc.setFaixa(req.body.faixa);
     doc.setId(req.params.id);
@@ -88,16 +91,7 @@ router.post('/altera/:id', async (req, res, next) => {
         mensagem = err;
         res.redirect('/graduacoes');
     })
+    */
 })
-
-router.get('/api/:id', controlador.getGraduacao);
-
-router.get('/api/', controlador.getGraduacoes);
-
-router.post('/api/',controlador.postGraduacao);
-
-router.patch('/api/:id', controlador.patchGraduacao);
-
-router.delete('/api/:id', controlador.deleteGraduacao);
 
 export default router;

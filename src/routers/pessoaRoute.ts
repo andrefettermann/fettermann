@@ -1,8 +1,7 @@
 /* pessoaRoute.ts */
 import express from 'express';
-import controlador from '../controllers/pessoaController';
 import { convertDdMmYyyyToDate } from '../utils/date';
-import * as pessoaController from '../controllers/pessoaController';
+import * as pessoaController from '../controllers/apiPessoaController';
 
 const router = express.Router();
 
@@ -147,7 +146,7 @@ router.get('/aniversariantes/:mes', async (req, res, next) => {
 router.get('/novo', async (req, res, next) => {
     try {
         const responseDojos = await fetch('http://localhost:3000/dojos/api/');
-        const rsponseGraduacoes = await fetch('http://localhost:3000/graduacoes/api/');
+        const rsponseGraduacoes = await fetch('http://localhost:3000/api/graduacoes');
 
         if (!responseDojos.ok) {
             throw new Error(`HTTP error! Dojos status: ${responseDojos.status}`);
@@ -176,7 +175,14 @@ router.get('/novo', async (req, res, next) => {
 /** Abre a tela com os detalhes da pessoa */
 router.get('/detalhes/:id', async (req, res, next) => {
     try {
-        const doc: any = await pessoaController.buscaPorId(req.params.id);
+        const response = await fetch('http://localhost:3000/api/pessoa/' 
+            + req.params.id);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const doc = await response.json();
         res.render('pessoa_detalhes',
             {
                 title: 'Dados da pessoa (Consulta)',
@@ -194,7 +200,7 @@ router.get('/edita/:id', async (req, res, next) => {
 
     try {
         var dojos = await fetch('http://localhost:3000/dojos/api/');
-        var graduacoes = await fetch('http://localhost:3000/graduacoes/api/');
+        var graduacoes = await fetch('http://localhost:3000/api/graduacoes/');
 
         if (!dojos.ok) {
             throw new Error(`HTTP error! status: ${dojos.status}`);
@@ -205,14 +211,12 @@ router.get('/edita/:id', async (req, res, next) => {
         const docs_dojos = await dojos.json();
         const docs_graduacoes = await graduacoes.json();
 
-        const docs = await fetch('http://localhost:3000/pessoas/api/' + id);
-        if (!docs.ok) {
-            throw new Error(`HTTP error! status: ${docs.status}`);
+        const pessoa = await fetch('http://localhost:3000/api/pessoa/' + id);
+        if (!pessoa.ok) {
+            throw new Error(`HTTP error! status: ${pessoa.status}`);
         }
 
-        const result = await docs.json();
-        const doc = result.data;
-
+        const doc = await pessoa.json();
         res.render('pessoa',
             {
                 title: 'Dados da pessoa (Alteração)',
@@ -233,22 +237,45 @@ router.get('/edita/:id', async (req, res, next) => {
 /** Inclui os dados da pessoa */
 router.post('/inclui', async (req, res, next) => {
     var doc = setDoc(req);
+    try {
+        const response = await fetch('http://localhost:3000/api/pessoa/inclui', {
+            method: 'POST', // Specify the HTTP method as POST
+            headers: {
+                'Content-Type': 'application/json' // Set content type for JSON data
+            },
+            body: JSON.stringify(doc) // Convert data to JSON string for the request body
+        });
 
-    controlador.inclui(doc).then((response) => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         mensagem = 'Pessoa incluída com sucesso!';
         res.redirect('/pessoas');
-    }).catch((err)=>{
-        mensagem = err;
-        res.redirect('/pessoas');
-    })
+    } catch (err) {
+        next(err);
+    }
+
 });
 
 /** Altera os dados da pessoa */
 router.post('/altera/:id', async (req, res, next) => {
     var id = req.params.id;
-
     var doc = setDoc(req);
-
+    try {
+        const response = await fetch('http://localhost:3000/api/pessoa/altera/'+ id, {
+            method: 'PATCH', // Specify the HTTP method as POST
+            headers: {
+                'Content-Type': 'application/json' // Set content type for JSON data
+            },
+            body: JSON.stringify(doc) // Convert data to JSON string for the request body
+        });
+        mensagem = 'Pessoa alterada com sucesso!';
+        res.redirect('/pessoas');
+    } catch (err) {
+        next(err);
+    }
+/*
     controlador.altera(id, doc).then((response) => {
         mensagem = 'Pessoa alterada com sucesso!';
         res.redirect('/pessoas');
@@ -256,6 +283,7 @@ router.post('/altera/:id', async (req, res, next) => {
         mensagem = err;
         res.redirect('/pessoas');
     })
+*/
 });
 
 

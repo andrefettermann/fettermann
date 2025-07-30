@@ -100,6 +100,6 @@ const PessoaSchema = new Schema<IPessoa>({
     ]
 })
 
-const Pessoa = model<IPessoa>('Pessoa', PessoaSchema);
+const Pessoa = model<IPessoa>('pessoas', PessoaSchema);
 
 export { Pessoa, IPessoa };
