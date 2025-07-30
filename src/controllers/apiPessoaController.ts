@@ -29,7 +29,6 @@ async function getPessoa(req: Request, res: Response, next: NextFunction) {
             res.sendStatus(404);
         }
     } catch (error) {
-        console.log(error);
         res.status(500).json({ mensagem: error });
     }
 }
@@ -128,21 +127,30 @@ async function getPessoasAniversariantes(req: Request, res: Response, next: Next
 
 async function postPessoa(req: Request, res: Response, next: NextFunction) {
     const doc = req.body;
-    const result = await repositorio.createPessoa(doc);
-    if (result)
-        res.status(201).json(result);
-    else
-        res.sendStatus(400);
+    try {
+        const result = await repositorio.createPessoa(doc);
+        if (result)
+            res.status(201).json(result);
+        else
+            res.sendStatus(400);
+    } catch (error) {
+        res.status(500).json({ mensagem: error });
+    }    
 }
 
 async function patchPessoa(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
     const pessoa = req.body;
-    const result = await repositorio.updatePessoa(id, pessoa);
-    if (result)
-        res.json(result);
-    else
-        res.sendStatus(404);
+
+    try {
+        const result = await repositorio.updatePessoa(id, pessoa);
+        if (result)
+            res.json(result);
+        else
+            res.sendStatus(404);
+    } catch (error) {
+        res.status(500).json({ mensagem: error });
+    }
 }
 
 async function deletePessoa(req: Request, res: Response, next: NextFunction) {

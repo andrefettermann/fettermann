@@ -6,12 +6,23 @@ const router = express.Router();
 
 var mensagem = "";
 
+function setDoc(req: any) {
+    var doc = {
+        'ordem': req.body.ordem,
+        'nome': req.body.nome,
+        'faixa': req.body.faixa
+    }
+
+    return doc;
+}
+
 router.get('/', async (req, res, next) => {
     try {
         var response = await fetch('http://localhost:3000/api/graduacoes');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+
         const docs = await response.json();
         res.render('graduacoes',
             {
@@ -21,6 +32,7 @@ router.get('/', async (req, res, next) => {
                 mensagem
             }
         );
+        mensagem = "";
     } catch (err) {
         next(err);
     }
@@ -48,6 +60,7 @@ router.get('/edita/:id', async (req, res, next) => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+
         const doc = await response.json();
         res.render('graduacao',
             {
@@ -62,36 +75,43 @@ router.get('/edita/:id', async (req, res, next) => {
 });
 
 router.post('/inclui', async (req, res, next) => {
-    /*
-        var doc = new Graduacao(req.body.ordem, req.body.nome);
-    doc.setFaixa(req.body.faixa);
+    var doc = setDoc(req);
+    try {
+        const response = await fetch('http://localhost:3000/api/graduacao/', {
+            method: 'POST', // Specify the HTTP method as POST
+            headers: {
+                'Content-Type': 'application/json' // Set content type for JSON data
+            },
+            body: JSON.stringify(doc) // Convert data to JSON string for the request body
+        });
 
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-
-    controlador.inclui(doc).then((response => {
         mensagem = 'Graduação incluída com sucesso!';
         res.redirect('/graduacoes');
-    })).catch((err)=>{
-        mensagem = err;
-        res.redirect('/graduacoes');
-    })
-    */
+    } catch (err) {
+        next(err);
+    }
 });
 
 router.post('/altera/:id', async (req, res, next) => {
-    /*
-    var doc = new Graduacao(req.body.ordem, req.body.nome);
-    doc.setFaixa(req.body.faixa);
-    doc.setId(req.params.id);
-
-    controlador.altera(doc).then(() => {
+    var id = req.params.id;
+    var doc = setDoc(req);
+    try {
+        const response = await fetch('http://localhost:3000/api/graduacao/'+ id, {
+            method: 'PATCH', // Specify the HTTP method as POST
+            headers: {
+                'Content-Type': 'application/json' // Set content type for JSON data
+            },
+            body: JSON.stringify(doc) // Convert data to JSON string for the request body
+        });
         mensagem = 'Graduação alterada com sucesso!';
         res.redirect('/graduacoes');
-    }).catch((err)=>{
-        mensagem = err;
-        res.redirect('/graduacoes');
-    })
-    */
+    } catch (err) {
+        next(err);
+    }
 })
 
 export default router;

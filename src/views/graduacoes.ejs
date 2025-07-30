@@ -37,7 +37,7 @@
                 <ul class="nav nav-pills"> 
                         <li class="nav-item"><a href="/dojos" class="nav-link">Dojos</a></li> 
                         <li class="nav-item"><a href="/pessoas" class="nav-link">Pessoas</a></li> 
-                        <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Graduações</a></li> 
+                        <li class="nav-item"><a href="/graduacoes" class="nav-link active" aria-current="page">Graduações</a></li> 
                         <li class="nav-item"><a href="/logout" class="nav-link">Sair</a></li> 
                 </ul>
             </header>
@@ -67,12 +67,12 @@
                                     <% docs.forEach(function(doc){ %>
                                         <tr>
                                             <th scope="row">
-                                                <a href="graduacoes/edita/<%= doc.id %>">
+                                                <a href="graduacoes/edita/<%= doc._id %>">
                                                     <%= doc.ordem %>
                                                 </a>
                                             </th>
                                             <td>
-                                                <a href="graduacoes/edita/<%= doc.id %>">
+                                                <a href="graduacoes/edita/<%= doc._id %>">
                                                     <%= doc.nome %>
                                                 </a>
                                             </td>

@@ -255,7 +255,6 @@ router.post('/inclui', async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-
 });
 
 /** Altera os dados da pessoa */
@@ -275,15 +274,6 @@ router.post('/altera/:id', async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-/*
-    controlador.altera(id, doc).then((response) => {
-        mensagem = 'Pessoa alterada com sucesso!';
-        res.redirect('/pessoas');
-    }).catch((err)=>{
-        mensagem = err;
-        res.redirect('/pessoas');
-    })
-*/
 });
 
 

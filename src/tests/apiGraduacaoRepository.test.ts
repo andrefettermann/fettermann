@@ -1,4 +1,5 @@
 // tests/userController.test.ts
+import { IGraduacao } from "src/models/graduacao";
 import { db, close } from "../db";
 import * as repositorio from "../repositories/apiGraduacaoRepository";
 
@@ -12,29 +13,48 @@ describe('Pessoa repository', () => {
     close();
   })
 
-  test('should insert', async () => {
-    /*
-    var newGraduacao = new Graduacao(1, '6º Kyu');
-    newGraduacao.setFaixa("Faixa branca")
+  test('deveria incluir', async () => {
+    var doc = {
+      ordem: 100,
+      nome: 'Teste de inclusao com sucesso',
+      faixa: 'Dourada'
+    }
 
-    const response = await createGraduacao(newGraduacao);
-    expect(response.status).toBe("Success");
-    */
+    try {
+      const response: IGraduacao | any = await repositorio.createGraduacao(doc);
+      expect(response.ordem).toBe(100);
+    } catch (err) {
+      console.log(err);
+      expect(err).toBeNull();
+    }
   });
 
-  test('should update', async() => {
-    /*
-    var newGraduacao = new Graduacao(2, '5º Kyu');
-    newGraduacao.setFaixa("Faixa amarela");
-    newGraduacao.setId('687ec6bc10e2e2d26cec38bc');
-
-    const response = await updateGraduacao(newGraduacao.getId(), newGraduacao);
-
-    expect(response.status).toBe('Success');
-    */
+  test('deveria alterar', async() => {
+    var doc = {
+      ordem: 100,
+      nome: 'Teste de alteracao com sucesso',
+      faixa: 'Prateada'
+    }
+    try {
+      const response: IGraduacao | any = await repositorio.updateGraduacao("688a968854488e9b3a033299", doc);
+      expect(response.faixa).toBe('Prateada');
+    } catch (err) {
+      console.log(err);
+      expect(err).toBeNull();
+    }
   });
 
-  test.only('deveria retornar uma graduacao pelo id', async () => {
+  test.only('deveria excluir', async() => {
+    try {
+      const response: IGraduacao | any = await repositorio.deleteGraduacao("688a968854488e9b3a033299");
+      expect(response.deletedCount).toBe(1);
+    } catch (err) {
+      console.log(err);
+      expect(err).toBeNull();
+    }
+  });
+
+  test('deveria retornar uma graduacao pelo id', async () => {
     try {
       const response: any = await repositorio.getGraduacao('687ebd93337f4a6e6cc653ea');
       expect(response.nome).toBe('6º Kyu');

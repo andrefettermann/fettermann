@@ -1,4 +1,4 @@
-import { Document, ObjectId } from "mongodb";
+/* apiGraduacaoRepository.ts */
 import { Graduacao, IGraduacao } from "../models/graduacao";
 
 export async function getGraduacao(id: string) {
@@ -12,8 +12,7 @@ export async function getGraduacao(id: string) {
 
 export async function getGraduacoes(){
     try{
-        const docs = await Graduacao.find({});//.sort({ order: 1 }).lean();
-        //const docs = await PessoaSchema.aggregate([lookupDojos]);
+        const docs = await Graduacao.find({}).sort({ order: 1 }).lean();
         return docs;
     }
     catch(error){
@@ -22,27 +21,17 @@ export async function getGraduacoes(){
 }
 
 export async function createGraduacao(data: any){
-    /*
     try {
-        const newGraduacao = await GraduacaoSchema.create(data);
-        return {
-            status: "Success",
-            data: newGraduacao
-        };
+        const graduacao = await Graduacao.create(data);
+        return graduacao;
     } catch (error) {
-        return {
-            status: "Failed",
-            message: error
-        };
+        return error;
     }
-    */
 };
 
 export async function updateGraduacao(id: string, data: any){
-    /*
     try{
-        const graduacao = await GraduacaoSchema.findByIdAndUpdate({"_id":id}, data, {new: true})
-
+        const graduacao = await Graduacao.findByIdAndUpdate({"_id":id}, data, {new: true})
         if(!graduacao){
             return {
                 status: "Failed",
@@ -50,16 +39,18 @@ export async function updateGraduacao(id: string, data: any){
             }
         }
 
-        return {
-            status: "Success",
-            data: graduacao
-        }
+        return graduacao;
+    } catch(error){
+        return error;
     }
-    catch(error){
-        return {
-            status: "Failed",
-            data: error
-        }
+}
+
+export async function deleteGraduacao(id: String) {
+    try {
+        const graduacao = await Graduacao.deleteOne({"_id":id});
+        return graduacao;
+    } catch(error){
+        return error;
     }
-    */
+
 }

@@ -1,5 +1,5 @@
 /* graduacao.ts */
-import { model, ObjectId, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
 interface IGraduacao {
     ordem: number,
@@ -20,7 +20,7 @@ const GraduacaoSchema = new Schema<IGraduacao>({
         type: String,
         required: false
     }
-})
+}, {collection : 'graduacoes'})
 
 const Graduacao = model<IGraduacao>('graduacoes', GraduacaoSchema);
 
