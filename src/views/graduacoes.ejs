@@ -61,6 +61,9 @@
                                         <th id="col_ordem" name="col_ordem" scope="col">Ordem</th>
                                         <th id="col_nome" name="col_nome" scope="col">Nome</th>
                                         <th id="col_faixa" name="col_faixa" scope="col">Faixa</th>
+                                        <th id="col_horas" name="col_horas" scope="col">Horas para exame</th>
+                                        <th id="col_horas" name="col_horas" scope="col">Meses para exame</th>
+                                        <th id="col_horas" name="col_horas" scope="col">Categoria</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tab_dojos_linhas">
@@ -79,6 +82,15 @@
                                             <td>
                                                 <%= doc.faixa %>
                                             </td>
+                                            <td>
+                                                <%= doc.minimo_horas_treino_exame %>
+                                            </td>
+                                            <td>
+                                                <%= doc.minimo_tempo_exame %>
+                                            </td>
+                                            <td>
+                                                <%= doc.categoria %>
+                                            </td>
                                         </tr>
                                         <% }); %>
                                 </tbody>
@@ -87,6 +99,16 @@
                     </div>
                 </div>
             </div>
+
+            <div class="container"> 
+                <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
+                    <div class="col-md-4 d-flex align-items-center"> 
+                        <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.01 Fettermann Aikidô</span>
+                     </div> 
+                     <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
+                </footer> 
+            </div>
+
         </div>
     </main>
 </body>

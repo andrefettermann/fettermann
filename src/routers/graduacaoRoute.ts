@@ -10,7 +10,11 @@ function setDoc(req: any) {
     var doc = {
         'ordem': req.body.ordem,
         'nome': req.body.nome,
-        'faixa': req.body.faixa
+        'faixa': req.body.faixa,
+        'minimo_horas_treino_exame': req.body.horas_exame,
+        'minimo_tempo_exame': req.body.meses_exame,
+        'categoria': req.body.categoria,
+        'observacoes': req.body.observacoes
     }
 
     return doc;

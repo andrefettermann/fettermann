@@ -12,7 +12,7 @@ export async function getGraduacao(id: string) {
 
 export async function getGraduacoes(){
     try{
-        const docs = await Graduacao.find({}).sort({ order: 1 }).lean();
+        const docs = await Graduacao.find({}).sort({ ordem: 1 }).lean();
         return docs;
     }
     catch(error){

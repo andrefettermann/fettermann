@@ -3,7 +3,6 @@ import { Request, Response, NextFunction } from 'express';
 import * as repositorio from '../repositories/apiGraduacaoRepository';
 import { IGraduacao } from 'src/models/graduacao';
 
-
 async function getGraduacao(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
 
