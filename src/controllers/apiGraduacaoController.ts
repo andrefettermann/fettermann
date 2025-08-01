@@ -40,7 +40,6 @@ async function postGraduacao(req: Request, res: Response, next: NextFunction) {
     } catch (error) {
         res.status(500).json({ mensagem: error });
     }
-
 }
 
 async function patchGraduacao(req: Request, res: Response, next: NextFunction) {
@@ -56,7 +55,6 @@ async function patchGraduacao(req: Request, res: Response, next: NextFunction) {
     } catch (error) {
         res.status(500).json({ mensagem: error });
     }
-
 }
 
 async function deleteGraduacao(req: Request, res: Response, next: NextFunction) {

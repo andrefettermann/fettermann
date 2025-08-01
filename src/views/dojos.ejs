@@ -35,7 +35,7 @@
                 </a> 
 
                 <ul class="nav nav-pills"> 
-                        <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Dojos</a></li> 
+                        <li class="nav-item"><a href="/dojos" class="nav-link active" aria-current="page">Dojos</a></li> 
                         <li class="nav-item"><a href="/pessoas" class="nav-link">Pessoas</a></li> 
                         <li class="nav-item"><a href="/graduacoes" class="nav-link">Graduações</a></li> 
                         <li class="nav-item"><a href="/logout" class="nav-link">Sair</a></li> 
@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div class="col-9">
-                  
+                            <div class="text-info"><%= mensagem %></div>
                             <table id="tab_dojos" class="table table-striped table-hover table-sm">
                                 <thead id="tab_dojos_cabec">
                                     <tr>
@@ -66,27 +66,39 @@
                                     <% docs.forEach(function(doc){ %>
                                         <tr>
                                             <th scope="row">
-                                                <a href="/detalhes/<%= doc._id %>">
+                                                <a href="dojos/edita/<%= doc._id %>">
                                                     <%= doc.codigo %>
                                                 </a>
                                             </th>
                                             <td>
-                                                <%= doc.nome %>
+                                                <a href="dojos/edita/<%= doc._id %>">
+                                                    <%= doc.nome %>
+                                                </a>
                                             </td>
                                             <td>
                                                 <%= doc.cidade %>
                                             </td>
                                             <td>
-                                                <%= doc.professor %>
+                                                <%= doc.professor.nome %>
                                             </td>
                                         </tr>
-                                        <% }); %>
+                                    <% }); %>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="container"> 
+                <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
+                    <div class="col-md-4 d-flex align-items-center"> 
+                        <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.01 Fettermann Aikidô</span>
+                        </div> 
+                        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
+                </footer> 
+            </div>
+
         </div>
     </main>
 </body>

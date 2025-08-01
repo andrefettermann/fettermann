@@ -19,13 +19,12 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
- app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/api/', apiRouter);
 app.use('/dojos/', dojoRouter);
 app.use('/graduacoes/', graduacaoRouter);
 app.use('/pessoas/', pessoaRouter);
-
-app.use('/api/', apiRouter);
 
 //app.use((req: Request, res: Response, next: NextFunction) => {
 //   res.send("Hello World");
