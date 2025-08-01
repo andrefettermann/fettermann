@@ -3,7 +3,6 @@ import * as mongodb from 'mongodb';
 import { ObjectId, Schema, model } from 'mongoose';
 
 interface IDojo {
-    codigo: string,
     nome: string,
     endereco: string,
     cidade: string,
@@ -21,10 +20,6 @@ interface IDojo {
 };
 
 const dojoSchema = new Schema<IDojo>({
-    codigo: {
-        type: String,
-        required: true
-    },
     nome: {
         type: String,
         required: true

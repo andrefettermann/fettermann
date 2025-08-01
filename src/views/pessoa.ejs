@@ -133,13 +133,13 @@
                 <label for="dojo_id" class="col-form-label">Dojo</label>
               </div>
               <div class="col-4">
-                <select id="dojo_id" name="dojo_id" class="form-select" aria-label="Dojo">
-                  <option value="" selected>Selecione</option>
+                <select id="id_dojo" name="id_dojo" class="form-select" aria-label="Dojo">
+                  <option value="">Selecione</option>
                   <% docs_dojos.forEach(function(dojo) { %>
-                    <% if (doc.dojo && dojo.codigo == doc.dojo.codigo) {%>
-                      <option value="<%= dojo.codigo %>" selected><%= dojo.nome %></option>
+                    <% if (doc.dojo && dojo._id == doc.dojo._id) {%>
+                      <option value="<%= dojo._id %>" selected><%= dojo.nome %></option>
                     <% } else { %>
-                      <option value="<%= dojo.codigo %>"><%= dojo.nome %></option>
+                      <option value="<%= dojo._id %>"><%= dojo.nome %></option>
                     <% } %>
                   <% }) %>
                 </select>

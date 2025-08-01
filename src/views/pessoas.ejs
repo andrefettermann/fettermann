@@ -91,7 +91,9 @@
                                                 <%= doc.situacao %>
                                             </td>
                                             <td>
-                                                <%= doc.dojo.nome %>
+                                                <% if (doc.dojo[0]) { %> 
+                                                    <%= doc.dojo[0].nome %>
+                                                <% } %>
                                             </td>
                                         </tr>
                                         <% }); %>

@@ -1,4 +1,5 @@
-import { Decimal128, model, Schema } from "mongoose";
+import * as mongodb from 'mongodb';
+import { Decimal128, model, ObjectId, Schema } from "mongoose";
 
 // Pessoa.ts
 interface IPessoa {
@@ -9,7 +10,7 @@ interface IPessoa {
     cpf: string,
     data_inicio_aikido: string,
     data_matricula: string,
-    codigo_dojo: string,
+    id_dojo: ObjectId,
     graduacao_atual: string,
     pagamentos : [{
         data: Date,
@@ -54,8 +55,9 @@ const PessoaSchema = new Schema<IPessoa>({
         type: String,
         required: false
     },
-    codigo_dojo: {
-        type: String,
+    id_dojo: {
+        type: mongodb.ObjectId,
+        default: null,
         required: false
     },
     graduacao_atual: {

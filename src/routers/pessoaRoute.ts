@@ -1,7 +1,6 @@
 /* pessoaRoute.ts */
 import express from 'express';
 import { convertDdMmYyyyToDate } from '../utils/date';
-import * as pessoaController from '../controllers/apiPessoaController';
 
 const router = express.Router();
 
@@ -48,18 +47,35 @@ function setDoc(req: any) {
         }
     }
 
-    doc = {
-        'aniversario': req.body.aniversario,
-        'matricula': req.body.matricula,
-        'nome': req.body.nome,
-        'situacao': req.body.situacao,
-        'cpf': req.body.cpf,
-        'data_inicio_aikido': req.body.data_inicio,
-        'data_matricula': req.body.data_matricula,
-        'codigo_dojo': req.body.dojo,
-        'graduacao_atual': req.body.graduacao_atual,
-        'promocoes': doc_promocoes,
-        'pagamentos': doc_pagamentos
+
+    if (req.body.id_dojo == '') {
+        doc = {
+            'aniversario': req.body.aniversario,
+            'matricula': req.body.matricula,
+            'nome': req.body.nome,
+            'situacao': req.body.situacao,
+            'cpf': req.body.cpf,
+            'data_inicio_aikido': req.body.data_inicio,
+            'data_matricula': req.body.data_matricula,
+            'graduacao_atual': req.body.graduacao_atual,
+            'id_dojo': null,
+            'promocoes': doc_promocoes,
+            'pagamentos': doc_pagamentos
+        }
+    } else {
+        doc = {
+            'aniversario': req.body.aniversario,
+            'matricula': req.body.matricula,
+            'nome': req.body.nome,
+            'situacao': req.body.situacao,
+            'cpf': req.body.cpf,
+            'data_inicio_aikido': req.body.data_inicio,
+            'data_matricula': req.body.data_matricula,
+            'graduacao_atual': req.body.graduacao_atual,
+            'id_dojo': req.body.id_dojo,
+            'promocoes': doc_promocoes,
+            'pagamentos': doc_pagamentos
+        }
     }
 
     return doc;
@@ -68,8 +84,7 @@ function setDoc(req: any) {
 /** Busca todas as pessoas */
 router.get('/', async (req, res, next) => {
     try {
-        //const docs: any = await pessoaController.buscaTodos();
-        const response = await fetch('http://localhost:3000/api/pessoas');
+        const response = await fetch(`${req.protocol}://${req.host}/api/pessoas/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -92,11 +107,12 @@ router.get('/', async (req, res, next) => {
 
 /** Busca as pessoas ativas ou inativas */
 router.get('/situacao/:situacao', async (req, res, next) => {
+    const situacao = req.params.situacao;
     try {
-        const response = await fetch('http://localhost:3000/api/pessoas/situacao/' 
-            + req.params.situacao);
+        const response = await fetch(
+            `${req.protocol}://${req.host}/api/pessoas/situacao/${situacao}`);
 
-            if (!response.ok) {
+        if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -118,11 +134,12 @@ router.get('/situacao/:situacao', async (req, res, next) => {
 
 /** Busca os aniversariantes do mes informado */
 router.get('/aniversariantes/:mes', async (req, res, next) => {
+    const mes = req.params.mes;
     try {
-        const response = await fetch('http://localhost:3000/api/pessoas/aniversariantes/' 
-            + req.params.mes);
+        const response = await fetch(
+            `${req.protocol}://${req.host}/api/pessoas/aniversariantes/${mes}`);
 
-            if (!response.ok) {
+        if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -145,17 +162,17 @@ router.get('/aniversariantes/:mes', async (req, res, next) => {
 /** Abre a tela de inclusao dos dados da pessoa*/
 router.get('/novo', async (req, res, next) => {
     try {
-        const responseDojos = await fetch('http://localhost:3000/dojos/api/');
-        const rsponseGraduacoes = await fetch('http://localhost:3000/api/graduacoes');
+        const responseDojos = await fetch(`${req.protocol}://${req.host}/api/dojos`);
+        const responseGraduacoes = await fetch(`${req.protocol}://${req.host}/api/graduacoes`);
 
         if (!responseDojos.ok) {
             throw new Error(`HTTP error! Dojos status: ${responseDojos.status}`);
-        } else if (!rsponseGraduacoes.ok) {
-            throw new Error(`HTTP error! Graduacoes status: ${rsponseGraduacoes.status}`);
+        } else if (!responseGraduacoes.ok) {
+            throw new Error(`HTTP error! Graduacoes status: ${responseGraduacoes.status}`);
         }
 
         const docsDojos = await responseDojos.json();
-        const docsGraduacoes = await rsponseGraduacoes.json();
+        const docsGraduacoes = await responseGraduacoes.json();
         res.render('pessoa',
             {
                 title: 'Dados da pessoa (Inclusão)',
@@ -174,9 +191,9 @@ router.get('/novo', async (req, res, next) => {
 
 /** Abre a tela com os detalhes da pessoa */
 router.get('/detalhes/:id', async (req, res, next) => {
+    const id = req.params.id;
     try {
-        const response = await fetch('http://localhost:3000/api/pessoa/' 
-            + req.params.id);
+        const response = await fetch(`${req.protocol}://${req.host}/api/pessoa/${id}`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -199,24 +216,24 @@ router.get('/edita/:id', async (req, res, next) => {
     var id = req.params.id;
 
     try {
-        var dojos = await fetch('http://localhost:3000/dojos/api/');
-        var graduacoes = await fetch('http://localhost:3000/api/graduacoes/');
+        const responseDojos = await fetch(`${req.protocol}://${req.host}/api/dojos`);
+        const responseGraduacoes = await fetch(`${req.protocol}://${req.host}/api/graduacoes`);
 
-        if (!dojos.ok) {
-            throw new Error(`HTTP error! status: ${dojos.status}`);
-        } else if (!graduacoes.ok) {
-            throw new Error(`HTTP error! status: ${graduacoes.status}`);
+        if (!responseDojos.ok) {
+            throw new Error(`HTTP error! Dojos status: ${responseDojos.status}`);
+        } else if (!responseGraduacoes.ok) {
+            throw new Error(`HTTP error! Graduacoes status: ${responseGraduacoes.status}`);
         }
 
-        const docs_dojos = await dojos.json();
-        const docs_graduacoes = await graduacoes.json();
+        const docs_dojos = await responseDojos.json();
+        const docs_graduacoes = await responseGraduacoes.json();
 
-        const pessoa = await fetch('http://localhost:3000/api/pessoa/' + id);
-        if (!pessoa.ok) {
-            throw new Error(`HTTP error! status: ${pessoa.status}`);
+        const response = await fetch(`${req.protocol}://${req.host}/api/pessoa/${id}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Pessoa status: ${response.status}`);
         }
 
-        const doc = await pessoa.json();
+        const doc = await response.json();
         res.render('pessoa',
             {
                 title: 'Dados da pessoa (Alteração)',
@@ -238,7 +255,7 @@ router.get('/edita/:id', async (req, res, next) => {
 router.post('/inclui', async (req, res, next) => {
     var doc = setDoc(req);
     try {
-        const response = await fetch('http://localhost:3000/api/pessoa/inclui', {
+        const response = await fetch(`${req.protocol}://${req.host}/api/pessoa/inclui`, {
             method: 'POST', // Specify the HTTP method as POST
             headers: {
                 'Content-Type': 'application/json' // Set content type for JSON data
@@ -262,13 +279,18 @@ router.post('/altera/:id', async (req, res, next) => {
     var id = req.params.id;
     var doc = setDoc(req);
     try {
-        const response = await fetch('http://localhost:3000/api/pessoa/altera/'+ id, {
+        const response = await fetch(`${req.protocol}://${req.host}/api/pessoa/altera/${id}`, {
             method: 'PATCH', // Specify the HTTP method as POST
             headers: {
                 'Content-Type': 'application/json' // Set content type for JSON data
             },
             body: JSON.stringify(doc) // Convert data to JSON string for the request body
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         mensagem = 'Pessoa alterada com sucesso!';
         res.redirect('/pessoas');
     } catch (err) {

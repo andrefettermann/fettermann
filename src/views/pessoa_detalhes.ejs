@@ -49,6 +49,16 @@
           </div>
           <div class="row pt-2">
             <div class="col">
+                <span class="fw-bold">Dojo: </span>
+                <span id="dojo" name="dojo">
+                  <% if (doc.dojo[0]) { %>
+                    <%= doc.dojo[0].nome %>
+                  <% } %>
+                </span>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
                 <span class="fw-bold">Matrícula: </span>
                 <span id="matricula" name="matricula"><%= doc.matricula %></span>
             </div>

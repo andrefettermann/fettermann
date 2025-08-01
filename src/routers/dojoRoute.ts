@@ -21,7 +21,6 @@ function setDoc(req: any) {
     }
     
     const doc = {
-        'codigo': req.body.codigo,
         'nome': req.body.nome,
         'endereco': req.body.endereco,
         'bairro': req.body.bairro,

@@ -5,8 +5,8 @@ import { IPessoa, Pessoa } from "../models/pessoa";
 const lookupDojo = {
     $lookup: {
         from: "dojos",
-        localField: "codigo_dojo",
-        foreignField: "codigo",
+        localField: "id_dojo",
+        foreignField: "_id",
         as: "dojo"
     }
 }
@@ -25,8 +25,9 @@ export async function getPessoa(id: string) {
         const doc: IPessoa[] = await Pessoa.aggregate([
                     {
                         $match: {"_id": new ObjectId(id)}
-                    },  
-                    lookupDojo
+                    },
+                    lookupDojo,
+                    //{$unwind: '$dojo'},
                 ])
         return doc[0];
     } catch(error){
@@ -36,7 +37,12 @@ export async function getPessoa(id: string) {
 
 export async function getPessoas(){
     try{
-        const docs: IPessoa[] = await Pessoa.aggregate([lookupDojo]);
+        const docs: IPessoa[] = await Pessoa.aggregate(
+            [
+                lookupDojo,
+//                {$unwind: '$dojo'}
+            ],
+        );
         return docs;
     } catch(error){
         return error;
@@ -49,7 +55,8 @@ export  async function getPessoasSituacao(situacao: string) {
                     {
                         $match: {'situacao': situacao}
                     },  
-                    lookupDojo
+                    lookupDojo,
+                    //{$unwind: '$dojo'},
                 ]);
         return docs;
     }
@@ -64,7 +71,8 @@ export async function getPessoasAniversario(mes: string) {
             {
                 $match: {'aniversario': { $regex: mes + '$', $options: 'i' }}
             },  
-            lookupDojo
+            lookupDojo,
+            //{$unwind: '$dojo'},
         ]);
         return docs
     } catch(error){
@@ -102,13 +110,8 @@ export async function updatePessoa(id: string, doc: any){
             status: "Success",
             data: pessoa
         }
-    }
-    catch(error){
+    } catch(error){
         console.log(error)
         throw error
-//        return {
-//            status: "Failed",
-//            mensagem: error
-//        };
     }
 }

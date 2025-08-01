@@ -9,22 +9,21 @@ async function getPessoa(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
 
     try {
-        const pessoa: IPessoa | any = await repositorio.getPessoa(id);
-        
-        if (pessoa) {
-            pessoa.nome = decripta(pessoa.nome);
+        const doc: IPessoa | any = await repositorio.getPessoa(id);
+        if (doc) {
+            doc.nome = decripta(doc.nome);
 
-            if (pessoa.cpf) pessoa.cpf = decripta(pessoa.cpf);
+            if (doc.cpf) doc.cpf = decripta(doc.cpf);
 
-            pessoa.promocoes.forEach((p: { data_formatada: string; data: string; })=>{
+            doc.promocoes.forEach((p: { data_formatada: string; data: string; })=>{
                 p.data_formatada = formatDateToDDMMYYYY(new Date(p.data));
             })
 
-            pessoa.pagamentos.forEach((p: { data_formatada: string; data: string; })=>{
+            doc.pagamentos.forEach((p: { data_formatada: string; data: string; })=>{
                 p.data_formatada = formatDateToDDMMYYYY(new Date(p.data));
             })
 
-            res.json(pessoa);
+            res.status(200).json(doc);
         } else {
             res.sendStatus(404);
         }
