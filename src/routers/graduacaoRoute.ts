@@ -22,7 +22,7 @@ function setDoc(req: any) {
 
 router.get('/', async (req, res, next) => {
     try {
-        var response = await fetch('http://localhost:3000/api/graduacoes');
+        const response = await fetch(`${req.protocol}://${req.host}/api/graduacoes/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -60,7 +60,7 @@ router.get('/edita/:id', async (req, res, next) => {
     var id = req.params.id;
 
     try {
-        var response = await fetch('http://localhost:3000/api/graduacao/' + id);
+        const response = await fetch(`${req.protocol}://${req.host}/api/graduacao/${id}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -81,7 +81,7 @@ router.get('/edita/:id', async (req, res, next) => {
 router.post('/inclui', async (req, res, next) => {
     var doc = setDoc(req);
     try {
-        const response = await fetch('http://localhost:3000/api/graduacao/', {
+        const response = await fetch(`${req.protocol}://${req.host}/api/graduacao/`, {
             method: 'POST', // Specify the HTTP method as POST
             headers: {
                 'Content-Type': 'application/json' // Set content type for JSON data
@@ -104,7 +104,8 @@ router.post('/altera/:id', async (req, res, next) => {
     var id = req.params.id;
     var doc = setDoc(req);
     try {
-        const response = await fetch('http://localhost:3000/api/graduacao/'+ id, {
+        
+        const response = await fetch(`${req.protocol}://${req.host}/api/graduacao/${id}`, {
             method: 'PATCH', // Specify the HTTP method as POST
             headers: {
                 'Content-Type': 'application/json' // Set content type for JSON data

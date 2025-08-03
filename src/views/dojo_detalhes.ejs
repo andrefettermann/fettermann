@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Fettermann Aikidô - <%= title %>
+  </title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <header>
+  </header>
+  <main>
+    <div class="container pt-3 w-75">
+            
+      <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
+          <img src="/images/logo-sm.png"/>
+          <span class="fs-4">Fettermann Aikidô</span>
+        </a> 
+
+        <ul class="nav nav-pills"> 
+          <li class="nav-item"><a href="/dojos" class="nav-link active" aria-current="page">Dojos</a></li> 
+          <li class="nav-item"><a href="/pessoas" class="nav-link">Pessoas</a></li> 
+          <li class="nav-item"><a href="/graduacoes" class="nav-link">Graduações</a></li> 
+          <li class="nav-item"><a href="/logout" class="nav-link">Sair</a></li> 
+        </ul>
+      </header>
+
+      <div class="card">
+        <div class="card-header">Dados do dojo</div>
+        <div class="card-body">
+          <div class="row pt-1">
+            <div class="col-10"></div>
+            <div class="col-2">
+              <a class="btn btn-primary" href="/dojos/edita/<%= doc._id %>">Edita</a>
+              <a class="btn btn-primary" href="/dojos">Cancela</a>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">Nome: </span>
+                <span id="nome" name="nome"><%= doc.nome %></span>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">Endereço: </span>
+                <span id="endereco" name="endereco"><%= doc.endereco %></span>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">Cidade: </span>
+                <span id="cidade" name="cidade"><%= doc.cidade %></span>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">Bairro: </span>
+                <span id="bairro" name="bairro"><%= doc.bairro %></span>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">UF: </span>
+                <span id="uf" name="uf"><%= doc.uf %></span>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">País: </span>
+                <span id="pais" name="pais"><%= doc.pais %></span>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">URL: </span>
+                <span id="url" name="url"><%= doc.url %></span>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">E-mail: </span>
+                <span id="email" name="email"><%= doc.email %></span>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">Professor: </span>
+                <span id="professor" name="professor"><%= doc.professor.nome %></span>
+            </div>
+          </div>
+
+          <div class="card mb-3">
+            <div class="card-header fw-bold">Alunos</div>
+            <div class="card-body">
+              <ol id="promocoes" name="promocoes" class="list-group list-group-flush">
+                <% if (doc.pessoas) { %>
+                      <% doc.pessoas.forEach(function(pessoa){ %>
+                        <li class="list-group-item">
+                          <%= pessoa.nome + " (" + pessoa.graduacao_atual + ") (" + pessoa.situacao + ")" %>
+                        </li>
+                      <% }); %>
+                <% }; %>
+              </ol>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="container"> 
+          <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
+              <div class="col-md-4 d-flex align-items-center"> 
+                  <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.01 Fettermann Aikidô</span>
+                </div> 
+                <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
+          </footer> 
+      </div>
+
+    </div>
+  </main>
+</body>
+
+</html>

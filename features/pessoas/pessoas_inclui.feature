@@ -1,13 +1,15 @@
-Feature: Lista de pessoas
+Feature: Inclui pessoas
 
 # npm run test:cucumber features/pessoas_list.feature --tags '@list_01'
 # npx cucumber-js features/pessoas_list.feature --tags '@list_01' <==
 
-@find_all
-Scenario: Busca todas as pessoas cadastradas
-    Given que ha pessoas cadastradas
-    When eu solicito a lista de pessoas cadastradas
-    Then deveria ser retornada uma lista com todas as pessoas cadastradas
+@inclusao_01
+Scenario: Dados obrigatorios
+    Given que ha uma pessoa a ser incluida
+    And que os dados obrigatorios desta pessoa nao foram informados
+    When os dados sao gravados
+    Then deveria ser solicitado que os dados obrigatorios sejam informados
+    And os dados desta pessoa nao deveriam ser gravados
 
 @find_one
 Scenario: Busca a pessoa pelo id

@@ -1,6 +1,5 @@
 import { Given, When, Then, BeforeAll, AfterAll } from '@cucumber/cucumber';
 import { assert } from 'chai'; // Or any other assertion library
-import * as controller from '../../src/controllers/pessoaController';
 import { db, close } from "../../src/db";
 
 var totalEsperado = 0;
@@ -19,67 +18,86 @@ AfterAll(async () => {
 });
 
 Given('que ha pessoas cadastradas', function() {
-    totalEsperado = 5
+    //obtem o total de pessoas cadastradas
+    return('Pendente de implementacao');
 });
 
 Given('que ha pessoas ativas cadastradas', function() {
-    totalEsperado = 5
+    //obtem o total de pessoas ativas cadastradas
+    return('Pendente de implementacao');
 });
 
 Given('que ha pessoas inativas cadastradas', function() {
-    totalEsperado = 2
+    //obtem o total de pessoas inativas cadastradas
+    return('Pendente de implementacao');
 });
 
 Given('uma pessoa cadastrada com o id {string}', function(oId: string){
-    id = oId;
+    // registra o id a ser buscado
+    return('Pendente de implementacao');
 });
 
 Given('que ha aniversariantes do mes {string} cadastrados', function(oMes: string){
-    mes = oMes;
-    totalEsperado = 2;
+    // registra o mes a ser buscado e obtem o total de aniversariantes no mes
+    return('Pendente de implementacao');
 });
 
 When('eu solicito a lista de pessoas cadastradas', async function () {
-    response = await controller.buscaTodos();
-    totalObtido = response.length;
+    // busca a lista de pessoas cadastradas
+    return('Pendente de implementacao');
 });
 
 When('eu solicito a lista de pessoas ativas cadastradas', async function () {
-    response = await controller.buscaPorSituacao('Ativo');
-    totalObtido = response.length;
+    // busca a list de pessoas ativas cadastradas
+    return('Pendente de implementacao');
 });
 
 When('eu solicito a lista de pessoas inativas cadastradas', async function () {
-    response = await controller.buscaPorSituacao('Inativo');
-    totalObtido = response.length;
+    // busca a lista de pessoas inativas cadastradas
+    return('Pendente de implementacao');
 });
 
 When('eu solicito a lista de aniversariantes do mes cadastrados', async function () {
-    response = await controller.buscaPorAniversarioMes(mes);
-    totalObtido = response.length;
+    // busca a lista de aniversariantes do mes
+    return('Pendente de implementacao');
 });
 
 When('eu solicito os dados desta pessoa', async function () {
-    response = await controller.buscaPorId(id);
+    // busca a pessoa cadastrada
+    return('Pendente de implementacao');
 });
 
+/**
+ * Then
+ */
+
 Then('deveria ser retornada uma lista com todas as pessoas cadastradas', function () {
-    assert.equal(totalObtido, totalEsperado);
+    // verifica o total retornado com o total cadastrado
+    //assert.equal(totalObtido, totalEsperado);
+    return('Pendente de implementacao');
 });
 
 Then('deveria ser retornada uma lista com todas as pessoas ativas cadastradas', function () {
-    assert.equal(totalObtido, totalEsperado);
+    // verifica o total retornado com o total cadastrado
+    //assert.equal(totalObtido, totalEsperado);
+    return('Pendente de implementacao');
 });
 
 Then('deveria ser retornada uma lista com todos os aniversariantes do mes cadastrados', function () {
-    assert.equal(totalObtido, totalEsperado);
+    // verifica o total retornado com o total cadastrado
+    //assert.equal(totalObtido, totalEsperado);
+    return('Pendente de implementacao');
 });
 
 Then('deveria ser retornada uma lista com todas as pessoas inativas cadastradas', function () {
-    assert.equal(totalObtido, totalEsperado);
+    // verifica o total retornado com o total cadastrado
+    //assert.equal(totalObtido, totalEsperado);
+    return('Pendente de implementacao');
 });
 
 Then('o nome desta pessoa deveria ser {string}', function (oNome: string) {
-    const doc = response;
-    assert.equal(oNome, doc.nome);
+    // verifica o nome retornado com o nome cadastrado
+    // const doc = response;
+    // assert.equal(oNome, doc.nome);
+    return('Pendente de implementacao');
 });

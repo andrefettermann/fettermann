@@ -1,8 +1,10 @@
 /* pessoaRouters.ts */
 import { Request, Response, NextFunction } from 'express';
 import * as repositorio from '../repositories/apiDojoRepository';
+import * as pessoaRepositorio from '../repositories/apiPessoaRepository';
 import { IDojo } from '../models/dojo';
 import { decripta } from '../utils/crypto';
+import { IPessoa } from 'src/models/pessoa';
 
 async function getDojo(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
@@ -10,6 +12,30 @@ async function getDojo(req: Request, res: Response, next: NextFunction) {
         const dojo: IDojo | any = await repositorio.getDojo(id);
         if (dojo) {
             dojo.professor.nome = decripta(dojo.professor.nome);
+
+            // busca os alunos do dojo
+            const pessoas: IPessoa[] | any = await pessoaRepositorio.getPessoasDojo(dojo._id);
+            if (pessoas) {
+                pessoas.forEach((p: { nome: string; cpf: string; }) => {
+                    p.nome = decripta(p.nome);
+                    if (p.cpf) decripta(p.cpf);
+                })
+                
+                pessoas.sort((a: { nome: string; }, b: { nome: string; }) => {
+                    var fa = a.nome.toLowerCase();
+                    var fb = b.nome.toLowerCase();
+
+                    if (fa < fb) {
+                        return -1;
+                    }
+                    if (fa > fb) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                dojo.pessoas = pessoas;
+            }
+            
             res.json(dojo);
         } else {
             res.sendStatus(404);

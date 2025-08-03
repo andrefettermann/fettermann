@@ -12,6 +12,30 @@ describe('Pessoa repository', () => {
     close();
   })
 
+  test('nao deveria incluir pessoa sem os dados obrigatorios', async () => {
+    const doc = {
+      'aniversario': '',
+      'matricula': '',
+      'nome': '',
+      'situacao': '',
+      'cpf': '',
+      'data_inicio_aikido': '',
+      'data_matricula': '',
+      'codigo_dojo': '',
+      'graduacao_atual': '',
+      'pagamentos': [],
+      'promocoes': []
+    };
+
+    try {
+      const response: any = await repositorio.createPessoa(doc);
+      expect(response._id).toBeNull();
+    } catch (err) {
+      console.log(err);
+      expect(err).toBeNull();
+    }
+  });
+
   test('deveria incluir uma pessoa', async () => {
     const doc = {
       'aniversario': '14/01',
@@ -76,7 +100,16 @@ describe('Pessoa repository', () => {
     }
   });
 
-  test.only('deveria retornar uma pessoa pelo id', async () => {
+  test.only('deveria retornar os alunos de um dojo', async () => {
+    try {
+      const pessoas: any = await repositorio.getPessoasDojo('688bf3b6670789903d6d15e4');
+      expect(pessoas.length).toBe(2);
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  test('deveria retornar uma pessoa pelo id', async () => {
     try {
       const pessoa: any = await repositorio.getPessoa('68836238624ac36ce1d37dac');
       expect(pessoa.nome).toBe('2b6a1600aa0286cd252fdd9f5d825489:edd3d1b029cdeac6b1a347ab9f14c55958f32e155571a9ce11a650234c21a512');

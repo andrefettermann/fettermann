@@ -56,7 +56,6 @@
                             <table id="tab_dojos" class="table table-striped table-hover table-sm">
                                 <thead id="tab_dojos_cabec">
                                     <tr>
-                                        <th id="col_codigo" name="col_codigo" scope="col">Código</th>
                                         <th id="col_nome" name="col_nome" scope="col">Nome</th>
                                         <th id="col_cidade" name="col_cidade" scope="col">Cidade</th>
                                         <th id="col_professor" name="col_professor" scope="col">Professor</th>
@@ -65,13 +64,8 @@
                                 <tbody id="tab_dojos_linhas">
                                     <% docs.forEach(function(doc){ %>
                                         <tr>
-                                            <th scope="row">
-                                                <a href="dojos/edita/<%= doc._id %>">
-                                                    <%= doc.codigo %>
-                                                </a>
-                                            </th>
                                             <td>
-                                                <a href="dojos/edita/<%= doc._id %>">
+                                                <a href="dojos/detalhes/<%= doc._id %>">
                                                     <%= doc.nome %>
                                                 </a>
                                             </td>

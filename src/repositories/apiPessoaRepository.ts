@@ -80,6 +80,15 @@ export async function getPessoasAniversario(mes: string) {
     }
 }
 
+export async function getPessoasDojo(id: string) {
+    try {
+        const docs: IPessoa[] = await Pessoa.find({id_dojo: id});
+        return docs
+    } catch(error){
+        return error;
+    }
+}
+
 export async function createPessoa(doc: any){
     try {
         doc.nome = encripta(doc.nome);

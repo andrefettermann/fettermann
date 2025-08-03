@@ -36,9 +36,10 @@ function setDoc(req: any) {
     return doc;
 }
 
+/* Busca todos os dojos */
 router.get('/', async (req, res, next) => {
     try {
-        var response = await fetch('http://localhost:3000/api/dojos/');
+        const response = await fetch(`${req.protocol}://${req.host}/api/dojos/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         } else {
@@ -60,7 +61,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/novo', async (req, res, next) => {
     try {
-        const responsePessoas = await fetch('http://localhost:3000/api/pessoas');
+        const responsePessoas = await fetch(`${req.protocol}://${req.host}/api/pessoas/`);
         if (!responsePessoas.ok) {
             throw new Error(`HTTP error! Pessoas status: ${responsePessoas.status}`);
         }
@@ -79,18 +80,48 @@ router.get('/novo', async (req, res, next) => {
     }
 });
 
-router.get('/edita/:id', async (req, res, next) => {
+router.get('/detalhes/:id', async (req, res, next) => {
     var id = req.params.id;
 
     try {
-        const responsePessoas = await fetch('http://localhost:3000/api/pessoas');
+        const responsePessoas = await fetch(`${req.protocol}://${req.host}/api/pessoas/`);
         if (!responsePessoas.ok) {
             throw new Error(`HTTP error! Pessoas status: ${responsePessoas.status}`);
         }
 
         const docsPessoas = await responsePessoas.json();
 
-        var response = await fetch('http://localhost:3000/api/dojo/' + id);
+        const response = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const doc = await response.json();
+        res.render('dojo_detalhes',
+            {
+                title: 'Dados do dojo (Consulta)',
+                doc,
+                docs_pessoas: docsPessoas,
+                action: '/dojos/altera/' + id
+            }
+        );
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get('/edita/:id', async (req, res, next) => {
+    var id = req.params.id;
+
+    try {
+        const responsePessoas = await fetch(`${req.protocol}://${req.host}/api/pessoas/`);
+        if (!responsePessoas.ok) {
+            throw new Error(`HTTP error! Pessoas status: ${responsePessoas.status}`);
+        }
+
+        const docsPessoas = await responsePessoas.json();
+
+        const response = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -112,7 +143,7 @@ router.get('/edita/:id', async (req, res, next) => {
 router.post('/inclui', async (req, res, next) => {
     var doc = setDoc(req);
     try {
-        const response = await fetch('http://localhost:3000/api/dojo/', {
+        const response = await fetch(`${req.protocol}://${req.host}/api/dojo/`, {
             method: 'POST', // Specify the HTTP method as POST
             headers: {
                 'Content-Type': 'application/json' // Set content type for JSON data
@@ -135,7 +166,7 @@ router.post('/altera/:id', async (req, res, next) => {
     var id = req.params.id;
     var doc = setDoc(req);
     try {
-        const response = await fetch('http://localhost:3000/api/dojo/'+ id, {
+        const response = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`, {
             method: 'PATCH', // Specify the HTTP method as POST
             headers: {
                 'Content-Type': 'application/json' // Set content type for JSON data
