@@ -44,7 +44,7 @@ describe('Pessoa repository', () => {
     }
   });
 
-  test.only('deveria excluir', async() => {
+  test('deveria excluir', async() => {
     try {
       const response: IGraduacao | any = await repositorio.deleteGraduacao("688a968854488e9b3a033299");
       expect(response.deletedCount).toBe(1);
@@ -54,10 +54,10 @@ describe('Pessoa repository', () => {
     }
   });
 
-  test('deveria retornar uma graduacao pelo id', async () => {
+  test.only('deveria retornar uma graduacao pelo id', async () => {
     try {
-      const response: any = await repositorio.getGraduacao('687ebd93337f4a6e6cc653ea');
-      expect(response.nome).toBe('6º Kyu');
+      const response: any = await repositorio.getGraduacao('687eca2600d5db1747476461');
+      expect(response.nome).toBe('3º Kyu');
     } catch (err) {
       console.log(err);
       expect(err).toBeNull();
@@ -69,7 +69,6 @@ describe('Pessoa repository', () => {
       const graduacoes: any = await repositorio.getGraduacoes();
       expect(graduacoes.length).toBe(11);
     } catch (err) {
-      console.log(err);
       expect(err).toBeNull();
     }
   })

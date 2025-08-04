@@ -1,6 +1,4 @@
 
-import { db, close } from "../db";
-import Pessoa from "../models/pessoa";
 import * as crypto from "../utils/crypto";
 
 describe('Pessoa repository', () => {

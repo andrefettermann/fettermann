@@ -1,7 +1,9 @@
 /* apiGraduacaoController.ts */
 import { Request, Response, NextFunction } from 'express';
 import * as repositorio from '../repositories/apiGraduacaoRepository';
-import { IGraduacao } from 'src/models/graduacao';
+import * as pessoaRepositorio from '../repositories/apiPessoaRepository';
+import { IGraduacao } from '../models/graduacao';
+import { decripta } from '../utils/crypto';
 
 async function getGraduacao(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
@@ -9,10 +11,31 @@ async function getGraduacao(req: Request, res: Response, next: NextFunction) {
     try {
         const graduacao: IGraduacao | any = await repositorio.getGraduacao(id);
         if (graduacao)
+            // busca os alunos na graduacao
+            if (graduacao.pessoas) {
+                
+                graduacao.pessoas.forEach((p: { nome: string; cpf: string; }) => {
+                    p.nome = decripta(p.nome);
+                    if (p.cpf) decripta(p.cpf);
+                })
+                
+                graduacao.pessoas.sort((a: { nome: string; }, b: { nome: string; }) => {
+                    var fa = a.nome.toLowerCase();
+                    var fb = b.nome.toLowerCase();
+
+                    if (fa < fb) {
+                        return -1;
+                    }
+                    if (fa > fb) {
+                        return 1;
+                    }
+                    return 0;
+                });
+            }
+
             res.json(graduacao);
-        else
-            res.sendStatus(404);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ mensagem: error });
     }
 }

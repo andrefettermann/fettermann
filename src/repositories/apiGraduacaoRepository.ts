@@ -1,10 +1,26 @@
 /* apiGraduacaoRepository.ts */
+import { ObjectId } from "mongodb";
 import { Graduacao, IGraduacao } from "../models/graduacao";
+
+const lookupPessoa = {
+    $lookup: {
+        from: "pessoas",
+        localField: "_id",
+        foreignField: "id_graduacao",
+        as: "pessoas"
+    }
+}
 
 export async function getGraduacao(id: string) {
     try {
-        const docs: any = await Graduacao.findById(id);
-        return docs;
+        const docs: any = await Graduacao.aggregate([
+                    {
+                        $match: {"_id": new ObjectId(id)}
+                    },
+                    lookupPessoa,
+                ])
+        //await Graduacao.findById(id);
+        return docs[0];
     }  catch(error) {
         return error;
     }

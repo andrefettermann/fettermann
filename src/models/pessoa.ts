@@ -12,6 +12,7 @@ interface IPessoa {
     data_matricula: string,
     id_dojo: ObjectId,
     graduacao_atual: string,
+    id_graduacao: ObjectId,
     pagamentos : [{
         data: Date,
         valor_devido: Decimal128,
@@ -21,8 +22,7 @@ interface IPessoa {
     }],
     promocoes: [{
         data: Date,
-        graduacao: string,
-        codigo_graduacao: string
+        graduacao: string
     }]
 };
 
@@ -62,6 +62,11 @@ const PessoaSchema = new Schema<IPessoa>({
     },
     graduacao_atual: {
         type: String,
+        required: false
+    },
+    id_graduacao: {
+        type: mongodb.ObjectId,
+        default: null,
         required: false
     },
     pagamentos: [

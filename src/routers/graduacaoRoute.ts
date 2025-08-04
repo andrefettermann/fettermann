@@ -78,6 +78,28 @@ router.get('/edita/:id', async (req, res, next) => {
     }
 });
 
+router.get('/detalhes/:id', async (req, res, next) => {
+    var id = req.params.id;
+
+    try {
+        const response = await fetch(`${req.protocol}://${req.host}/api/graduacao/${id}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const doc = await response.json();
+        res.render('graduacao_detalhes',
+            {
+                title: 'Dados da graduação (Consulta)',
+                doc,
+                action: '/graduacoes/altera/' + id
+            }
+        );
+    } catch (err) {
+        next(err);
+    }
+});
+
 router.post('/inclui', async (req, res, next) => {
     var doc = setDoc(req);
     try {
