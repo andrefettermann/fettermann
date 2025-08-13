@@ -64,7 +64,7 @@ describe('Pessoa repository', () => {
     //const response = await updatePessoa('', newPessoa);
   });
 
-  test('deveria retornar todas as pessoas cadastradas', async () => {
+  test.only('deveria retornar todas as pessoas cadastradas', async () => {
     try {
       const pessoas: any = await repositorio.getPessoas();
       expect(pessoas.length).toBe(5);
@@ -100,7 +100,7 @@ describe('Pessoa repository', () => {
     }
   });
 
-  test.only('deveria retornar os alunos de um dojo', async () => {
+  test('deveria retornar os alunos de um dojo', async () => {
     try {
       const pessoas: any = await repositorio.getPessoasDojo('688bf3b6670789903d6d15e4');
       expect(pessoas.length).toBe(2);

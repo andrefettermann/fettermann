@@ -12,10 +12,9 @@ export function convertDdMmYyyyToDate(dateString: String) {
   return new Date(isoFormattedString);
 }
 
-export function formatDateToDDMMYYYY(date: Date): string {
-  const d = date.getDate() + 1; //ajustar, por algum motivo getdate subtrai um
-  const day = d.toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-indexed
+export function formatDateDDMMAAAA(date: Date): string {
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // meses vão de 0 a 11
   const year = date.getFullYear();
 
   return `${day}/${month}/${year}`;

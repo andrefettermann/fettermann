@@ -99,13 +99,13 @@
                 <label for="graduacao_atual" class="col-form-label">*Graduação atual</label>
               </div>
               <div class="col-2">
-                <select id="graduacao_atual" name="graduacao_atual" class="form-select" aria-label="Graduação atual" required>
+                <select id="id_graduacao" name="id_graduacao" class="form-select" aria-label="Graduação atual" required>
                   <option value="" selected>Selecione</option>
                   <% docs_graduacoes.forEach(function(graduacao) { 
-                       if (doc.graduacao_atual && graduacao.nome == doc.graduacao_atual) { %>
-                      <option value="<%= graduacao.nome %>" selected><%= graduacao.nome + ' - ' + graduacao.faixa %></option>
+                       if (doc.id_graduacao && graduacao._id == doc.id_graduacao) { %>
+                      <option value="<%= graduacao._id %>" selected><%= graduacao.nome + ' - ' + graduacao.faixa %></option>
                     <% } else { %>
-                      <option value="<%= graduacao.nome %>"><%= graduacao.nome + ' - ' + graduacao.faixa %></option>
+                      <option value="<%= graduacao._id %>"><%= graduacao.nome + ' - ' + graduacao.faixa %></option>
                     <% } %>
                   <% }) %>
               </select>
@@ -136,7 +136,7 @@
                 <select id="id_dojo" name="id_dojo" class="form-select" aria-label="Dojo">
                   <option value="">Selecione</option>
                   <% docs_dojos.forEach(function(dojo) { %>
-                    <% if (doc.dojo && dojo._id == doc.dojo._id) {%>
+                    <% if (doc.dojo && dojo._id == doc.id_dojo) {%>
                       <option value="<%= dojo._id %>" selected><%= dojo.nome %></option>
                     <% } else { %>
                       <option value="<%= dojo._id %>"><%= dojo.nome %></option>
@@ -167,14 +167,14 @@
                         </div>
                       
                         <div class="col-3">
-                        <select id="graduacao_promocao_<%= index+1 %>" name="graduacao_promocao_<%= index+1 %>" 
+                        <select id="id_graduacao_promocao_<%= index+1 %>" name="id_graduacao_promocao_<%= index+1 %>" 
                           class="form-select" aria-label="Graduação" required>
                           <option value="" selected>Selecione</option>
                           <% docs_graduacoes.forEach(function(graduacao) { %>
-                            <% if (promocao.graduacao && graduacao.nome == promocao.graduacao) { %>
-                              <option value="<%= graduacao.nome %>" selected><%= graduacao.nome + ' - ' + graduacao.faixa %></option>
+                            <% if (promocao.id_graduacao && graduacao._id == promocao.id_graduacao) { %>
+                              <option value="<%= graduacao._id %>" selected><%= graduacao.nome + ' - ' + graduacao.faixa %></option>
                             <% } else { %>
-                              <option value="<%= graduacao.nome %>"><%= graduacao.nome + ' - ' + graduacao.faixa %></option>
+                              <option value="<%= graduacao._id %>"><%= graduacao.nome + ' - ' + graduacao.faixa %></option>
                             <% } %>
                           <% }) %>
                         </select>

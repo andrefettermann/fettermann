@@ -11,7 +11,6 @@ interface IPessoa {
     data_inicio_aikido: string,
     data_matricula: string,
     id_dojo: ObjectId,
-    graduacao_atual: string,
     id_graduacao: ObjectId,
     pagamentos : [{
         data: Date,
@@ -22,7 +21,8 @@ interface IPessoa {
     }],
     promocoes: [{
         data: Date,
-        graduacao: string
+        //graduacao: string,
+        id_graduacao: ObjectId
     }]
 };
 
@@ -60,10 +60,6 @@ const PessoaSchema = new Schema<IPessoa>({
         default: null,
         required: false
     },
-    graduacao_atual: {
-        type: String,
-        required: false
-    },
     id_graduacao: {
         type: mongodb.ObjectId,
         default: null,
@@ -99,10 +95,15 @@ const PessoaSchema = new Schema<IPessoa>({
                 type: Date,
                 required: true
             },
-            graduacao: {
-                type: String,
-                required: true
-            }
+//            graduacao: {
+//                type: String,
+//                required: true
+//            },
+            id_graduacao: {
+                type: mongodb.ObjectId,
+                default: null,
+                required: false
+            },
         }
     ]
 })

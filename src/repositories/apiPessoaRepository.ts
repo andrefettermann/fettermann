@@ -14,9 +14,9 @@ const lookupDojo = {
 const lookupGraduacao = {
     $lookup: {
         from: "graduacoes",
-        localField: "codigo_graduacao",
+        localField: "id_graduacao",
         foreignField: "_id",
-        as: "grads"
+        as: "graduacao"
     }
 }
 
@@ -27,6 +27,7 @@ export async function getPessoa(id: string) {
                         $match: {"_id": new ObjectId(id)}
                     },
                     lookupDojo,
+                    lookupGraduacao
                     //{$unwind: '$dojo'},
                 ])
         return doc[0];
@@ -40,6 +41,7 @@ export async function getPessoas(){
         const docs: IPessoa[] = await Pessoa.aggregate(
             [
                 lookupDojo,
+                lookupGraduacao
 //                {$unwind: '$dojo'}
             ],
         );
@@ -56,6 +58,7 @@ export  async function getPessoasSituacao(situacao: string) {
                         $match: {'situacao': situacao}
                     },  
                     lookupDojo,
+                    lookupGraduacao
                     //{$unwind: '$dojo'},
                 ]);
         return docs;
@@ -72,6 +75,7 @@ export async function getPessoasAniversario(mes: string) {
                 $match: {'aniversario': { $regex: mes + '$', $options: 'i' }}
             },  
             lookupDojo,
+            lookupGraduacao
             //{$unwind: '$dojo'},
         ]);
         return docs

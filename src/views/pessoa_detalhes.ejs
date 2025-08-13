@@ -35,10 +35,13 @@
         <div class="card-header">Dados da pessoa</div>
         <div class="card-body">
           <div class="row pt-1">
-            <div class="col-10"></div>
-            <div class="col-2">
+            <div class="col-9"></div>
+            <div class="col-3">
               <a class="btn btn-primary" href="/pessoas/edita/<%= doc._id%>">Edita</a>
               <a class="btn btn-primary" href="/pessoas">Cancela</a>
+
+              <a id="exclui_pessoa" class="btn btn-primary disabled" name="exclui_pessoa" 
+              href="/pessoas/exclui/<%= doc._id %>">Excluir</a>
             </div>
           </div>
           <div class="row pt-2">
@@ -78,7 +81,7 @@
           <div class="row pt-2">
             <div class="col">
                 <span class="fw-bold">Graduação atual: </span>
-                <span id="graduacao_atual" name="graduacao_atual"><%= doc.graduacao_atual %></span>
+                <span id="graduacao_atual" name="graduacao_atual"><%= doc.graduacao[0].nome %></span>
             </div>
           </div>
           <div class="row pt-2">
@@ -94,7 +97,11 @@
               <ol id="promocoes" name="promocoes" class="list-group list-group-flush">
                 <% if (doc.promocoes) { %>
                       <% doc.promocoes.forEach(function(promocao){ %>
-                        <li class="list-group-item"><%= promocao.data_formatada + " - " + promocao.graduacao %></li>
+                        <% docs_graduacoes.forEach(function(g) { %>
+                          <% if (promocao.id_graduacao && g._id == promocao.id_graduacao) { %>
+                            <li class="list-group-item"><%= promocao.data_formatada + " - " + g.nome %></li>
+                          <% } %>
+                        <% }); %>
                       <% }); %>
                 <% }; %>
               </ol>
@@ -130,6 +137,10 @@
 
     </div>
   </main>
+
+    <script src="/js/exclusao.js"></script>
+
+
 </body>
 
 </html>

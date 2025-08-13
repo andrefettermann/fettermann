@@ -42,20 +42,20 @@
                 </ul>
             </header>
 
+            <div class="mb-2">
+                <a class="btn btn-success" href="/pessoas/novo">Nova pessoa</a>
+                <a class="btn btn-primary" href="/pessoas">Todos</a>
+                <a class="btn btn-primary" href="/pessoas/situacao/Ativo">Pessoas em atividade</a>
+                <a class="btn btn-primary" href="/pessoas/situacao/Inativo">Pessoas inativas</a>
+                <a class="btn btn-primary" href="/pessoas/aniversariantes/<%= mes %>">Aniversariantes do mês</a>
+            </div>
+
             <div class="card">
                 <div class="card-header fw-bold"><%= title %> <span>(<%= total %>)</span></div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-3">
-                            <div class="d-grid gap-3">
-                                <a class="btn btn-primary" href="/pessoas/novo">Nova pessoa</a>
-                                <a class="btn btn-primary" href="/pessoas">Todos</a>
-                                <a class="btn btn-primary" href="/pessoas/situacao/Ativo">Pessoas em atividade</a>
-                                <a class="btn btn-primary" href="/pessoas/situacao/Inativo">Pessoas inativas</a>
-                                <a class="btn btn-primary" href="/pessoas/aniversariantes/<%= mes %>">Aniversariantes do mês</a>
-                            </div>
-                        </div>
-                        <div class="col-9">
+
+                        <div class="col">
                             
                             <div class="text-info"><%= mensagem %></div>
 
@@ -68,6 +68,7 @@
                                         <th id="col_graduacao_atual" name="col_graduacao_atual" scope="col">Graduação</th>
                                         <th id="col_situacao" name="col_situacao" scope="col">Situação</th>
                                         <th id="col_dojo" name="col_dojo" scope="col">Dojo</th>
+                                        <th id="col_acoes" name="col_acoes" width="250px">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tab_pessoas_linhas">
@@ -85,7 +86,7 @@
                                                 <%= doc.aniversario %>
                                             </td>
                                             <td>
-                                                <%= doc.graduacao_atual %>
+                                                <%= doc.graduacao[0].nome %>
                                             </td>
                                             <td>
                                                 <%= doc.situacao %>
@@ -94,6 +95,10 @@
                                                 <% if (doc.dojo[0]) { %> 
                                                     <%= doc.dojo[0].nome %>
                                                 <% } %>
+                                            </td>
+                                            <td>
+                                                <a href="/pessoas/detalhes/<%= doc._id %>" class="btn btn-info">Detalhes</a>
+                                                <a href="/pessoas/edita/<%= doc._id %>" class="btn btn-primary">Edita</a>
                                             </td>
                                         </tr>
                                         <% }); %>

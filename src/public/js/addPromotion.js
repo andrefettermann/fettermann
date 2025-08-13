@@ -41,14 +41,14 @@ function addPromotion() {
     divColRankLabel.appendChild(rankLabel);
 
     //Busco as graduacoes carregadas para o campo graduacao atual
-    var ranks = document.getElementById("graduacao_atual");
+    var ranks = document.getElementById("id_graduacao");
     var options = ranks.options;
 
     var divColRankInput = document.createElement("div");
     divColRankInput.setAttribute("class", "col-3");
 
     var rankInput = document.createElement("select");
-    rankInput.id = "graduacao_promocao_" + (count);
+    rankInput.id = "id_graduacao_promocao_" + (count);
     rankInput.name = rankInput.id;
     rankInput.setAttribute("type", "text");
     rankInput.setAttribute("class", "form-select");

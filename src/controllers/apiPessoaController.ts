@@ -1,8 +1,9 @@
 /* pessoaRouters.ts */
 import { Request, Response, NextFunction } from 'express';
 import * as repositorio from '../repositories/apiPessoaRepository';
+import * as repositorioGraduacoes from '../repositories/apiGraduacaoRepository';
 import { decripta } from '../utils/crypto';
-import { formatDateToDDMMYYYY } from '../utils/date';
+import { formatDateDDMMAAAA } from '../utils/date';
 import { IPessoa } from 'src/models/pessoa';
 
 async function getPessoa(req: Request, res: Response, next: NextFunction) {
@@ -15,12 +16,12 @@ async function getPessoa(req: Request, res: Response, next: NextFunction) {
 
             if (doc.cpf) doc.cpf = decripta(doc.cpf);
 
-            doc.promocoes.forEach((p: { data_formatada: string; data: string; })=>{
-                p.data_formatada = formatDateToDDMMYYYY(new Date(p.data));
-            })
+            doc.promocoes.forEach((p: { data_formatada: string; data: string; }) => {
+                p.data_formatada = formatDateDDMMAAAA(new Date(p.data));
+            });
 
             doc.pagamentos.forEach((p: { data_formatada: string; data: string; })=>{
-                p.data_formatada = formatDateToDDMMYYYY(new Date(p.data));
+                p.data_formatada = formatDateDDMMAAAA(new Date(p.data));
             })
 
             res.status(200).json(doc);
@@ -36,7 +37,7 @@ async function getPessoas(req: Request, res: Response, next: NextFunction) {
     try {
         const docs: IPessoa[] |  any = await repositorio.getPessoas();
         if (docs) {
-            docs.forEach((d: { nome: string; cpf: string; }) => {
+            docs.forEach(async (d: { nome: string; cpf: string; promocoes: []}) => {
                 d.nome = decripta(d.nome);
                 if (d.cpf) decripta(d.cpf);
             })

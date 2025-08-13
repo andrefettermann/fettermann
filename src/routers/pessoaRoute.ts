@@ -21,11 +21,11 @@ function setDoc(req: any) {
     var doc_promocoes = [];
     if (totalPromocoes > 0) {
         for (var i=0; i<req.body.total_promocoes; i++) {
-            var graduacao = req.body['graduacao_promocao_' + (i+1)];
+            var graduacao = req.body['id_graduacao_promocao_' + (i+1)];
             if (graduacao) {
                 var doc_promocao = {
                     'data': convertDdMmYyyyToDate(req.body['data_promocao_' + (i+1)]),
-                    'graduacao': req.body['graduacao_promocao_' + (i+1)]
+                    'id_graduacao': req.body['id_graduacao_promocao_' + (i+1)]
                 }
                 doc_promocoes.push(doc_promocao);
             }
@@ -47,7 +47,6 @@ function setDoc(req: any) {
         }
     }
 
-
     if (req.body.id_dojo == '') {
         doc = {
             'aniversario': req.body.aniversario,
@@ -57,8 +56,8 @@ function setDoc(req: any) {
             'cpf': req.body.cpf,
             'data_inicio_aikido': req.body.data_inicio,
             'data_matricula': req.body.data_matricula,
-            'graduacao_atual': req.body.graduacao_atual,
             'id_dojo': null,
+            'id_graduacao': req.body.id_graduacao,
             'promocoes': doc_promocoes,
             'pagamentos': doc_pagamentos
         }
@@ -73,6 +72,7 @@ function setDoc(req: any) {
             'data_matricula': req.body.data_matricula,
             'graduacao_atual': req.body.graduacao_atual,
             'id_dojo': req.body.id_dojo,
+            'id_graduacao': req.body.id_graduacao,
             'promocoes': doc_promocoes,
             'pagamentos': doc_pagamentos
         }
@@ -193,17 +193,24 @@ router.get('/novo', async (req, res, next) => {
 router.get('/detalhes/:id', async (req, res, next) => {
     const id = req.params.id;
     try {
+        const responseGraduacoes = await fetch(`${req.protocol}://${req.host}/api/graduacoes`);
+        if (!responseGraduacoes.ok) {
+            throw new Error(`HTTP error! Graduacoes status: ${responseGraduacoes.status}`);
+        }
+
         const response = await fetch(`${req.protocol}://${req.host}/api/pessoa/${id}`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
+        const docs_graduacoes = await responseGraduacoes.json();
         const doc = await response.json();
         res.render('pessoa_detalhes',
             {
                 title: 'Dados da pessoa (Consulta)',
                 doc,
+                docs_graduacoes
             }
         );
     } catch (err) {
@@ -298,5 +305,10 @@ router.post('/altera/:id', async (req, res, next) => {
     }
 });
 
+/** Exclui os dados da organizacao */
+router.get('/exclui/:id', async (req, res, next) => {
+    const id = req.params.id;
+console.log(id)
+})
 
 export default router;
