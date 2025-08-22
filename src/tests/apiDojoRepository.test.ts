@@ -1,5 +1,5 @@
 import { db, close } from "../db";
-import * as repositorio from "../repositories/apiDojoRepository";
+import * as repositorio from "../api/repositories/apiDojoRepository";
 
 describe('Dojos repository', () => {
 
@@ -27,7 +27,6 @@ describe('Dojos repository', () => {
       const response: any = await repositorio.getDojos();
       expect(response.length).toBe(5);
     } catch (err) {
-      console.log(err);
       expect(err).toBeNull();
     }
   })

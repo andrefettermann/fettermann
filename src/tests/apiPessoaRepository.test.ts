@@ -1,6 +1,6 @@
 // tests/userController.test.ts
 import { db, close } from "../db";
-import * as repositorio from "../repositories/apiPessoaRepository";
+import * as repositorio from "../api/repositories/apiPessoaRepository";
 
 describe('Pessoa repository', () => {
 

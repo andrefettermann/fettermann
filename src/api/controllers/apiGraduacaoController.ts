@@ -1,9 +1,8 @@
 /* apiGraduacaoController.ts */
 import { Request, Response, NextFunction } from 'express';
 import * as repositorio from '../repositories/apiGraduacaoRepository';
-import * as pessoaRepositorio from '../repositories/apiPessoaRepository';
-import { IGraduacao } from '../models/graduacao';
-import { decripta } from '../utils/crypto';
+import { IGraduacao } from '../../models/graduacao';
+import { decripta } from '../../utils/crypto';
 
 async function getGraduacao(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;

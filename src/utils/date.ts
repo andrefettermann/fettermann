@@ -19,3 +19,9 @@ export function formatDateDDMMAAAA(date: Date): string {
 
   return `${day}/${month}/${year}`;
 }
+
+export function getCurrentMonth() {
+    const date = new Date();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return month;
+}

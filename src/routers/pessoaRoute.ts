@@ -1,16 +1,10 @@
 /* pessoaRoute.ts */
 import express from 'express';
-import { convertDdMmYyyyToDate } from '../utils/date';
+import { convertDdMmYyyyToDate, getCurrentMonth } from '../utils/date';
 
 const router = express.Router();
 
 var mensagem: string = "";
-
-function getCurrentMonth() {
-    const date = new Date();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    return month;
-}
 
 function setDoc(req: any) {
     var totalPromocoes = req.body.total_promocoes;

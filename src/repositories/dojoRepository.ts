@@ -1,4 +1,4 @@
-import { Document, ObjectId } from "mongodb";
+import { getLoggedInUser } from "../realmClient";
 import { Dojo } from "../models/dojo";
 
 const lookupPessoa = {
@@ -39,33 +39,23 @@ const projectDojo = {
 }
 
 export async function getDojo(id: string) {
-    try {
-        const docs: any = await Dojo.aggregate([
-                            {
-                                $match: {"_id": new ObjectId(id)}
-                            },  
-                            lookupPessoa,
-                            {$unwind: '$professor'},
-                            projectDojo,
-                        ])
-        return docs[0];
-    }  catch(error) {
-        return error;
-    }
 }
 
-export async function getDojos(){
+export async function getDojos(): Promise<any>{
     try{
-        const docs = await Dojo.aggregate(
-            [
-                lookupPessoa,
-                {$unwind: '$professor'},
-                projectDojos,
-            ]).sort({ nome: 1 });
-        //find({}).sort({ nome: 1 }).lean();
-        return docs;
+        const user = getLoggedInUser();
+        const docs: any = await user.functions['GetDojos']()
+        return {
+            result: "Success",
+            docs: docs.result
+        }
+        //return docs;
     } catch(error){
-        return  error
+        return {
+            result: "Failed",
+            error: error
+        }
+        //return  error
     }
 }
 

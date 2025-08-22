@@ -62,18 +62,18 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tab_dojos_linhas">
-                                    <% docs.forEach(function(doc){ %>
+                                    <% dojos.forEach(function(dojo){ %>
                                         <tr>
                                             <td>
-                                                <a href="dojos/detalhes/<%= doc._id %>">
-                                                    <%= doc.nome %>
+                                                <a href="dojos/detalhes/<%= dojo._id %>">
+                                                    <%= dojo.nome %>
                                                 </a>
                                             </td>
                                             <td>
-                                                <%= doc.cidade %>
+                                                <%= dojo.cidade %>
                                             </td>
                                             <td>
-                                                <%= doc.professor.nome %>
+                                                <%= dojo.professor.nome %>
                                             </td>
                                         </tr>
                                     <% }); %>

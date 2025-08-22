@@ -2,8 +2,8 @@
 import { Request, Response, NextFunction } from 'express';
 import * as repositorio from '../repositories/apiDojoRepository';
 import * as pessoaRepositorio from '../repositories/apiPessoaRepository';
-import { IDojo } from '../models/dojo';
-import { decripta } from '../utils/crypto';
+import { IDojo } from '../../models/dojo';
+import { decripta } from '../../utils/crypto';
 import { IPessoa } from 'src/models/pessoa';
 
 async function getDojo(req: Request, res: Response, next: NextFunction) {

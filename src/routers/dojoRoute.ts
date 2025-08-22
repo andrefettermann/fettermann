@@ -1,4 +1,11 @@
-/* dojoRoute.ts */
+/**
+ * dojoRoute.ts
+ * 
+ * Router para acesso a funcionalidade de dojos.
+ * 
+ * @author Andre Fettermann
+ **/
+
 import express from 'express';
 
 const router = express.Router();
@@ -43,12 +50,13 @@ router.get('/', async (req, res, next) => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         } else {
-            const docs = await response.json();
+            //const docs = await response.json();
+            const dojos: any = await response.json();
             res.render('dojos',
                 {
                     title: 'Dojos cadastrados',
-                    docs,
-                    total: docs.length,
+                    dojos,
+                    total: dojos.length,
                     mensagem
                 }
             );
