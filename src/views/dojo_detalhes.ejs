@@ -92,11 +92,15 @@
           <div class="row pt-2">
             <div class="col">
                 <span class="fw-bold">Professor: </span>
-                <span id="professor" name="professor"><%= doc.professor.nome %></span>
+                <span id="professor" name="professor">
+                      <% if (doc.professor[0]) { %>
+                      <%=  doc.professor[0].nome  %>
+                      <% } %>
+                </span>
             </div>
           </div>
 
-          <div class="card mb-3">
+          <div class="card mb-3 mt-4">
             <div class="card-header fw-bold">Alunos</div>
             <div class="card-body">
               <ol id="promocoes" name="promocoes" class="list-group list-group-flush">

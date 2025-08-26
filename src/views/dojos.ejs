@@ -42,39 +42,46 @@
                 </ul>
             </header>
 
+            <div class="mb-2">
+                <a class="btn btn-primary" href="/dojos/novo">Novo dojo</a>
+            </div>
+
             <div class="card">
                 <div class="card-header fw-bold"><%= title %> <span>(<%= total %>)</span></div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-3">
-                            <div class="d-grid gap-3">
-                                <a class="btn btn-primary" href="/dojos/novo">Novo dojo</a>
-                            </div>
-                        </div>
-                        <div class="col-9">
+                        <div class="col-12">
                             <div class="text-info"><%= mensagem %></div>
-                            <table id="tab_dojos" class="table table-striped table-hover table-sm">
+                            <table id="tab_dojos" class="table table-striped table-hover table-lg">
                                 <thead id="tab_dojos_cabec">
                                     <tr>
                                         <th id="col_nome" name="col_nome" scope="col">Nome</th>
                                         <th id="col_cidade" name="col_cidade" scope="col">Cidade</th>
                                         <th id="col_professor" name="col_professor" scope="col">Professor</th>
+                                        <th id="col_acoes" name="col_acoes" width="250px">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tab_dojos_linhas">
-                                    <% dojos.forEach(function(dojo){ %>
+                                    <% dojos.forEach(function(doc){ %>
                                         <tr>
                                             <td>
-                                                <a href="dojos/detalhes/<%= dojo._id %>">
-                                                    <%= dojo.nome %>
+                                                <a href="dojos/detalhes/<%= doc._id %>">
+                                                    <%= doc.nome %>
                                                 </a>
                                             </td>
                                             <td>
-                                                <%= dojo.cidade %>
+                                                <%= doc.cidade %>
                                             </td>
                                             <td>
-                                                <%= dojo.professor.nome %>
+                                                <% if (doc.professor[0]) { %>
+                                                    <%=  doc.professor[0].nome  %>
+                                                <% } %>
                                             </td>
+                                            <td>
+                                                <a href="/dojos/detalhes/<%= doc._id %>" class="btn btn-info">Detalhes</a>
+                                                <a href="/dojos/edita/<%= doc._id %>" class="btn btn-primary">Edita</a>
+                                            </td>
+
                                         </tr>
                                     <% }); %>
                                 </tbody>

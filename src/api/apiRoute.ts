@@ -40,11 +40,11 @@ router.delete('/graduacao/:id', apiGraduacaoController.deleteGraduacao);
 
 /* Dojo routes */
 
-router.get('/dojo/:id', apiDojoController.getDojo);
+router.get('/dojo/:id', dojoController.buscaDojo);
 
-router.get('/dojos/', dojoController.getDojos);
+router.get('/dojos/', dojoController.buscaTodos);
 
-router.post('/dojo/', apiDojoController.postDojo);
+router.post('/dojo/', dojoController.inclui);
 
 router.patch('/dojo/:id', apiDojoController.patchDojo);
 

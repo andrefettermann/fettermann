@@ -92,13 +92,6 @@ router.get('/detalhes/:id', async (req, res, next) => {
     var id = req.params.id;
 
     try {
-//        const responsePessoas = await fetch(`${req.protocol}://${req.host}/api/pessoas/`);
-//        if (!responsePessoas.ok) {
-//            throw new Error(`HTTP error! Pessoas status: ${responsePessoas.status}`);
-//        }
-
-//        const docsPessoas = await responsePessoas.json();
-
         const response = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -108,8 +101,7 @@ router.get('/detalhes/:id', async (req, res, next) => {
         res.render('dojo_detalhes',
             {
                 title: 'Dados do dojo (Consulta)',
-                doc,
-//                docs_pessoas: docsPessoas,
+                doc: doc[0],
                 action: '/dojos/altera/' + id
             }
         );

@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import apiRouter from './routers/apiRoute';
+import apiRouter from './api/apiRoute';
 import pessoaRouter from './routers/pessoaRoute';
 import dojoRouter from './routers/dojoRoute';
 import graduacaoRouter from './routers/graduacaoRoute';

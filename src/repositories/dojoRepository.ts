@@ -39,32 +39,57 @@ const projectDojo = {
 }
 
 export async function getDojo(id: string) {
+    try{
+        const user = getLoggedInUser();
+        const doc: any = await user.functions['GetDojo'](id)
+        
+        return {
+            sucess: true,
+            docs: doc.result
+        }
+    } catch(error){
+        return {
+            sucess: false,
+            error: error
+        }
+    }
 }
 
 export async function getDojos(): Promise<any>{
     try{
         const user = getLoggedInUser();
         const docs: any = await user.functions['GetDojos']()
+        
         return {
-            result: "Success",
+            sucess: true,
             docs: docs.result
         }
-        //return docs;
     } catch(error){
         return {
-            result: "Failed",
+            sucess: false,
             error: error
         }
-        //return  error
     }
 }
 
 export async function createDojo(data: any){
     try {
-        const doc = await Dojo.create(data);
-        return doc;
-    } catch (error) {
-        return error;
+        const user = getLoggedInUser();
+        const doc = await user.functions['PostDojo'](data)
+
+        if (doc.success) {
+            return {
+                sucess: true,
+                doc: doc.result
+            }
+        } else {
+            return doc;
+        }
+    } catch(error){
+        return {
+            sucess: false,
+            error: error
+        }
     }
 };
 
