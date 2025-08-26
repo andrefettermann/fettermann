@@ -1,3 +1,3 @@
 Uma aplicação simples para controle dos alunos de Aikidô.
 
-NodeJS, Express, Typescript, Mongoose
+NodeJS, Express, Typescript, Mongoose, Atlas App Services
