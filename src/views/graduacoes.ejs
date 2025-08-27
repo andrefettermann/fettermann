@@ -41,18 +41,17 @@
                         <li class="nav-item"><a href="/logout" class="nav-link">Sair</a></li> 
                 </ul>
             </header>
+            <div class="mb-2">
+                <a id="nova_graduacao" name="nova_graduacao" 
+                class="btn btn-success" href="/graduacoes/novo">Nova graduação</a>
+            </div>
+
 
             <div class="card">
                 <div class="card-header fw-bold"><%= title %> <span>(<%= total %>)</span></div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-3">
-                            <div class="d-grid gap-3">
-                                <a id="nova_graduacao" name="nova_graduacao" 
-                                class="btn btn-primary" href="/graduacoes/novo">Nova graduação</a>
-                            </div>
-                        </div>
-                        <div class="col-9">
+                        <div class="col-12">
                             <div class="text-info"><%= mensagem %></div>
 
                             <table id="tab_graduacoes" class="table table-striped table-hover table-sm">
@@ -64,6 +63,7 @@
                                         <th id="col_horas" name="col_horas" scope="col">Horas para exame</th>
                                         <th id="col_horas" name="col_horas" scope="col">Meses para exame</th>
                                         <th id="col_horas" name="col_horas" scope="col">Categoria</th>
+                                        <th id="col_acoes" name="col_acoes" width="250px">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tab_dojos_linhas">
@@ -90,6 +90,10 @@
                                             </td>
                                             <td>
                                                 <%= doc.categoria %>
+                                            </td>
+                                            <td>
+                                                <a href="/graduacoes/detalhes/<%= doc._id %>" class="btn btn-info">Detalhes</a>
+                                                <a href="/graduacoes/edita/<%= doc._id %>" class="btn btn-primary">Edita</a>
                                             </td>
                                         </tr>
                                         <% }); %>

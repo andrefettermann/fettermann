@@ -84,7 +84,7 @@ router.get('/detalhes/:id', async (req, res, next) => {
     try {
         const response = await fetch(`${req.protocol}://${req.host}/api/graduacao/${id}`);
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! Graduacao status: ${response.status}`);
         }
 
         const doc = await response.json();

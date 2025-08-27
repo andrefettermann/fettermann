@@ -193,9 +193,8 @@ router.get('/detalhes/:id', async (req, res, next) => {
         }
 
         const response = await fetch(`${req.protocol}://${req.host}/api/pessoa/${id}`);
-
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! Pessoa status: ${response.status}`);
         }
 
         const docs_graduacoes = await responseGraduacoes.json();
@@ -203,7 +202,7 @@ router.get('/detalhes/:id', async (req, res, next) => {
         res.render('pessoa_detalhes',
             {
                 title: 'Dados da pessoa (Consulta)',
-                doc,
+                doc: doc[0],
                 docs_graduacoes
             }
         );
@@ -234,14 +233,14 @@ router.get('/edita/:id', async (req, res, next) => {
             throw new Error(`HTTP error! Pessoa status: ${response.status}`);
         }
 
-        const doc = await response.json();
+        const docs = await response.json();
         res.render('pessoa',
             {
                 title: 'Dados da pessoa (Alteração)',
-                doc,
+                doc: docs[0],
                 action: '/pessoas/altera/' + id,
-                total_pagamentos: doc.pagamentos.length,
-                total_promocoes: doc.promocoes.length,
+                total_pagamentos: docs[0].pagamentos.length,
+                total_promocoes: docs[0].promocoes.length,
                 docs_dojos,
                 docs_graduacoes,
                 mensagem: ''
@@ -265,7 +264,7 @@ router.post('/inclui', async (req, res, next) => {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! Inclusao de pessoa status: ${response.status}`);
         }
 
         mensagem = 'Pessoa incluída com sucesso!';

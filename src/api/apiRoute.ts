@@ -12,15 +12,15 @@ const router = express.Router();
 
 /* Pessoa routes */
 
-router.get('/pessoa/:id', apiPessoaController.getPessoa);
+router.get('/pessoa/:id', pessoaController.buscaPeloId);
 
 router.get('/pessoas/', pessoaController.buscaTodos);
 
-router.get('/pessoas/situacao/:situacao', apiPessoaController.getPessoasSituacao);
+router.get('/pessoas/situacao/:situacao', pessoaController.buscaSituacao);
 
-router.get('/pessoas/aniversariantes/:mes', apiPessoaController.getPessoasAniversariantes);
+router.get('/pessoas/aniversariantes/:mes', pessoaController.buscaAniversariantes);
 
-router.post('/pessoa/inclui/', apiPessoaController.postPessoa);
+router.post('/pessoa/inclui/', pessoaController.inclui);
 
 router.patch('/pessoa/altera/:id', apiPessoaController.patchPessoa);
 
@@ -28,7 +28,7 @@ router.delete('/pessoa/exclui/:id', apiPessoaController.deletePessoa);
 
 /* Graduacao routes */
 
-router.get('/graduacao/:id', apiGraduacaoController.getGraduacao);
+router.get('/graduacao/:id', graduacaoController.buscaPeloId);
 
 router.get('/graduacoes/', graduacaoController.buscaTodos);
 
@@ -40,13 +40,13 @@ router.delete('/graduacao/:id', apiGraduacaoController.deleteGraduacao);
 
 /* Dojo routes */
 
-router.get('/dojo/:id', dojoController.buscaDojo);
+router.get('/dojo/:id', dojoController.buscaPeloId);
 
 router.get('/dojos/', dojoController.buscaTodos);
 
 router.post('/dojo/', dojoController.inclui);
 
-router.patch('/dojo/:id', apiDojoController.patchDojo);
+router.patch('/dojo/:id', dojoController.atualiza);
 
 router.delete('/dojo/:id', apiDojoController.deleteDojo);
 

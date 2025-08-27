@@ -38,7 +38,7 @@ const projectDojo = {
     } 
 }
 
-export async function getDojo(id: string) {
+export async function find(id: string) {
     try{
         const user = getLoggedInUser();
         const doc: any = await user.functions['GetDojo'](id)
@@ -55,7 +55,7 @@ export async function getDojo(id: string) {
     }
 }
 
-export async function getDojos(): Promise<any>{
+export async function findAll(): Promise<any>{
     try{
         const user = getLoggedInUser();
         const docs: any = await user.functions['GetDojos']()
@@ -72,7 +72,7 @@ export async function getDojos(): Promise<any>{
     }
 }
 
-export async function createDojo(data: any){
+export async function insert(data: any){
     try {
         const user = getLoggedInUser();
         const doc = await user.functions['PostDojo'](data)
@@ -93,18 +93,26 @@ export async function createDojo(data: any){
     }
 };
 
-export async function updateDojo(id: string, data: any){
+export async function update(id: string, data: any){
     try{
-        const dojo = await Dojo.findByIdAndUpdate({"_id":id}, data, {new: true})
+        //const dojo = await Dojo.findByIdAndUpdate({"_id":id}, data, {new: true})
+        const user = getLoggedInUser();
+        const doc = await user.functions['PatchDojo'](id,data)
 
-        if(!dojo){
+        if(!doc){
             return {
                 status: "Failed",
                 message: "Post not available"
             }
+        } else if (!doc.success) {
+            return {
+                status: "Failed",
+                message: "Post not available"
+            }
+        } else {
+            return doc;
         }
 
-        return dojo;
     }
     catch(error){
         return error;

@@ -6,17 +6,33 @@ import { getLoggedInUser } from "../realmClient";
  */
 export default class GraduacaoRepository {
 
-    async getGraduacoes(): Promise<any>{
+    async find(id: string) {
         try{
             const user = getLoggedInUser();
-            const docs: any = await user.functions['GetGraduacoes']()
+            const response: any = await user.functions['GetGraduacao'](id)
             return {
-                result: "Success",
-                docs: docs.result
+                success: true,
+                doc: response.result
             }
         } catch(error){
             return {
-                result: "Failed",
+                success: false,
+                error: error
+            }
+        }
+    }
+
+    async findAll(): Promise<any>{
+        try{
+            const user = getLoggedInUser();
+            const response: any = await user.functions['GetGraduacoes']()
+            return {
+                success: true,
+                docs: response.result
+            }
+        } catch(error){
+            return {
+                success: false,
                 error: error
             }
         }

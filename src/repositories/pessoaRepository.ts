@@ -9,23 +9,121 @@ import { getLoggedInUser } from "../realmClient";
  */
 export class PessoaRepository {
 
-    async getPessoa(id: string) {}
-
-    async getPessoas(): Promise<any>{
+    async find(id: string) {
         try{
             const user = getLoggedInUser();
-            const docs: any = await user.functions['GetPessoas']()
+            const doc: any = await user.functions['GetPessoa'](id)
             return {
-                result: "Success",
-                docs: docs.result
+                success: true,
+                doc: doc.result
             }
         } catch(error){
             return {
-                result: "Failed",
+                success: false,
                 error: error
             }
         }
     }
+
+    async findall(): Promise<any>{
+        try{
+            const user = getLoggedInUser();
+            const docs: any = await user.functions['GetPessoas']()
+            return {
+                success: true,
+                docs: docs.result
+            }
+        } catch(error){
+            return {
+                success: false,
+                error: error
+            }
+        }
+    }
+
+    async findByAniversario(mes: number): Promise<any>{
+        try{
+            const user = getLoggedInUser();
+            const docs: any = await user.functions['GetAniversariantes'](mes)
+            return {
+                success: true,
+                docs: docs.result
+            }
+        } catch(error){
+            return {
+                success: false,
+                error: error
+            }
+        }
+    }
+
+    async findBySituacao(situacao: string): Promise<any>{
+        try{
+            const user = getLoggedInUser();
+            const docs: any = await user.functions['GetPessoasSituacao'](situacao)
+            return {
+                success: true,
+                docs: docs.result
+            }
+        } catch(error){
+            return {
+                success: false,
+                error: error
+            }
+        }
+    }
+
+    async insert(data: any): Promise<any>{
+        try {
+            const user = getLoggedInUser();
+            const response = await user.functions['PostPessoa'](data)
+            if (response.success) {
+                return {
+                    success: true,
+                    doc: response.insertedId
+                }
+            } else {
+                return response;
+            }
+        } catch(error){
+            return {
+                success: false,
+                error: error
+            }
+        }
+    };
+
+    async update(id: string, data: any): Promise<any>{
+        try{
+            //const dojo = await Dojo.findByIdAndUpdate({"_id":id}, data, {new: true})
+            const user = getLoggedInUser();
+            const doc = await user.functions['PatchPessoa'](id,data)
+
+            if(!doc){
+                return {
+                    success: false,
+                    message: "Post not available"
+                }
+            } else if (!doc.success) {
+                return {
+                    success: false,
+                    message: "Post not available"
+                }
+            } else {
+                return {
+                    success: true,
+                    doc
+                }
+            }
+        }
+        catch(error){
+            return {
+                success: false,
+                message: error
+            }
+        }
+    }
+
 }
 
 

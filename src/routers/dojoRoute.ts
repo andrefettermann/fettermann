@@ -130,7 +130,7 @@ router.get('/edita/:id', async (req, res, next) => {
         res.render('dojo',
             {
                 title: 'Dados do dojo (Edição)',
-                doc,
+                doc: doc[0],
                 docs_pessoas: docsPessoas,
                 action: '/dojos/altera/' + id
             }
