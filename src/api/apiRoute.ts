@@ -22,7 +22,7 @@ router.get('/pessoas/aniversariantes/:mes', pessoaController.buscaAniversariante
 
 router.post('/pessoa/inclui/', pessoaController.inclui);
 
-router.patch('/pessoa/altera/:id', apiPessoaController.patchPessoa);
+router.patch('/pessoa/altera/:id', pessoaController.atualiza);
 
 router.delete('/pessoa/exclui/:id', apiPessoaController.deletePessoa);
 

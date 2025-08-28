@@ -6,75 +6,6 @@ const router = express.Router();
 
 var mensagem: string = "";
 
-function setDoc(req: any) {
-    var totalPromocoes = req.body.total_promocoes;
-    var totalPagamentos = req.body.total_pagamentos;
-
-    var doc = {};
-
-    var doc_promocoes = [];
-    if (totalPromocoes > 0) {
-        for (var i=0; i<req.body.total_promocoes; i++) {
-            var graduacao = req.body['id_graduacao_promocao_' + (i+1)];
-            if (graduacao) {
-                var doc_promocao = {
-                    'data': convertDdMmYyyyToDate(req.body['data_promocao_' + (i+1)]),
-                    'id_graduacao': req.body['id_graduacao_promocao_' + (i+1)]
-                }
-                doc_promocoes.push(doc_promocao);
-            }
-        }
-    }
-
-    var doc_pagamentos = [];
-    if (totalPagamentos > 0) {
-        for (var i=0; i<req.body.total_pagamentos; i++) {
-            let data = req.body['data_pagamento_' + (i+1)];
-            if (data) {
-                var doc_pagamento = {
-                    'data': convertDdMmYyyyToDate(req.body['data_pagamento_' + (i+1)]),
-                    'valor_pago': Number.parseFloat(req.body['valor_pagamento_' + (i+1)]),
-                    'descricao': req.body['descricao_pagamento_' + (i+1)]
-                }
-                doc_pagamentos.push(doc_pagamento);
-            }
-        }
-    }
-
-    if (req.body.id_dojo == '') {
-        doc = {
-            'aniversario': req.body.aniversario,
-            'matricula': req.body.matricula,
-            'nome': req.body.nome,
-            'situacao': req.body.situacao,
-            'cpf': req.body.cpf,
-            'data_inicio_aikido': req.body.data_inicio,
-            'data_matricula': req.body.data_matricula,
-            'id_dojo': null,
-            'id_graduacao': req.body.id_graduacao,
-            'promocoes': doc_promocoes,
-            'pagamentos': doc_pagamentos
-        }
-    } else {
-        doc = {
-            'aniversario': req.body.aniversario,
-            'matricula': req.body.matricula,
-            'nome': req.body.nome,
-            'situacao': req.body.situacao,
-            'cpf': req.body.cpf,
-            'data_inicio_aikido': req.body.data_inicio,
-            'data_matricula': req.body.data_matricula,
-            'graduacao_atual': req.body.graduacao_atual,
-            'id_dojo': req.body.id_dojo,
-            'id_graduacao': req.body.id_graduacao,
-            'promocoes': doc_promocoes,
-            'pagamentos': doc_pagamentos
-        }
-    }
-
-    return doc;
-}
-
 /** Busca todas as pessoas */
 router.get('/', async (req, res, next) => {
     try {
@@ -253,14 +184,13 @@ router.get('/edita/:id', async (req, res, next) => {
 
 /** Inclui os dados da pessoa */
 router.post('/inclui', async (req, res, next) => {
-    var doc = setDoc(req);
     try {
         const response = await fetch(`${req.protocol}://${req.host}/api/pessoa/inclui`, {
             method: 'POST', // Specify the HTTP method as POST
             headers: {
                 'Content-Type': 'application/json' // Set content type for JSON data
             },
-            body: JSON.stringify(doc) // Convert data to JSON string for the request body
+            body: JSON.stringify(req.body) // Convert data to JSON string for the request body
         });
 
         if (!response.ok) {
@@ -277,14 +207,13 @@ router.post('/inclui', async (req, res, next) => {
 /** Altera os dados da pessoa */
 router.post('/altera/:id', async (req, res, next) => {
     var id = req.params.id;
-    var doc = setDoc(req);
     try {
         const response = await fetch(`${req.protocol}://${req.host}/api/pessoa/altera/${id}`, {
             method: 'PATCH', // Specify the HTTP method as POST
             headers: {
                 'Content-Type': 'application/json' // Set content type for JSON data
             },
-            body: JSON.stringify(doc) // Convert data to JSON string for the request body
+            body: JSON.stringify(req.body) // Convert data to JSON string for the request body
         });
 
         if (!response.ok) {

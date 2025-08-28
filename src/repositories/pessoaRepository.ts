@@ -97,14 +97,14 @@ export class PessoaRepository {
         try{
             //const dojo = await Dojo.findByIdAndUpdate({"_id":id}, data, {new: true})
             const user = getLoggedInUser();
-            const doc = await user.functions['PatchPessoa'](id,data)
+            const response = await user.functions['PatchPessoa'](id,data)
 
-            if(!doc){
+            if(!response){
                 return {
                     success: false,
                     message: "Post not available"
                 }
-            } else if (!doc.success) {
+            } else if (!response.success) {
                 return {
                     success: false,
                     message: "Post not available"
@@ -112,7 +112,7 @@ export class PessoaRepository {
             } else {
                 return {
                     success: true,
-                    doc
+                    doc: response
                 }
             }
         }
