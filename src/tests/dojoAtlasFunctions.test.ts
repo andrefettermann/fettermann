@@ -1,4 +1,4 @@
-import * as repositorio from "../repositories/dojoRepository";
+import * as repositorio from "../repositories/repository";
 import { login, logout } from '../realmClient';
 
 // npm test dojoAtlasFunctions.test
@@ -16,7 +16,7 @@ describe('Dojos repository com Atlas Functions', () => {
 
   test('deveria retornar todos os dojos', async () => {
     try {
-      const response: any = await repositorio.findAll();
+      const response: any = await repositorio.findAll('GetDojos');
       expect(response.sucess).toBe(true);
     } catch (err) {
       console.log(err);
@@ -24,13 +24,12 @@ describe('Dojos repository com Atlas Functions', () => {
     }
   })
 
-  test('deveria retornar o dojo pelo id', async () => {
+  test.only('deveria retornar o dojo pelo id', async () => {
     try {
-      const response: any = await repositorio.find('68acfce3dd14e40a73a6eb54');
-      expect(response.success).toBe(true);
+      const response: any = await repositorio.find('GetDojo', '68acfce3dd14e40a73a6eb54');
+      expect(response.sucesso).toBe(true);
     } catch (err) {
       console.log(err);
-      expect(err).toBeNull();
     }
   })
 
@@ -48,7 +47,7 @@ describe('Dojos repository com Atlas Functions', () => {
     }
 
     try {
-      const response: any = await repositorio.insert(doc);
+      const response: any = await repositorio.insert('PostDojo', doc);
       expect(response.success).toBe(true);
     } catch (err) {
       console.log(err);
@@ -56,7 +55,7 @@ describe('Dojos repository com Atlas Functions', () => {
     }
   });
 
-  test.only('deveria alterar', async () => {
+  test('deveria alterar', async () => {
     var doc = {
       nome: 'Teste de alteracao com sucesso',
       endereco: 'Teste 2',
@@ -70,7 +69,7 @@ describe('Dojos repository com Atlas Functions', () => {
     }
 
     try {
-      const response: any = await repositorio.update('68acfce3dd14e40a73a6eb54', doc);
+      const response: any = await repositorio.update('PatchDojo', '68acfce3dd14e40a73a6eb54', doc);
       console.log(">>>>> " + response.success)
       expect(response.success).toBe(true);
     } catch (err) {

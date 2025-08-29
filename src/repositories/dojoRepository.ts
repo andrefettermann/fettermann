@@ -1,42 +1,4 @@
 import { getLoggedInUser } from "../realmClient";
-import { Dojo } from "../models/dojo";
-
-const lookupPessoa = {
-    $lookup: {
-        from: "pessoas",
-        localField: "id_professor",
-        foreignField: "_id",
-        as: "professor"
-    }
-}
-
-const projectDojos = {
-    $project: {
-        _id: 1,
-        codigo: 1,
-        nome: 1,
-        cidade: 1,
-        'professor.nome': 1,
-    } 
-}
-
-const projectDojo = {
-    $project: {
-        _id: 1,
-        codigo: 1,
-        nome: 1,
-        endereco: 1,
-        cidade: 1,
-        bairro: 1,
-        uf: 1,
-        pais: 1,
-        url: 1,
-        email: 1,
-        horarios: 1,
-        id_professor: 1,
-        'professor.nome': 1,
-    } 
-}
 
 export async function find(id: string) {
     try{

@@ -11,37 +11,8 @@ import express from 'express';
 const router = express.Router();
 
 var mensagem = "";
-var totalHorarios = 0;
 
-function setDoc(req: any) {
-    var doc_horarios = [];
-    if (totalHorarios > 0) {
-        for (var i=0; i<req.body.total_horarios; i++) {
-            const horario = req.body['horario_' + (i+1)];
-            if (horario) {
-                const doc_horario = {
-                    'horario':horario
-                }
-                doc_horarios.push(doc_horario);
-            }
-        }
-    }
-    
-    const doc = {
-        'nome': req.body.nome,
-        'endereco': req.body.endereco,
-        'bairro': req.body.bairro,
-        'cidade': req.body.cidade,
-        'uf': req.body.uf,
-        'pais': req.body.pais,
-        'url': req.body.url,
-        'email': req.body.email,
-        'id_professor': req.body.professor_id,
-        doc_horarios
-    }
 
-    return doc;
-}
 
 /* Busca todos os dojos */
 router.get('/', async (req, res, next) => {
@@ -101,7 +72,7 @@ router.get('/detalhes/:id', async (req, res, next) => {
         res.render('dojo_detalhes',
             {
                 title: 'Dados do dojo (Consulta)',
-                doc: doc[0],
+                doc,
                 action: '/dojos/altera/' + id
             }
         );
@@ -121,16 +92,16 @@ router.get('/edita/:id', async (req, res, next) => {
 
         const docsPessoas = await responsePessoas.json();
 
-        const response = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        const responseDojo = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`);
+        if (!responseDojo.ok) {
+            throw new Error(`HTTP error! status: ${responseDojo.status}`);
         }
 
-        const doc = await response.json();
+        const doc = await responseDojo.json();
         res.render('dojo',
             {
                 title: 'Dados do dojo (Edição)',
-                doc: doc[0],
+                doc,
                 docs_pessoas: docsPessoas,
                 action: '/dojos/altera/' + id
             }
@@ -141,14 +112,14 @@ router.get('/edita/:id', async (req, res, next) => {
 });
 
 router.post('/inclui', async (req, res, next) => {
-    var doc = setDoc(req);
+    //var doc = setDoc(req);
     try {
         const response = await fetch(`${req.protocol}://${req.host}/api/dojo/`, {
             method: 'POST', // Specify the HTTP method as POST
             headers: {
                 'Content-Type': 'application/json' // Set content type for JSON data
             },
-            body: JSON.stringify(doc) // Convert data to JSON string for the request body
+            body: JSON.stringify(req.body) // Convert data to JSON string for the request body
         });
 
         if (!response.ok) {
@@ -164,14 +135,13 @@ router.post('/inclui', async (req, res, next) => {
 
 router.post('/altera/:id', async (req, res, next) => {
     var id = req.params.id;
-    var doc = setDoc(req);
     try {
         const response = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`, {
             method: 'PATCH', // Specify the HTTP method as POST
             headers: {
                 'Content-Type': 'application/json' // Set content type for JSON data
             },
-            body: JSON.stringify(doc) // Convert data to JSON string for the request body
+            body: JSON.stringify(req.body) // Convert data to JSON string for the request body
         });
         mensagem = 'Dojo alterado com sucesso!';
         res.redirect('/dojos');
