@@ -133,7 +133,7 @@ router.get('/detalhes/:id', async (req, res, next) => {
         res.render('pessoa_detalhes',
             {
                 title: 'Dados da pessoa (Consulta)',
-                doc: doc[0],
+                doc,
                 docs_graduacoes
             }
         );
@@ -164,14 +164,14 @@ router.get('/edita/:id', async (req, res, next) => {
             throw new Error(`HTTP error! Pessoa status: ${response.status}`);
         }
 
-        const docs = await response.json();
+        const doc = await response.json();
         res.render('pessoa',
             {
                 title: 'Dados da pessoa (Alteração)',
-                doc: docs[0],
+                doc,
                 action: '/pessoas/altera/' + id,
-                total_pagamentos: docs[0].pagamentos.length,
-                total_promocoes: docs[0].promocoes.length,
+                total_pagamentos: doc.pagamentos.length,
+                total_promocoes: doc.promocoes.length,
                 docs_dojos,
                 docs_graduacoes,
                 mensagem: ''

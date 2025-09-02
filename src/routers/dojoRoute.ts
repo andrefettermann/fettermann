@@ -63,16 +63,23 @@ router.get('/detalhes/:id', async (req, res, next) => {
     var id = req.params.id;
 
     try {
+        const responseGraduacoes = await fetch(`${req.protocol}://${req.host}/api/graduacoes`);
+        if (!responseGraduacoes.ok) {
+            throw new Error(`HTTP error! Graduacoes status: ${responseGraduacoes.status}`);
+        }
+
         const response = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
+        const docs_graduacoes = await responseGraduacoes.json();
         const doc = await response.json();
         res.render('dojo_detalhes',
             {
                 title: 'Dados do dojo (Consulta)',
                 doc,
+                docs_graduacoes,
                 action: '/dojos/altera/' + id
             }
         );

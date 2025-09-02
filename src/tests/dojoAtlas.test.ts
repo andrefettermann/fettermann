@@ -17,7 +17,7 @@ describe('Dojos repository com Atlas Functions', () => {
   test('deveria retornar todos os dojos', async () => {
     try {
       const response: any = await repositorio.findAll('GetDojos');
-      expect(response.sucess).toBe(true);
+      expect(response.sucesso).toBe(true);
     } catch (err) {
       console.log(err);
       expect(err).toBeNull();
@@ -48,7 +48,7 @@ describe('Dojos repository com Atlas Functions', () => {
 
     try {
       const response: any = await repositorio.insert('PostDojo', doc);
-      expect(response.success).toBe(true);
+      expect(response.sucesso).toBe(true);
     } catch (err) {
       console.log(err);
       expect(err).toBeNull();
@@ -70,8 +70,8 @@ describe('Dojos repository com Atlas Functions', () => {
 
     try {
       const response: any = await repositorio.update('PatchDojo', '68acfce3dd14e40a73a6eb54', doc);
-      console.log(">>>>> " + response.success)
-      expect(response.success).toBe(true);
+      console.log(">>>>> " + response.sucesso)
+      expect(response.sucesso).toBe(true);
     } catch (err) {
       console.log(err);
       expect(err).toBeNull();

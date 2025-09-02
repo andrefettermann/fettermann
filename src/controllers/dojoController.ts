@@ -49,6 +49,10 @@ async function buscaPeloId(req: Request, res: Response, next: NextFunction) {
         if (response.sucesso) {
             if (response.doc.professor[0])
                 response.doc.professor[0].nome = decripta(response.doc.professor[0].nome);
+
+            response.doc.alunos.forEach((a: any) => {
+                a.nome = decripta(a.nome);
+            })
             return res.status(200).send(response.doc)
         } else {
             res.status(500).json({ mensagem: response.error });    

@@ -1,14 +1,13 @@
 import { PessoaRepository } from '../repositories/pessoaRepository'; 
+import * as repositorio from "../repositories/repository";
 import { login, logout } from '../realmClient';
 import { encripta } from '../utils/crypto';
 
 describe('Pessoas repository com Atlas Functions', () => {
 
-  var repositorio: PessoaRepository
-
   beforeAll(async () => {
     await login("", "")
-    repositorio = new PessoaRepository();
+    
   });
 
   afterAll(async () => {
@@ -17,8 +16,8 @@ describe('Pessoas repository com Atlas Functions', () => {
 
   test('deveria retornar todas as pessoas', async () => {
     try {
-      const response: any = await repositorio.findall();
-      expect(response.success).toBe(true);
+      const response: any = await repositorio.findAll('GetPessoas');
+      expect(response.sucesso).toBe(true);
     } catch (err) {
       console.log(err);
       expect(err).toBeNull();
@@ -27,9 +26,8 @@ describe('Pessoas repository com Atlas Functions', () => {
 
   test('deveria retornar os aniversariantes do mes informado', async () => {
     try {
-      const response: any = await repositorio.findByAniversario(8);
-      console.log(response)
-      expect(response.success).toBe(true);
+      const response: any = await repositorio.findAllBy('GetAniversariantes', 8);
+      expect(response.sucesso).toBe(true);
     } catch (err) {
       console.log(err);
       expect(err).toBeNull();
@@ -38,9 +36,20 @@ describe('Pessoas repository com Atlas Functions', () => {
 
   test('deveria retornar as pessoas em atividade', async () => {
     try {
-      const response: any = await repositorio.findBySituacao('Ativo');
-      console.log(response)
-      expect(response.success).toBe(true);
+      const response: any = await repositorio.findAllBy('GetPessoasSituacao', 'Ativo');
+      //console.log(response)
+      expect(response.sucesso).toBe(true);
+    } catch (err) {
+      console.log(err);
+      expect(err).toBeNull();
+    }
+  })
+
+  test('deveria retornar as pessoas inativas', async () => {
+    try {
+      const response: any = await repositorio.findAllBy('GetPessoasSituacao', 'Inativo');
+      //console.log(response)
+      expect(response.sucesso).toBe(true);
     } catch (err) {
       console.log(err);
       expect(err).toBeNull();
@@ -49,9 +58,9 @@ describe('Pessoas repository com Atlas Functions', () => {
 
   test('deveria retornar a pessoa pelo id', async () => {
     try {
-      const response: any = await repositorio.find('68836238624ac36ce1d37dac');
+      const response: any = await repositorio.find('GetPessoa', '68836238624ac36ce1d37dac');
       console.log(response)
-      expect(response.success).toBe(true);
+      expect(response.sucesso).toBe(true);
     } catch (err) {
       console.log(err);
       expect(err).toBeNull();
@@ -74,7 +83,7 @@ describe('Pessoas repository com Atlas Functions', () => {
     }
 
     try {
-      const response: any = await repositorio.insert(dados);
+      const response: any = await repositorio.insert('PostPessoa', dados);
       console.log(response)
       expect(response.success).toBe(true);
     } catch (err) {
@@ -83,7 +92,8 @@ describe('Pessoas repository com Atlas Functions', () => {
     }
   })
 
-  test.only('deveria atualizar uma pessoa', async () => {
+  test('deveria atualizar uma pessoa', async () => {
+
     const dados = {
       aniversario: '02/02',
       matricula: '',
@@ -99,7 +109,7 @@ describe('Pessoas repository com Atlas Functions', () => {
     }
 
     try {
-      const response: any = await repositorio.update('68afbb081f53025a4fa19440', dados);
+      const response: any = await repositorio.update('PatchPessoa', '68afbb081f53025a4fa19440', dados);
       console.log(response)
       expect(response.success).toBe(true);
     } catch (err) {

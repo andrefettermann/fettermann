@@ -41,6 +41,28 @@ export async function findAll(nomeFuncaoAtlas: string): Promise<any>{
     }
 }
 
+export async function findAllBy(nomeFuncaoAtlas: string, arg: any): Promise<any>{
+    try{
+        const user = getLoggedInUser();
+        const docs: any = await user.functions[nomeFuncaoAtlas](arg)
+
+        if (docs) {
+            return {
+                sucesso: true,
+                docs: docs.result
+            }
+        } else {
+            return {
+                sucesso: false,
+                error: docs.result
+            }
+        }
+    } catch(error){
+        console.log(error)
+        throw (error)
+    }
+}
+
 export async function insert(nomeFuncaoAtlas: string, dados: any){
     try {
         const user = getLoggedInUser();

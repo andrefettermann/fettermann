@@ -8,10 +8,11 @@
 
 import { Request, Response, NextFunction } from 'express';
 import { PessoaRepository } from "../repositories/pessoaRepository";
+import * as repositorio from "../repositories/repository";
 import { decripta, encripta } from '../utils/crypto';
 import { convertDdMmYyyyToDate, formatDateDDMMAAAA } from '../utils/date';
 
-const repositorio = new PessoaRepository()
+//const repositorio = new PessoaRepository()
 
 function decriptaCpf(cpf: any | null | undefined): string {
     if (cpf && cpf !== null && cpf !== undefined && cpf.length > 0) {
@@ -25,23 +26,23 @@ function decriptaCpf(cpf: any | null | undefined): string {
 
 async function buscaPeloId(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
+
     try {
-        const response: any = await repositorio.find(id);
-        if (response.success) {            
-            response.doc.forEach((p: any) => {
-                p.nome = decripta(p.nome);
-                p.cpf = decriptaCpf(p.cpf);
+        const response: any = await repositorio.find('GetPessoa', id);
+        if (response.sucesso) {
+            let pessoa = response.doc;
+            pessoa.nome = decripta(pessoa.nome);
+            pessoa.cpf = decriptaCpf(pessoa.cpf);
 
-                p.promocoes.forEach((p: any) => {
-                    p.data_formatada = formatDateDDMMAAAA(p.data);
-                })
+            pessoa.promocoes.forEach(async (p: any) => {
+                p.data_formatada = formatDateDDMMAAAA(p.data);
+            })
 
-                p.pagamentos.forEach((p: any) => {
-                    p.data_formatada = formatDateDDMMAAAA(p.data);
-                })
-            });
-            
-           return res.status(200).send(response.doc)
+            pessoa.pagamentos.forEach((p: any) => {
+                p.data_formatada = formatDateDDMMAAAA(p.data);
+            })
+
+            return res.status(200).send(pessoa)
         } else {
             console.log(response.error)
             res.status(500).json({ mensagem: response.error });    
@@ -50,13 +51,13 @@ async function buscaPeloId(req: Request, res: Response, next: NextFunction) {
         console.log(error)
         res.status(500).json({ mensagem: error });
     }
+
 }
 
 async function buscaTodos(req: Request, res: Response, next: NextFunction) {
     try {
-        const response: any = await repositorio.findall();
-        if (response.success) {
-            
+        const response: any = await repositorio.findAll('GetPessoas');
+        if (response.sucesso) {
             response.docs.forEach((element: any) => {
                 element.nome = decripta(element.nome);
                 element.cpf = decriptaCpf(element.cpf);
@@ -88,9 +89,10 @@ async function buscaTodos(req: Request, res: Response, next: NextFunction) {
 
 async function buscaAniversariantes(req: Request, res: Response, next: NextFunction) {
     const mes = Number(req.params.mes);
+
     try {
-        const response: any = await repositorio.findByAniversario(mes);
-        if (response.success) {
+        const response: any = await repositorio.findAllBy('GetAniversariantes', mes);
+        if (response.sucesso) {
             response.docs.forEach((element: any) => {
                 element.nome = decripta(element.nome);
                 element.cpf = decriptaCpf(element.cpf);
@@ -121,8 +123,9 @@ async function buscaAniversariantes(req: Request, res: Response, next: NextFunct
 async function buscaSituacao(req: Request, res: Response, next: NextFunction) {
     const situacao = req.params.situacao;
     try {
-        const response: any = await repositorio.findBySituacao(situacao);
-        if (response.success) {
+        const response: any = await repositorio.findAllBy('GetPessoasSituacao', situacao);
+        if (response.sucesso) {
+
             response.docs.forEach((element: any) => {
                 element.nome = decripta(element.nome);
                 element.cpf = decriptaCpf(element.cpf);
@@ -222,9 +225,9 @@ function setDoc(req: any) {
 async function inclui(req: Request, res: Response, next: NextFunction) {
     const doc = setDoc(req);
     try {
-        const response: any = await repositorio.insert(doc);
+        const response: any = await repositorio.insert('PostPessoa', doc);
         
-        if (response.success) {
+        if (response.sucesso) {
             res.status(201).json(response);
         } else {
             res.status(500).json({ mensagem: response.error });
@@ -240,8 +243,8 @@ async function atualiza(req: Request, res: Response, next: NextFunction) {
     const doc = setDoc(req);
 
     try {
-        const response: any = await repositorio.update(id, doc);
-        if (response.success) {
+        const response: any = await repositorio.update('PatchPessoa', id, doc);
+        if (response.sucesso) {
             res.status(201).json(response);
         
         } else {
@@ -251,6 +254,7 @@ async function atualiza(req: Request, res: Response, next: NextFunction) {
         console.log("e: " + error)
         res.status(500).json({ mensagem: error });
     }
+
 }
 
 export default {

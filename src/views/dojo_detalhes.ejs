@@ -104,10 +104,14 @@
             <div class="card-header fw-bold">Alunos</div>
             <div class="card-body">
               <ol id="promocoes" name="promocoes" class="list-group list-group-flush">
-                <% if (doc.pessoas) { %>
-                      <% doc.pessoas.forEach(function(pessoa){ %>
+                <% if (doc.alunos) { %>
+                      <% doc.alunos.forEach(function(pessoa){ %>
                         <li class="list-group-item">
-                          <%= pessoa.nome + " (" + pessoa.graduacao_atual + ") (" + pessoa.situacao + ")" %>
+                          <% docs_graduacoes.forEach(function(g) { %>
+                            <% if (g._id && g._id == pessoa.id_graduacao) { %>
+                              <%= pessoa.nome + " (" + g.nome + ") (" + pessoa.situacao + ")" %>
+                            <% } %>
+                          <% }) %>
                         </li>
                       <% }); %>
                 <% }; %>
