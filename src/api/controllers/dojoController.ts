@@ -7,8 +7,8 @@
  */
 
 import { Request, Response, NextFunction } from 'express';
-import * as repositorio from "../repositories/repository";
-import { decripta } from '../utils/crypto';
+import * as repositorio from "../repositories/atlasAppRepository";
+import { decripta } from '../../utils/crypto';
 
 var totalHorarios = 0;
 

@@ -6,19 +6,6 @@ const router = express.Router();
 
 var mensagem = "";
 
-function setDoc(req: any) {
-    var doc = {
-        'ordem': req.body.ordem,
-        'nome': req.body.nome,
-        'faixa': req.body.faixa,
-        'minimo_horas_treino_exame': req.body.horas_exame,
-        'minimo_tempo_exame': req.body.meses_exame,
-        'categoria': req.body.categoria,
-        'observacoes': req.body.observacoes
-    }
-
-    return doc;
-}
 
 router.get('/', async (req, res, next) => {
     try {
@@ -101,14 +88,13 @@ router.get('/detalhes/:id', async (req, res, next) => {
 });
 
 router.post('/inclui', async (req, res, next) => {
-    var doc = setDoc(req);
     try {
         const response = await fetch(`${req.protocol}://${req.host}/api/graduacao/`, {
             method: 'POST', // Specify the HTTP method as POST
             headers: {
                 'Content-Type': 'application/json' // Set content type for JSON data
             },
-            body: JSON.stringify(doc) // Convert data to JSON string for the request body
+            body: JSON.stringify(req.body) // Convert data to JSON string for the request body
         });
 
         if (!response.ok) {
@@ -124,7 +110,6 @@ router.post('/inclui', async (req, res, next) => {
 
 router.post('/altera/:id', async (req, res, next) => {
     var id = req.params.id;
-    var doc = setDoc(req);
     try {
         
         const response = await fetch(`${req.protocol}://${req.host}/api/graduacao/${id}`, {
@@ -132,7 +117,7 @@ router.post('/altera/:id', async (req, res, next) => {
             headers: {
                 'Content-Type': 'application/json' // Set content type for JSON data
             },
-            body: JSON.stringify(doc) // Convert data to JSON string for the request body
+            body: JSON.stringify(req.body) // Convert data to JSON string for the request body
         });
         mensagem = 'Graduação alterada com sucesso!';
         res.redirect('/graduacoes');

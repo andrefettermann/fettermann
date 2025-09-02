@@ -12,8 +12,6 @@ const router = express.Router();
 
 var mensagem = "";
 
-
-
 /* Busca todos os dojos */
 router.get('/', async (req, res, next) => {
     try {

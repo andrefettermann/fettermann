@@ -1,6 +1,6 @@
 /* pessoaRouters.ts */
 import { Request, Response, NextFunction } from 'express';
-import * as repositorio from '../repositories/apiPessoaRepository';
+import * as repositorio from '../repositories/pessoaMongooseRepository';
 import { decripta } from '../../utils/crypto';
 import { formatDateDDMMAAAA } from '../../utils/date';
 import { IPessoa } from 'src/models/pessoa';

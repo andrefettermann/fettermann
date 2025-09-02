@@ -1,5 +1,5 @@
 import { db, close } from "../../db";
-import * as repositorio from "../../api/repositories/apiDojoRepository";
+import * as repositorio from "../../api/repositories/dojoMongooseRepository";
 
 describe('Dojos repository', () => {
 

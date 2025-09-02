@@ -1,12 +1,12 @@
 /* apiRoute.ts */
 import express from 'express';
-import apiPessoaController from '../api/controllers/apiPessoaController';
-import apiGraduacaoController from '../api/controllers/apiGraduacaoController';
-import apiDojoController from '../api/controllers/apiDojoController';
+import pessoaMongooseController from './controllers/pessoaMongooseController';
+import graduacaoMongooseController from './controllers/graduacaoMongooseController';
+import dojoMongooseController from './controllers/dojoMongooseController';
 
-import dojoController from '../controllers/dojoController';
-import graduacaoController from '../controllers/graduacaoController';
-import pessoaController from '../controllers/pessoaController';
+import dojoController from './controllers/dojoController';
+import graduacaoController from './controllers/graduacaoController';
+import pessoaController from './controllers/pessoaController';
 
 const router = express.Router();
 
@@ -24,7 +24,7 @@ router.post('/pessoa/inclui/', pessoaController.inclui);
 
 router.patch('/pessoa/altera/:id', pessoaController.atualiza);
 
-router.delete('/pessoa/exclui/:id', apiPessoaController.deletePessoa);
+router.delete('/pessoa/exclui/:id', pessoaMongooseController.deletePessoa);
 
 /* Graduacao routes */
 
@@ -32,11 +32,11 @@ router.get('/graduacao/:id', graduacaoController.buscaPeloId);
 
 router.get('/graduacoes/', graduacaoController.buscaTodos);
 
-router.post('/graduacao/',apiGraduacaoController.postGraduacao);
+router.post('/graduacao/',graduacaoController.inclui);
 
-router.patch('/graduacao/:id', apiGraduacaoController.patchGraduacao);
+router.patch('/graduacao/:id', graduacaoController.atualiza);
 
-router.delete('/graduacao/:id', apiGraduacaoController.deleteGraduacao);
+router.delete('/graduacao/:id', graduacaoMongooseController.deleteGraduacao);
 
 /* Dojo routes */
 
@@ -48,6 +48,6 @@ router.post('/dojo/', dojoController.inclui);
 
 router.patch('/dojo/:id', dojoController.atualiza);
 
-router.delete('/dojo/:id', apiDojoController.deleteDojo);
+router.delete('/dojo/:id', dojoMongooseController.deleteDojo);
 
 export default router;

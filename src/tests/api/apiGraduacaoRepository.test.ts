@@ -1,7 +1,7 @@
 // tests/userController.test.ts
 import { IGraduacao } from "src/models/graduacao";
 import { db, close } from "../../db";
-import * as repositorio from "../../api/repositories/apiGraduacaoRepository";
+import * as repositorio from "../../api/repositories/graduacaoMongooseRepository";
 
 describe('Pessoa repository', () => {
 

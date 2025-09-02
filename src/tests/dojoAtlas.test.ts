@@ -1,4 +1,4 @@
-import * as repositorio from "../repositories/repository";
+import * as repositorio from "../api/repositories/atlasAppRepository";
 import { login, logout } from '../realmClient';
 
 // npm test dojoAtlasFunctions.test

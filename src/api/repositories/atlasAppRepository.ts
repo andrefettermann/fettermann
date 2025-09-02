@@ -1,4 +1,4 @@
-import { getLoggedInUser } from "../realmClient";
+import { getLoggedInUser } from "../../realmClient";
 
 export async function find(nomeFuncaoAtlas: string, id: string) {
     try{

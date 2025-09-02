@@ -7,10 +7,9 @@
  */
 
 import { Request, Response, NextFunction } from 'express';
-import { PessoaRepository } from "../repositories/pessoaRepository";
-import * as repositorio from "../repositories/repository";
-import { decripta, encripta } from '../utils/crypto';
-import { convertDdMmYyyyToDate, formatDateDDMMAAAA } from '../utils/date';
+import * as repositorio from "../repositories/atlasAppRepository";
+import { decripta, encripta } from '../../utils/crypto';
+import { convertDdMmYyyyToDate, formatDateDDMMAAAA } from '../../utils/date';
 
 //const repositorio = new PessoaRepository()
 
