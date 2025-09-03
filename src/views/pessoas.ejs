@@ -43,15 +43,15 @@
             </header>
 
             <div class="mb-2">
-                <a class="btn btn-success" href="/pessoas/novo">Nova pessoa</a>
-                <a class="btn btn-primary" href="/pessoas">Todos</a>
-                <a class="btn btn-primary" href="/pessoas/situacao/Ativo">Pessoas em atividade</a>
-                <a class="btn btn-primary" href="/pessoas/situacao/Inativo">Pessoas inativas</a>
-                <a class="btn btn-primary" href="/pessoas/aniversariantes/<%= mes %>">Aniversariantes do mês</a>
+                <a id="botao_nova_pessoa" name="botao_nova_pessoa" class="btn btn-success" href="/pessoas/novo">Nova pessoa</a>
+                <a id="botao_todas" name="botao_todas" class="btn btn-primary" href="/pessoas">Todos</a>
+                <a id="botao_ativas" name="botao_ativas" class="btn btn-primary" href="/pessoas/situacao/Ativo">Pessoas em atividade</a>
+                <a id="botao_inativas" name="botao_inativas" class="btn btn-primary" href="/pessoas/situacao/Inativo">Pessoas inativas</a>
+                <a id="botao_aniversariantes" name="botao_aniversariantes" class="btn btn-primary" href="/pessoas/aniversariantes/<%= mes %>">Aniversariantes do mês</a>
             </div>
 
             <div class="card">
-                <div class="card-header fw-bold"><%= title %> <span>(<%= total %>)</span></div>
+                <div class="card-header fw-bold"><%= title %> <span id="total" name="total">(<%= total %>)</span></div>
                 <div class="card-body">
                     <div class="row">
 

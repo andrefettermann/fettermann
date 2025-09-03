@@ -1,4 +1,3 @@
-import { PessoaRepository } from '../repositories/pessoaRepository'; 
 import * as repositorio from "../api/repositories/atlasAppRepository";
 import { login, logout } from '../realmClient';
 import { encripta } from '../utils/crypto';
