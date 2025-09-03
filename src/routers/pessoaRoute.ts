@@ -44,7 +44,7 @@ router.get('/situacao/:situacao', async (req, res, next) => {
         const docs = await response.json();
         res.render('pessoas',
             {
-                title: 'Pessoas cadastradas (em atividade)',
+                title: 'Pessoas cadastradas ('+ situacao + ')',
                 docs,
                 total: docs.length,
                 mensagem,

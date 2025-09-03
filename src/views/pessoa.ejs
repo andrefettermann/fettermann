@@ -56,43 +56,12 @@
             </div>
             <div class="form-group row mb-3">
               <div class="col-2">
-                <label for="aniversario" class="col-form-label">Aniversário</label>
-              </div>
-              <div class="col-1">
-                <input type="text" class="form-control" id="aniversario" name="aniversario" value="<%= doc.aniversario %>"
-                placeholder="A data de aniversário(dd/mm)" aria-colcount="10" data-toggle="tooltip" data-placement="top" 
-                title="A data de aniversário(dd/mm)">
-              </div>
-            </div>
-            <div class="form-group row mb-3">
-              <div class="col-2">
                 <label for="matricula" class="col-form-label">Matrícula</label>
               </div>
               <div class="col-1">
                 <input type="text" class="form-control" id="matricula" name="matricula" value="<%= doc.matricula %>"
                 placeholder="O número de matrícula na FEPAI" size="10" data-toggle="tooltip" data-placement="top" 
                 title="O número de matrícula na FEPAI">
-              </div>
-            </div>
-            <div class="form-group row mb-3">
-              <div class="col-2">
-                <label for="data_inicio" class="col-form-label">Data de início</label>
-              </div>
-              <div class="col-2">
-                <input type="text" class="form-control" id="data_inicio" name="data_inicio" value="<%= doc.data_inicio_aikido %>"
-                placeholder="A data de início no aikidô" size="10" data-toggle="tooltip" data-placement="top" 
-                title="A data de início no aikidô">
-              </div>
-            </div>
-            <div class="form-group row mb-3">
-              <div class="col-2">
-                <label for="data_inicio" class="col-form-label">Data de matrícula</label>
-              </div>
-              <div class="col-2">
-                <input type="text" class="form-control" id="data_matricula" name="data_matricula" 
-                value="<%= doc.data_matricula %>"
-                placeholder="A data de matrícula" size="10" data-toggle="tooltip" data-placement="top" 
-                title="A data de início no aikidô">
               </div>
             </div>
             <div class="form-group row mb-3">
@@ -137,6 +106,37 @@
                       <option selected value="Ativo">Ativo</option>
                       <% } %>
                 </select>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <div class="col-2">
+                <label for="aniversario" class="col-form-label">Aniversário</label>
+              </div>
+              <div class="col-1">
+                <input type="text" class="form-control" id="aniversario" name="aniversario" value="<%= doc.aniversario %>"
+                placeholder="A data de aniversário(dd/mm)" aria-colcount="10" data-toggle="tooltip" data-placement="top" 
+                title="A data de aniversário(dd/mm)">
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <div class="col-2">
+                <label for="data_inicio" class="col-form-label">Data de início</label>
+              </div>
+              <div class="col-2">
+                <input type="text" class="form-control" id="data_inicio" name="data_inicio" value="<%= doc.data_inicio_aikido %>"
+                placeholder="A data de início no aikidô" size="10" data-toggle="tooltip" data-placement="top" 
+                title="A data de início no aikidô">
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <div class="col-2">
+                <label for="data_inicio" class="col-form-label">Data de matrícula</label>
+              </div>
+              <div class="col-2">
+                <input type="text" class="form-control" id="data_matricula" name="data_matricula" 
+                value="<%= doc.data_matricula %>"
+                placeholder="A data de matrícula" size="10" data-toggle="tooltip" data-placement="top" 
+                title="A data de início no aikidô">
               </div>
             </div>
             <div class="form-group row mb-3">

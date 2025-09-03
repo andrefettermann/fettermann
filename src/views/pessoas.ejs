@@ -43,15 +43,33 @@
             </header>
 
             <div class="mb-2">
-                <a id="botao_nova_pessoa" name="botao_nova_pessoa" class="btn btn-success" href="/pessoas/novo">Nova pessoa</a>
-                <a id="botao_todas" name="botao_todas" class="btn btn-primary" href="/pessoas">Todos</a>
-                <a id="botao_ativas" name="botao_ativas" class="btn btn-primary" href="/pessoas/situacao/Ativo">Pessoas em atividade</a>
-                <a id="botao_inativas" name="botao_inativas" class="btn btn-primary" href="/pessoas/situacao/Inativo">Pessoas inativas</a>
-                <a id="botao_aniversariantes" name="botao_aniversariantes" class="btn btn-primary" href="/pessoas/aniversariantes/<%= mes %>">Aniversariantes do mês</a>
+                <a id="botao_nova_pessoa" name="botao_nova_pessoa" 
+                    class="btn btn-success" href="/pessoas/novo">
+                        Nova pessoa
+                </a>
+                <a id="botao_todas" name="botao_todas" 
+                    class="btn btn-primary" href="/pessoas">
+                        Todos
+                </a>
+                <a id="botao_ativas" name="botao_ativas" 
+                    class="btn btn-primary" href="/pessoas/situacao/Ativo">
+                        Em atividade
+                </a>
+                <a id="botao_inativas" name="botao_inativas" 
+                    class="btn btn-primary" href="/pessoas/situacao/Inativo">
+                        Inativas
+                </a>
+                <a id="botao_aniversariantes" name="botao_aniversariantes" 
+                    class="btn btn-primary" 
+                    href="/pessoas/aniversariantes/<%= mes %>">
+                        Aniversariantes do mês
+                </a>
             </div>
 
             <div class="card">
-                <div class="card-header fw-bold"><%= title %> <span id="total" name="total">(<%= total %>)</span></div>
+                <div class="card-header fw-bold"><%= title %> 
+                    <span id="total" name="total">(<%= total %>)</span>
+                </div>
                 <div class="card-body">
                     <div class="row">
 
@@ -59,19 +77,45 @@
                             
                             <div class="text-info"><%= mensagem %></div>
 
-                            <table id="tab_pessoas" class="table table-striped table-hover table-sm">
-                                <thead id="tab_pessoas_cabec">
+                            <table id="tabela_pessoas" 
+                                class="table table-striped table-hover table-sm">
+                                <thead id="cabecalho_tabela_pessoas">
                                     <tr>
-                                        <th id="col_nome" name="col_nome" scope="col">Nome</th>
-                                        <th id="col_matricula" name="col_matricula" scope="col">Matrícula</th>
-                                        <th id="col_aniversario" name="col_aniversario" scope="col">Aniversário</th>
-                                        <th id="col_graduacao_atual" name="col_graduacao_atual" scope="col">Graduação</th>
-                                        <th id="col_situacao" name="col_situacao" scope="col">Situação</th>
-                                        <th id="col_dojo" name="col_dojo" scope="col">Dojo</th>
-                                        <th id="col_acoes" name="col_acoes" width="250px">Ações</th>
+                                        <th id="col_nome" name="col_nome" 
+                                            scope="col">
+                                                Nome
+                                        </th>
+                                        <th id="col_matricula" 
+                                            name="col_matricula" 
+                                            scope="col">
+                                                Matrícula
+                                        </th>
+                                        <th id="col_aniversario" 
+                                            name="col_aniversario" 
+                                            scope="col">
+                                                Aniversário
+                                        </th>
+                                        <th id="col_graduacao_atual" 
+                                            name="col_graduacao_atual" 
+                                            scope="col">
+                                                Graduação
+                                        </th>
+                                        <th id="col_situacao" 
+                                            name="col_situacao" 
+                                            scope="col">
+                                                Situação
+                                        </th>
+                                        <th id="col_dojo" name="col_dojo" 
+                                            scope="col">
+                                                Dojo
+                                        </th>
+                                        <th id="col_acoes" name="col_acoes" 
+                                            width="250px">
+                                                Ações
+                                        </th>
                                     </tr>
                                 </thead>
-                                <tbody id="tab_pessoas_linhas">
+                                <tbody id="linhas_tabela_pessoas">
                                     <% docs.forEach(function(doc){ %>
                                         <tr>
                                             <th scope="row">
@@ -97,8 +141,10 @@
                                                 <% } %>
                                             </td>
                                             <td>
-                                                <a href="/pessoas/detalhes/<%= doc._id %>" class="btn btn-info">Detalhes</a>
-                                                <a href="/pessoas/edita/<%= doc._id %>" class="btn btn-primary">Edita</a>
+                                                <a href="/pessoas/detalhes/<%= doc._id %>" 
+                                                    class="btn btn-info">Detalhes</a>
+                                                <a href="/pessoas/edita/<%= doc._id %>" 
+                                                    class="btn btn-primary">Edita</a>
                                             </td>
                                         </tr>
                                         <% }); %>
