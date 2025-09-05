@@ -44,11 +44,24 @@ async function buscaPeloId(req: Request, res: Response, next: NextFunction) {
 
 async function buscaTodos(req: Request, res: Response, next: NextFunction) {
     try {
-        const doc: any = await repositorio.findAll('GetGraduacoes');
-        if (doc.result = "Success") {
-           return res.status(200).json(doc.docs)
+        const result: any = await repositorio.findAll('GetGraduacoes');
+        if (result.result = "Success") {
+            result.docs.sort((a: { ordem: number; }, b: { ordem: number; }) => {
+                //var fa = a.nome.toLowerCase();
+                //var fb = b.nome.toLowerCase();
+
+                if (a.ordem < b.ordem) {
+                    return -1;
+                }
+                if (a.ordem > b.ordem) {
+                    return 1;
+                }
+                return 0;
+            });
+
+           return res.status(200).json(result.docs)
         } else {
-            res.status(500).json({ mensagem: doc.error });    
+            res.status(500).json({ mensagem: result.error });    
         }        
     } catch (error) {
         console.log(error)

@@ -118,11 +118,11 @@
                                 <tbody id="linhas_tabela_pessoas">
                                     <% docs.forEach(function(doc){ %>
                                         <tr>
-                                            <th scope="row">
+                                            <td scope="row">
                                                 <a href="/pessoas/detalhes/<%= doc._id %>">
                                                     <%= doc.nome %>
                                                 </a>
-                                            </th>
+                                            </td>
                                             <td>
                                                 <%= doc.matricula %>
                                             </td>
