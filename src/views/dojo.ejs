@@ -38,23 +38,30 @@
       <div class="card">
         <div class="card-header"><%= title %></div>
         <div class="card-body">
-          <form action="<%= action %>" method="POST">
+          <form id="formulario" name="formulario" action="<%= action %>" method="POST">
             <!-- Info Alert -->
             <div class="alert alert-info alert-dismissible fade show">
               <strong>Info!</strong> O '*'' indica os campos obrigatórios.
               <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
+            <div id="mensagem-topo" class="alert alert-danger alert-dismissible d-none" >
+              <span id="texto-mensagem"></span>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Nome -->
             <div class="form-group row mb-3">
               <div class="col-2">
                 <label for="nome" class="col-form-label">*Nome</label>
               </div>
               <div class="col-4">
                 <input type="text" class="form-control" id="nome" name="nome" value="<%= doc.nome %>"
-                placeholder="O nome do dojo" required>
+                placeholder="O nome do dojo" data-obrigatorio="Por favor, preencha o nome do dojo.">
               </div>
             </div>
             
+            <!--Endereco -->
             <div class="form-group row mb-3">
               <div class="col-2">
                 <label for="endereco" class="col-form-label">Endereço</label>
@@ -66,6 +73,7 @@
               </div>
             </div>
             
+            <!--Bairro -->
             <div class="form-group row mb-3">
               <div class="col-2">
                 <label for="bairro" class="col-form-label">Bairro</label>
@@ -151,8 +159,8 @@
             </div>
 
             <div class="col-12">
-              <input class="btn btn-primary" type="submit" value="Grava" />
-              <a class="btn btn-primary" href="/dojos">Cancela</a>
+              <input id="botao_grava" name="botao_grava" class="btn btn-primary" type="submit" value="Grava" />
+              <a id="botao_cancela" name="botao_cancela" class="btn btn-primary" href="/dojos">Cancela</a>
             </div>
 
           </form>
@@ -170,6 +178,7 @@
 
     </div>
   </main>
+  <script src="/js/verifica_campos_obrigatorios.js"></script>
 </body>
 
 </html>

@@ -1,6 +1,6 @@
-document.getElementById("adiciona_promocao").addEventListener("click", addPromotion);
+document.getElementById("adiciona_promocao").addEventListener("click", adicionaPromocao);
 
-function addPromotion() {
+function adicionaPromocao() {
     var content = document.getElementById("promocoes");
     var total_promotions = document.getElementById("total_promocoes");
     var count = parseInt(total_promotions.value) + 1;

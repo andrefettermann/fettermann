@@ -43,25 +43,34 @@
             </header>
 
             <div class="mb-2">
-                <a class="btn btn-success" href="/dojos/novo">Novo dojo</a>
+                <a id="botao_novo_dojo" name="botao_novo_dojo" 
+                class="btn btn-success" href="/dojos/novo">Novo dojo</a>
             </div>
 
             <div class="card">
-                <div class="card-header fw-bold"><%= title %> <span>(<%= total %>)</span></div>
+                <div class="card-header fw-bold"><%= title %> 
+                    <span id="total" name="total">(<%= total %>)</span>
+                </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="text-info"><%= mensagem %></div>
-                            <table id="tab_dojos" class="table table-striped table-hover table-lg">
-                                <thead id="tab_dojos_cabec">
+                            <table id="tabela_dojos" class="table table-striped 
+                            table-hover table-lg">
+                                <thead id="tabela_dojos_cabecalho">
                                     <tr>
-                                        <th id="col_nome" name="col_nome" scope="col">Nome</th>
-                                        <th id="col_cidade" name="col_cidade" scope="col">Cidade</th>
-                                        <th id="col_professor" name="col_professor" scope="col">Professor</th>
-                                        <th id="col_acoes" name="col_acoes" width="250px">Ações</th>
+                                        <th id="col_nome" name="col_nome" 
+                                        scope="col">Nome</th>
+                                        <th id="col_cidade" name="col_cidade" 
+                                        scope="col">Cidade</th>
+                                        <th id="col_professor" 
+                                        name="col_professor" scope="col">
+                                        Professor</th>
+                                        <th id="col_acoes" name="col_acoes" 
+                                        width="250px">Ações</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tab_dojos_linhas">
+                                <tbody id="tabela_dojos_linhas">
                                     <% dojos.forEach(function(doc){ %>
                                         <tr>
                                             <td>

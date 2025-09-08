@@ -38,12 +38,21 @@
       <div class="card">
         <div class="card-header"><%= title %></div>
         <div class="card-body">
-          <form action="<%= action %>" method="POST">
+          <form id="formulario" name="formulario" action="<%= action %>" 
+            method="POST">
+
             <!-- Info Alert -->
             <div class="alert alert-info alert-dismissible fade show">
               <strong>Info!</strong> O '*'' indica os campos obrigatórios.
               <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
+
+            <div id="mensagem-topo" class="alert alert-danger alert-dismissible d-none" >
+              <span id="texto-mensagem"></span>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!--Ordem -->
             <div class="form-group row mb-3">
               <div class="col-2">
                 <label for="ordem" class="col-form-label">*Ordem</label>
@@ -51,18 +60,22 @@
               <div class="col-1">
                 <input type="text" class="form-control" id="ordem" name="ordem" value="<%= doc.ordem %>"
                 placeholder="A ordem sequencial da graduação" title="A ordem sequencial da graduação" 
-                required>
+                data-obrigatorio="Por favor, preencha a ordem da graduação.">
               </div>
             </div>
+
+            <!-- Nome -->
             <div class="form-group row mb-3">
               <div class="col-2">
                 <label for="nome" class="col-form-label">*Nome</label>
               </div>
               <div class="col-2">
                 <input type="text" class="form-control" id="nome" name="nome" value="<%= doc.nome %>"
-                placeholder="O nome da graduação" title="O nome da graduação" required>
+                placeholder="O nome da graduação" title="O nome da graduação" data-obrigatorio="Por favor, preencha o nome da graduação.">
               </div>
             </div>
+
+            <!-- Faixa -->
             <div class="form-group row mb-3">
               <div class="col-2">
                 <label for="faixa" class="col-form-label">Faixa</label>
@@ -74,6 +87,7 @@
               </div>
             </div>
 
+            <!-- Horas para exame -->
             <div class="form-group row mb-3">
               <div class="col-2">
                 <label for="horas_exame" class="col-form-label">Horas para exame</label>
@@ -87,6 +101,7 @@
               </div>
             </div>
 
+            <!-- Meses para exame -->
             <div class="form-group row mb-3">
               <div class="col-2">
                 <label for="meses_exame" class="col-form-label">Meses para exame</label>
@@ -100,6 +115,7 @@
               </div>
             </div>
 
+            <!-- Categoria -->
             <div class="form-group row mb-3">
               <div class="col-2">
                 <label for="categoria" class="form-label">Categoria</label>
@@ -121,6 +137,7 @@
               </div>
             </div>
 
+            <!-- Observacoes -->
             <div class="form-group row mb-3">
               <div class="col-2">
                 <label for="obervacoes" class="col-form-label">Observações</label>
@@ -135,8 +152,8 @@
             </div>
 
             <div class="col-12">
-              <input class="btn btn-primary" type="submit" value="Grava" />
-              <a class="btn btn-primary" href="/graduacoes">Cancela</a>
+              <input id="botao_grava" name="botao_grava" class="btn btn-primary" type="submit" value="Grava" />
+              <a id="botao_cancela" name="botao_cancela" class="btn btn-primary" href="/graduacoes">Cancela</a>
             </div>
 
           </form>
@@ -154,6 +171,7 @@
 
     </div>
   </main>
+  <script src="/js/verifica_campos_obrigatorios.js"></script>
 </body>
 
 </html>

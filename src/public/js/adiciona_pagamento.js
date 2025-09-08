@@ -1,6 +1,6 @@
-document.getElementById("adiciona_pagamento").addEventListener("click", addPayment);
+document.getElementById("adiciona_pagamento").addEventListener("click", adicionaPagamento);
 
-function addPayment() {
+function adicionaPagamento() {
     var content = document.getElementById("pagamentos");
     var total_payments = document.getElementById("total_pagamentos");
     var count = parseInt(total_payments.value) + 1;
