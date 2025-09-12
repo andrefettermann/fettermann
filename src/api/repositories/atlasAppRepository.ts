@@ -98,7 +98,6 @@ export async function update(nomeFuncaoAtlas: string, id: string, dados: any){
                 mensagem: "Nao foi possivel atualizar"
             }
         } else {
-            console.log(doc)
             return {
                 sucesso: true,
                 doc: doc

@@ -12,11 +12,11 @@ import { decripta } from '../../utils/crypto';
 
 function setDoc(req: any) {
     var doc = {
-        'ordem': req.body.ordem,
+        'ordem': parseInt(req.body.ordem),
         'nome': req.body.nome,
         'faixa': req.body.faixa,
-        'minimo_horas_treino_exame': req.body.horas_exame,
-        'minimo_tempo_exame': req.body.meses_exame,
+        'minimo_horas_treino_exame': parseInt(req.body.horas_exame),
+        'minimo_tempo_exame': parseInt(req.body.meses_exame),
         'categoria': req.body.categoria,
         'observacoes': req.body.observacoes
     }

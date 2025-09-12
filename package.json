@@ -12,7 +12,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Uma aplicação simples para controle dos alunos de Aikidô.",
   "dependencies": {
     "@cucumber/cucumber-expressions": "^18.0.1",
     "abort-controller": "^3.0.0",
@@ -44,5 +44,14 @@
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrefettermann/fettermann.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/andrefettermann/fettermann/issues"
+  },
+  "homepage": "https://github.com/andrefettermann/fettermann#readme"
 }
