@@ -11,6 +11,18 @@ import * as repositorio from "../repositories/atlasAppRepository";
 import { decripta } from '../../utils/crypto';
 
 function setDoc(req: any) {
+    var totalTecnicas = req.body.total_tecnicas;
+    var doc_tecnicas = [];
+    if (totalTecnicas > 0) {
+        for (var i=0; i<req.body.total_tecnicas; i++) {
+            var nome = req.body['nome_' + (i+1)];
+            var doc_tecnica = {
+                    nome 
+            }
+            doc_tecnicas.push(doc_tecnica);
+        }
+    }
+    
     var doc = {
         'ordem': parseInt(req.body.ordem),
         'nome': req.body.nome,
@@ -18,9 +30,10 @@ function setDoc(req: any) {
         'minimo_horas_treino_exame': parseInt(req.body.horas_exame),
         'minimo_tempo_exame': parseInt(req.body.meses_exame),
         'categoria': req.body.categoria,
-        'observacoes': req.body.observacoes
+        'observacoes': req.body.observacoes,
+        'tecnicas': doc_tecnicas
     }
-
+console.log(doc)
     return doc;
 }
 

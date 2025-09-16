@@ -35,6 +35,7 @@ router.get('/novo', async (req, res, next) => {
             {
                 title: 'Dados da graduação (Inclusão)',
                 doc: "",
+                total_tecnicas: 0,
                 action: '/graduacoes/inclui/'
             }
         );
@@ -57,6 +58,7 @@ router.get('/edita/:id', async (req, res, next) => {
             {
                 title: 'Dados da graduação (Edição)',
                 doc,
+                total_tecnicas: doc.tecnicas?doc.tecnicas.length:0,
                 action: '/graduacoes/altera/' + id
             }
         );
