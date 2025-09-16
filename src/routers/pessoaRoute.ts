@@ -12,6 +12,7 @@ router.get('/', async (req, res, next) => {
     try {
         const response = await fetch(`${req.protocol}://${req.host}/api/pessoas/`,
             {
+                credentials: 'include',
                 headers: {
                     'Cookie': `authToken=${token}`, // ✅ Passa o cookie
                     'Content-Type': 'application/json'
@@ -174,7 +175,7 @@ router.get('/detalhes/:id', async (req, res, next) => {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
         if (!response.ok) {
             throw new Error(`HTTP error! Pessoa status: ${response.status}`);
         }
