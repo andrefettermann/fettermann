@@ -24,7 +24,10 @@ router.post('/login', async (req, res) => {
     res.cookie('authToken', token, {
       httpOnly: true,
       maxAge: 30 * 60 * 1000, // 30 min
-      sameSite: 'strict'
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/'
+      //sameSite: 'strict'
     });
     console.log("Login com sucesso")
     res.redirect('/pessoas');
