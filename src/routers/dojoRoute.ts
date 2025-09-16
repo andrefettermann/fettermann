@@ -14,8 +14,15 @@ var mensagem = "";
 
 /* Busca todos os dojos */
 router.get('/', async (req, res, next) => {
+    const token = req.cookies?.authToken;
     try {
-        const response = await fetch(`${req.protocol}://${req.host}/api/dojos/`);
+        const response = await fetch(`${req.protocol}://${req.host}/api/dojos/`,
+            {
+                headers: {
+                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
+                    'Content-Type': 'application/json'
+                }
+            });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         } else {
@@ -37,8 +44,15 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/novo', async (req, res, next) => {
+    const token = req.cookies?.authToken;
     try {
-        const responsePessoas = await fetch(`${req.protocol}://${req.host}/api/pessoas/`);
+        const responsePessoas = await fetch(`${req.protocol}://${req.host}/api/pessoas/`,
+            {
+                headers: {
+                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
+                    'Content-Type': 'application/json'
+                }
+            });
         if (!responsePessoas.ok) {
             throw new Error(`HTTP error! Pessoas status: ${responsePessoas.status}`);
         }
@@ -58,15 +72,27 @@ router.get('/novo', async (req, res, next) => {
 });
 
 router.get('/detalhes/:id', async (req, res, next) => {
-    var id = req.params.id;
-
+    const id = req.params.id;
+    const token = req.cookies?.authToken;
     try {
-        const responseGraduacoes = await fetch(`${req.protocol}://${req.host}/api/graduacoes`);
+        const responseGraduacoes = await fetch(`${req.protocol}://${req.host}/api/graduacoes`,
+            {
+                headers: {
+                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
+                    'Content-Type': 'application/json'
+                }
+            });
         if (!responseGraduacoes.ok) {
             throw new Error(`HTTP error! Graduacoes status: ${responseGraduacoes.status}`);
         }
 
-        const response = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`);
+        const response = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`,
+            {
+                headers: {
+                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
+                    'Content-Type': 'application/json'
+                }
+            });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -87,17 +113,29 @@ router.get('/detalhes/:id', async (req, res, next) => {
 });
 
 router.get('/edita/:id', async (req, res, next) => {
-    var id = req.params.id;
-
+    const id = req.params.id;
+    const token = req.cookies?.authToken;
     try {
-        const responsePessoas = await fetch(`${req.protocol}://${req.host}/api/pessoas/`);
+        const responsePessoas = await fetch(`${req.protocol}://${req.host}/api/pessoas/`,
+            {
+                headers: {
+                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
+                    'Content-Type': 'application/json'
+                }
+            });
         if (!responsePessoas.ok) {
             throw new Error(`HTTP error! Pessoas status: ${responsePessoas.status}`);
         }
 
         const docsPessoas = await responsePessoas.json();
 
-        const responseDojo = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`);
+        const responseDojo = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`,
+            {
+                headers: {
+                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
+                    'Content-Type': 'application/json'
+                }
+            });
         if (!responseDojo.ok) {
             throw new Error(`HTTP error! status: ${responseDojo.status}`);
         }
@@ -118,10 +156,12 @@ router.get('/edita/:id', async (req, res, next) => {
 
 router.post('/inclui', async (req, res, next) => {
     //var doc = setDoc(req);
+    const token = req.cookies?.authToken;
     try {
         const response = await fetch(`${req.protocol}://${req.host}/api/dojo/`, {
             method: 'POST', // Specify the HTTP method as POST
             headers: {
+                'Cookie': `authToken=${token}`,
                 'Content-Type': 'application/json' // Set content type for JSON data
             },
             body: JSON.stringify(req.body) // Convert data to JSON string for the request body
@@ -139,11 +179,13 @@ router.post('/inclui', async (req, res, next) => {
 });
 
 router.post('/altera/:id', async (req, res, next) => {
-    var id = req.params.id;
+    const id = req.params.id;
+    const token = req.cookies?.authToken;
     try {
         const response = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`, {
             method: 'PATCH', // Specify the HTTP method as POST
             headers: {
+                'Cookie': `authToken=${token}`,
                 'Content-Type': 'application/json' // Set content type for JSON data
             },
             body: JSON.stringify(req.body) // Convert data to JSON string for the request body
