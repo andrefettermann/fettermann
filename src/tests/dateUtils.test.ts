@@ -1,5 +1,5 @@
 
-import { convertDdMmYyyyToDate, formatDateToDDMMYYYY } from "../utils/date";
+import { convertDdMmYyyyToDate, formatDateDDMMAAAA } from "../utils/date";
 
 describe('Utilitarios de data', () => {
 
@@ -12,7 +12,7 @@ describe('Utilitarios de data', () => {
 
   test('deveria formatar a data', async () => {
     const date = new Date('2022-11-19T00:00:00.000Z');
-    const dataFormatada = formatDateToDDMMYYYY(date);
+    const dataFormatada = formatDateDDMMAAAA(date);
     expect(dataFormatada).toBe('19/11/2022');
   });
 });
