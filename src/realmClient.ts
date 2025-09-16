@@ -5,19 +5,30 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = new Realm.App({ id: process.env.ATLAS_APP_ID! });
-
 let currentUser: Realm.User | null = null;
+let lastLoginTime = 0;
+const LOGIN_TIMEOUT = 30 * 60 * 1000; // 30 minutos
 
-export async function login(email: string, password: string): Promise<Realm.User> {
-  if (currentUser?.isLoggedIn) {
+
+export async function ensureAuthenticated(): Promise<Realm.User> {
+  const now = Date.now();
+  
+  // Verifica se o usuário ainda está válido
+  if (currentUser?.isLoggedIn && (now - lastLoginTime) < LOGIN_TIMEOUT) {
     return currentUser;
   }
-
-  const credentials = Realm.Credentials.apiKey(process.env.ATLAS_API_KEY!);
-  //Realm.Credentials.emailPassword(email, password);
-  currentUser = await app.logIn(credentials);
-  console.log(`🟢 Usuário autenticado: ${currentUser.id}`);
-  return currentUser;
+  
+  try {
+    const credentials = Realm.Credentials.apiKey(process.env.ATLAS_API_KEY!);
+    currentUser = await app.logIn(credentials);
+    lastLoginTime = now;
+    console.log(`🟢 Usuário autenticado: ${currentUser.id}`);
+    return currentUser;
+  } catch (error) {
+    console.error('❌ Erro na autenticação:', error);
+    currentUser = null;
+    throw new Error('Falha na autenticação com MongoDB Atlas');
+  }
 }
 
 export function getLoggedInUser(): Realm.User {
@@ -32,7 +43,11 @@ export async function logout(): Promise<void> {
     await currentUser.logOut();
     console.log("🔒 Usuário desconectado");
     currentUser = null;
-  } else {
-    console.warn("⚠️ Nenhum usuário logado para fazer logout");
+    lastLoginTime = 0;
   }
+}
+
+// Função legada mantida para compatibilidade
+export async function login(email: string, password: string): Promise<Realm.User> {
+  return ensureAuthenticated();
 }

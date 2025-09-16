@@ -13,6 +13,8 @@ db.then(() => {
     app.listen(PORT, () => console.log(`Server is running at ${PORT}.`));
 });
 
+/*
 login("", "").then((u: User) => {
     //console.log(`Conectado ao Atlas MongoDB com o usuario ${u.id}`)
 })
+*/
