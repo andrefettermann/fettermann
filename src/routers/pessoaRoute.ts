@@ -14,7 +14,8 @@ router.get('/', async (req, res, next) => {
             {
                 credentials: 'include',
                 headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
+                    'Cookie': req.headers.cookie || '',
+                    //'Cookie': `authToken=${token}`, // ✅ Passa o cookie
                     'Content-Type': 'application/json'
                 }
             });
