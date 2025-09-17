@@ -1,6 +1,9 @@
 /* pessoaRoute.ts */
 import express from 'express';
 import { convertDdMmYyyyToDate, getCurrentMonth } from '../utils/date';
+import * as pessoaServico from '../servicos/pessoaServico';
+import * as dojoServico from '../servicos/dojoServico';
+import * as graduacaoServico from '../servicos/graduacaoServico';
 
 const router = express.Router();
 
@@ -8,25 +11,9 @@ var mensagem: string = "";
 
 /** Busca todas as pessoas */
 router.get('/', async (req, res, next) => {
-    const token = req.cookies?.authToken;
     try {
-        const response = await fetch(`${req.protocol}://${req.host}/api/pessoas/`,
-            {
-                credentials: 'include',
-                headers: {
-                    'Cookie': req.headers.cookie || '',
-                    //'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        } else  {
-            console.log("API pessoas executada com sucesso!");
-        }
-
-        const docs = await response.json();
+        const result = await pessoaServico.buscaTodos();
+        const docs = result.docs;
         res.render('pessoas',
             {
                 title: 'Pessoas cadastradas',
@@ -45,22 +32,9 @@ router.get('/', async (req, res, next) => {
 /** Busca as pessoas ativas ou inativas */
 router.get('/situacao/:situacao', async (req, res, next) => {
     const situacao = req.params.situacao;
-    const token = req.cookies?.authToken;
     try {
-        const response = await fetch(
-            `${req.protocol}://${req.host}/api/pessoas/situacao/${situacao}`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const docs = await response.json();
+        const response = await pessoaServico.buscaSituacao(situacao);
+        const docs = response.docs;
         res.render('pessoas',
             {
                 title: 'Pessoas cadastradas ('+ situacao + ')',
@@ -79,22 +53,9 @@ router.get('/situacao/:situacao', async (req, res, next) => {
 /** Busca os aniversariantes do mes informado */
 router.get('/aniversariantes/:mes', async (req, res, next) => {
     const mes = req.params.mes;
-    const token = req.cookies?.authToken;
     try {
-        const response = await fetch(
-            `${req.protocol}://${req.host}/api/pessoas/aniversariantes/${mes}`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const docs = await response.json();
+        const response = await pessoaServico.buscaAniversariantes(Number(mes));
+        const docs = response.docs;
         res.render('pessoas',
             {
                 title: 'Pessoas cadastradas (aniversariantes do mês)',
@@ -114,29 +75,11 @@ router.get('/aniversariantes/:mes', async (req, res, next) => {
 router.get('/novo', async (req, res, next) => {
     const token = req.cookies?.authToken;
     try {
-        const responseDojos = await fetch(`${req.protocol}://${req.host}/api/dojos`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-        const responseGraduacoes = await fetch(`${req.protocol}://${req.host}/api/graduacoes`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
+        const dojos = await dojoServico.buscaTodos();
+        const graduacoes = await graduacaoServico.buscaTodos();
 
-        if (!responseDojos.ok) {
-            throw new Error(`HTTP error! Dojos status: ${responseDojos.status}`);
-        } else if (!responseGraduacoes.ok) {
-            throw new Error(`HTTP error! Graduacoes status: ${responseGraduacoes.status}`);
-        }
-
-        const docsDojos = await responseDojos.json();
-        const docsGraduacoes = await responseGraduacoes.json();
+        const docsDojos = dojos.docs;
+        const docsGraduacoes = graduacoes.docs;
         res.render('pessoa',
             {
                 title: 'Dados da pessoa (Inclusão)',
@@ -156,33 +99,12 @@ router.get('/novo', async (req, res, next) => {
 /** Abre a tela com os detalhes da pessoa */
 router.get('/detalhes/:id', async (req, res, next) => {
     const id = req.params.id;
-    const token = req.cookies?.authToken;
     try {
-        const responseGraduacoes = await fetch(`${req.protocol}://${req.host}/api/graduacoes`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-        if (!responseGraduacoes.ok) {
-            throw new Error(`HTTP error! Graduacoes status: ${responseGraduacoes.status}`);
-        }
+        const graduacoes = await graduacaoServico.buscaTodos();
+        const response = await pessoaServico.busca(id);
 
-        const response = await fetch(`${req.protocol}://${req.host}/api/pessoa/${id}`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Pessoa status: ${response.status}`);
-        }
-
-        const docs_graduacoes = await responseGraduacoes.json();
-        const doc = await response.json();
+        const docs_graduacoes = graduacoes.docs;
+        const doc = response.doc;
         res.render('pessoa_detalhes',
             {
                 title: 'Dados da pessoa (Consulta)',
@@ -198,44 +120,14 @@ router.get('/detalhes/:id', async (req, res, next) => {
 /** Abre a tela para alteracao dos dados da pessoa */
 router.get('/edita/:id', async (req, res, next) => {
     const id = req.params.id;
-    const token = req.cookies?.authToken;
     try {
-        const responseDojos = await fetch(`${req.protocol}://${req.host}/api/dojos`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-        const responseGraduacoes = await fetch(`${req.protocol}://${req.host}/api/graduacoes`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
+        const dojos = await dojoServico.buscaTodos();
+        const graduacoes = await graduacaoServico.buscaTodos();
+        const response = await pessoaServico.busca(id);
 
-        if (!responseDojos.ok) {
-            throw new Error(`HTTP error! Dojos status: ${responseDojos.status}`);
-        } else if (!responseGraduacoes.ok) {
-            throw new Error(`HTTP error! Graduacoes status: ${responseGraduacoes.status}`);
-        }
-
-        const docs_dojos = await responseDojos.json();
-        const docs_graduacoes = await responseGraduacoes.json();
-
-        const response = await fetch(`${req.protocol}://${req.host}/api/pessoa/${id}`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-        if (!response.ok) {
-            throw new Error(`HTTP error! Pessoa status: ${response.status}`);
-        }
-
-        const doc = await response.json();
+        const docs_dojos = dojos.docs;
+        const docs_graduacoes = graduacoes.docs;
+        const doc = response.doc;
         res.render('pessoa',
             {
                 title: 'Dados da pessoa (Alteração)',
@@ -255,21 +147,8 @@ router.get('/edita/:id', async (req, res, next) => {
 
 /** Inclui os dados da pessoa */
 router.post('/inclui', async (req, res, next) => {
-    const token = req.cookies?.authToken;
     try {
-        const response = await fetch(`${req.protocol}://${req.host}/api/pessoa/inclui`, {
-            method: 'POST', // Specify the HTTP method as POST
-            headers: {
-                'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                'Content-Type': 'application/json' // Set content type for JSON data
-            },
-            body: JSON.stringify(req.body) // Convert data to JSON string for the request body
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Inclusao de pessoa status: ${response.status}`);
-        }
-
+        const response = await pessoaServico.inclui(req.body);
         mensagem = 'Pessoa incluída com sucesso!';
         res.redirect('/pessoas');
     } catch (err) {
@@ -280,21 +159,8 @@ router.post('/inclui', async (req, res, next) => {
 /** Altera os dados da pessoa */
 router.post('/altera/:id', async (req, res, next) => {
     const id = req.params.id;
-    const token = req.cookies?.authToken;
     try {
-        const response = await fetch(`${req.protocol}://${req.host}/api/pessoa/altera/${id}`, {
-            method: 'PATCH', // Specify the HTTP method as POST
-            headers: {
-                'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                'Content-Type': 'application/json' // Set content type for JSON data
-            },
-            body: JSON.stringify(req.body) // Convert data to JSON string for the request body
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
+        const response = await pessoaServico.atualiza(id, req.body);
         mensagem = 'Pessoa alterada com sucesso!';
         res.redirect('/pessoas');
     } catch (err) {

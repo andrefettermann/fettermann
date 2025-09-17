@@ -1,27 +1,14 @@
-/* graduacaoRoute.ts */
-
 import express from 'express';
+import * as graduacaoServico from '../servicos/graduacaoServico';
 
 const router = express.Router();
 
 var mensagem = "";
 
 router.get('/', async (req, res, next) => {
-    const token = req.cookies?.authToken;
     try {
-        const response = await fetch(`${req.protocol}://${req.host}/api/graduacoes/`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const docs = await response.json();
+        const response = await graduacaoServico.buscaTodos();
+        const docs = response.docs;
         res.render('graduacoes',
             {
                 title: 'Graduações cadastradas',
@@ -53,21 +40,9 @@ router.get('/novo', async (req, res, next) => {
 
 router.get('/edita/:id', async (req, res, next) => {
     const id = req.params.id;
-    const token = req.cookies?.authToken;
-
     try {
-        const response = await fetch(`${req.protocol}://${req.host}/api/graduacao/${id}`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const doc = await response.json();
+        const response = await graduacaoServico.busca(id);
+        const doc = await response.docs;
         res.render('graduacao',
             {
                 title: 'Dados da graduação (Edição)',
@@ -83,20 +58,9 @@ router.get('/edita/:id', async (req, res, next) => {
 
 router.get('/detalhes/:id', async (req, res, next) => {
     const id = req.params.id;
-    const token = req.cookies?.authToken;
     try {
-        const response = await fetch(`${req.protocol}://${req.host}/api/graduacao/${id}`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-        if (!response.ok) {
-            throw new Error(`HTTP error! Graduacao status: ${response.status}`);
-        }
-
-        const doc = await response.json();
+        const response = await graduacaoServico.busca(id);
+        const doc = await response.docs;
         res.render('graduacao_detalhes',
             {
                 title: 'Dados da graduação (Consulta)',
@@ -110,21 +74,9 @@ router.get('/detalhes/:id', async (req, res, next) => {
 });
 
 router.post('/inclui', async (req, res, next) => {
-    const token = req.cookies?.authToken;
+    const dados = req.body;
     try {
-        const response = await fetch(`${req.protocol}://${req.host}/api/graduacao/`, {
-            method: 'POST', // Specify the HTTP method as POST
-            headers: {
-                'Cookie': `authToken=${token}`, // ✅ Passa o cookie,
-                'Content-Type': 'application/json' // Set content type for JSON data
-            },
-            body: JSON.stringify(req.body) // Convert data to JSON string for the request body
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
+        await graduacaoServico.inclui(dados);
         mensagem = 'Graduação incluída com sucesso!';
         res.redirect('/graduacoes');
     } catch (err) {
@@ -133,18 +85,10 @@ router.post('/inclui', async (req, res, next) => {
 });
 
 router.post('/altera/:id', async (req, res, next) => {
-    var id = req.params.id;
-    const token = req.cookies?.authToken;
+    const id = req.params.id;
+    const dados = req.body;
     try {
-        
-        const response = await fetch(`${req.protocol}://${req.host}/api/graduacao/${id}`, {
-            method: 'PATCH', // Specify the HTTP method as POST
-            headers: {
-                'Cookie': `authToken=${token}`, 
-                'Content-Type': 'application/json' // Set content type for JSON data
-            },
-            body: JSON.stringify(req.body) // Convert data to JSON string for the request body
-        });
+        await graduacaoServico.atualiza(id, dados);
         mensagem = 'Graduação alterada com sucesso!';
         res.redirect('/graduacoes');
     } catch (err) {

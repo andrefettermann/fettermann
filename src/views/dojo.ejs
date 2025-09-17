@@ -134,7 +134,7 @@
                 <label for="email" class="col-form-label">E-mail</label>
               </div>
               <div class="col-3">
-                <input type="text" class="form-control" id="email" name="email" value="<%= doc.url %>"
+                <input type="text" class="form-control" id="email" name="email" value="<%= doc.email %>"
                 placeholder="O e-mail" data-toggle="tooltip" data-placement="top" 
                 title="O e-mail">
               </div>
@@ -145,7 +145,7 @@
                 <label for="pessoa" class="col-form-label">Professor</label>
               </div>
               <div class="col-4">
-                <select id="professor_id" name="professor_id" class="form-select" aria-label="Professor">
+                <select id="id_professor" name="id_professor" class="form-select" aria-label="Professor">
                   <option value="">Selecione</option>
                   <% docs_pessoas.forEach(function(pessoa) { %>
                     <% if (doc.id_professor && pessoa._id == doc.id_professor) {%>
@@ -170,7 +170,7 @@
       <div class="container"> 
           <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
               <div class="col-md-4 d-flex align-items-center"> 
-                  <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.01 Fettermann Aikidô</span>
+                  <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.02 - Dojos - Fettermann Aikidô</span>
                 </div> 
                 <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
           </footer> 

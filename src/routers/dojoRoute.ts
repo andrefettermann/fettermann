@@ -1,12 +1,7 @@
-/**
- * dojoRoute.ts
- * 
- * Router para acesso a funcionalidade de dojos.
- * 
- * @author Andre Fettermann
- **/
-
 import express from 'express';
+import * as dojoServico from '../servicos/dojoServico';
+import * as pessoaServico from '../servicos/pessoaServico';
+import * as graduacaoServico from '../servicos/graduacaoServico';
 
 const router = express.Router();
 
@@ -14,29 +9,17 @@ var mensagem = "";
 
 /* Busca todos os dojos */
 router.get('/', async (req, res, next) => {
-    const token = req.cookies?.authToken;
     try {
-        const response = await fetch(`${req.protocol}://${req.host}/api/dojos/`,
+        const response = await dojoServico.buscaTodos();
+        const docs = response.docs;
+        res.render('dojos',
             {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        } else {
-            //const docs = await response.json();
-            const dojos: any = await response.json();
-            res.render('dojos',
-                {
-                    title: 'Dojos cadastrados',
-                    dojos,
-                    total: dojos.length,
-                    mensagem
-                }
-            );
-        }
+                title: 'Dojos cadastrados',
+                docs,
+                total: docs.length,
+                mensagem
+            }
+        );
         mensagem = "";
     } catch (err) {
         next(err);
@@ -44,20 +27,9 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/novo', async (req, res, next) => {
-    const token = req.cookies?.authToken;
     try {
-        const responsePessoas = await fetch(`${req.protocol}://${req.host}/api/pessoas/`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-        if (!responsePessoas.ok) {
-            throw new Error(`HTTP error! Pessoas status: ${responsePessoas.status}`);
-        }
-
-        const docsPessoas = await responsePessoas.json();
+        const pessoas = await pessoaServico.buscaTodos();
+        const docsPessoas = pessoas.docs;
         res.render('dojo',
             {
                 title: 'Dados do dojo (Inclusão)',
@@ -73,32 +45,12 @@ router.get('/novo', async (req, res, next) => {
 
 router.get('/detalhes/:id', async (req, res, next) => {
     const id = req.params.id;
-    const token = req.cookies?.authToken;
     try {
-        const responseGraduacoes = await fetch(`${req.protocol}://${req.host}/api/graduacoes`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-        if (!responseGraduacoes.ok) {
-            throw new Error(`HTTP error! Graduacoes status: ${responseGraduacoes.status}`);
-        }
+        const graduacoes = await graduacaoServico.buscaTodos();
+        const response = await dojoServico.busca(id);
 
-        const response = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const docs_graduacoes = await responseGraduacoes.json();
-        const doc = await response.json();
+        const docs_graduacoes = graduacoes.docs;
+        const doc = response.docs;
         res.render('dojo_detalhes',
             {
                 title: 'Dados do dojo (Consulta)',
@@ -114,33 +66,12 @@ router.get('/detalhes/:id', async (req, res, next) => {
 
 router.get('/edita/:id', async (req, res, next) => {
     const id = req.params.id;
-    const token = req.cookies?.authToken;
     try {
-        const responsePessoas = await fetch(`${req.protocol}://${req.host}/api/pessoas/`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-        if (!responsePessoas.ok) {
-            throw new Error(`HTTP error! Pessoas status: ${responsePessoas.status}`);
-        }
+        const pessoas = await pessoaServico.buscaTodos();
+        const docsPessoas = pessoas.docs;
 
-        const docsPessoas = await responsePessoas.json();
-
-        const responseDojo = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`,
-            {
-                headers: {
-                    'Cookie': `authToken=${token}`, // ✅ Passa o cookie
-                    'Content-Type': 'application/json'
-                }
-            });
-        if (!responseDojo.ok) {
-            throw new Error(`HTTP error! status: ${responseDojo.status}`);
-        }
-
-        const doc = await responseDojo.json();
+        const response = await dojoServico.busca(id);
+        const doc = response.docs;
         res.render('dojo',
             {
                 title: 'Dados do dojo (Edição)',
@@ -155,22 +86,9 @@ router.get('/edita/:id', async (req, res, next) => {
 });
 
 router.post('/inclui', async (req, res, next) => {
-    //var doc = setDoc(req);
-    const token = req.cookies?.authToken;
+    var dados = req.body;
     try {
-        const response = await fetch(`${req.protocol}://${req.host}/api/dojo/`, {
-            method: 'POST', // Specify the HTTP method as POST
-            headers: {
-                'Cookie': `authToken=${token}`,
-                'Content-Type': 'application/json' // Set content type for JSON data
-            },
-            body: JSON.stringify(req.body) // Convert data to JSON string for the request body
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
+        const response = await dojoServico.inclui(dados);
         mensagem = 'Dojo incluído com sucesso!';
         res.redirect('/dojos');
     } catch (err) {
@@ -180,19 +98,14 @@ router.post('/inclui', async (req, res, next) => {
 
 router.post('/altera/:id', async (req, res, next) => {
     const id = req.params.id;
-    const token = req.cookies?.authToken;
+    const dados = req.body;
     try {
-        const response = await fetch(`${req.protocol}://${req.host}/api/dojo/${id}`, {
-            method: 'PATCH', // Specify the HTTP method as POST
-            headers: {
-                'Cookie': `authToken=${token}`,
-                'Content-Type': 'application/json' // Set content type for JSON data
-            },
-            body: JSON.stringify(req.body) // Convert data to JSON string for the request body
-        });
+        const response = await dojoServico.atualiza(id, dados);
         mensagem = 'Dojo alterado com sucesso!';
+        console.log(mensagem)
         res.redirect('/dojos');
     } catch (err) {
+        console.log(err)
         next(err);
     }
 })
