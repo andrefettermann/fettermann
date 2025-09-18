@@ -74,9 +74,11 @@
                                     <% docs.forEach(function(doc){ %>
                                         <tr>
                                             <td>
-                                                <a href="dojos/detalhes/<%= doc._id %>">
-                                                    <%= doc.nome %>
-                                                </a>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="ms3 fw-bold mb-1">
+                                                            <%= doc.nome %>
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td>
                                                 <%= doc.cidade %>
@@ -87,8 +89,8 @@
                                                 <% } %>
                                             </td>
                                             <td>
-                                                <a href="/dojos/detalhes/<%= doc._id %>" class="btn btn-info">Detalhes</a>
-                                                <a href="/dojos/edita/<%= doc._id %>" class="btn btn-primary">Edita</a>
+                                                <a href="/dojos/detalhes/<%= doc._id %>" class="btn btn-rounded">Detalhes</a>
+                                                <a href="/dojos/edita/<%= doc._id %>" class="btn">Edita</a>
                                             </td>
                                         </tr>
                                     <% }); %>
