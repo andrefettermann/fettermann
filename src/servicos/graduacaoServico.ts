@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import * as repositorio from '../api/repositories/atlasAppRepository';
+import * as repositorio from '../repositories/atlasAppRepository';
 import { decripta, encripta } from '../utils/crypto';
 
 function setDoc(osDados: any) {

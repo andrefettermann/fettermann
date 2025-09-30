@@ -1,6 +1,6 @@
 /* apiGraduacaoController.ts */
 import { Request, Response, NextFunction } from 'express';
-import * as repositorio from '../repositories/graduacaoMongooseRepository';
+import * as repositorio from '../../repositories/graduacaoMongooseRepository';
 import { IGraduacao } from '../../models/graduacao';
 import { decripta } from '../../utils/crypto';
 

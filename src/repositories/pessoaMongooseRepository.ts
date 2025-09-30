@@ -1,6 +1,6 @@
 import { Document, ObjectId } from "mongodb";
-import { decripta, encripta } from "../../utils/crypto";
-import { IPessoa, Pessoa } from "../../models/pessoa";
+import { decripta, encripta } from "../utils/crypto";
+import { IPessoa, Pessoa } from "../models/pessoa";
 
 const lookupDojo = {
     $lookup: {

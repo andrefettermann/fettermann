@@ -1,6 +1,6 @@
 /* apiGraduacaoRepository.ts */
 import { ObjectId } from "mongodb";
-import { Graduacao, IGraduacao } from "../../models/graduacao";
+import { Graduacao, IGraduacao } from "../models/graduacao";
 
 const lookupPessoa = {
     $lookup: {

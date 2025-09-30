@@ -7,27 +7,15 @@
  */
 
 import { Request, Response, NextFunction } from 'express';
-import * as repositorio from "../repositories/atlasAppRepository";
+import * as repositorio from "../../repositories/atlasAppRepository";
 import { decripta } from '../../utils/crypto';
 
 var totalHorarios = 0;
 
 function setDoc(req: any) {
-    var doc_horarios = [];
-    if (totalHorarios > 0) {
-        for (var i=0; i<req.body.total_horarios; i++) {
-            const horario = req.body['horario_' + (i+1)];
-            if (horario) {
-                const doc_horario = {
-                    'horario':horario
-                }
-                doc_horarios.push(doc_horario);
-            }
-        }
-    }
-    
     const doc = {
         'nome': req.body.nome,
+        'local': req.body.local,
         'endereco': req.body.endereco,
         'bairro': req.body.bairro,
         'cidade': req.body.cidade,
@@ -36,19 +24,20 @@ function setDoc(req: any) {
         'url': req.body.url,
         'email': req.body.email,
         'id_professor': req.body.professor_id,
-        doc_horarios
+        'horarios': req.body.horarios
     }
 
     return doc;
 }
 
-async function buscaPeloId(req: Request, res: Response, next: NextFunction) {
+async function busca(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
     try {
         const response: any = await repositorio.find('GetDojo', id);
         if (response.sucesso) {
             if (response.doc.professor[0])
-                response.doc.professor[0].nome = decripta(response.doc.professor[0].nome);
+                response.doc.professor[0].nome = 
+                    decripta(response.doc.professor[0].nome);
 
             response.doc.alunos.forEach((a: any) => {
                 a.nome = decripta(a.nome);
@@ -115,7 +104,7 @@ async function atualiza(req: Request, res: Response, next: NextFunction) {
 }
 
 export default {
-    buscaPeloId,
+    busca,
     buscaTodos,
     inclui,
     atualiza

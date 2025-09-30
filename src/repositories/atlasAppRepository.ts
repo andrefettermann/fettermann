@@ -1,4 +1,4 @@
-import { ensureAuthenticated } from "../../realmClient"; // Mudança aqui
+import { ensureAuthenticated } from "../realmClient"; // Mudança aqui
 
 export async function find(nomeFuncaoAtlas: string, id: string) {
   try {

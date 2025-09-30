@@ -1,24 +1,12 @@
-import * as repositorio from '../api/repositories/atlasAppRepository';
+import * as repositorio from '../repositories/atlasAppRepository';
 import { decripta, encripta } from '../utils/crypto';
 
 var totalHorarios = 0;
 
 function setDoc(osDados: any) {
-    var doc_horarios = [];
-    if (totalHorarios > 0) {
-        for (var i=0; i<osDados.body.total_horarios; i++) {
-            const horario = osDados.body['horario_' + (i+1)];
-            if (horario) {
-                const doc_horario = {
-                    'horario':horario
-                }
-                doc_horarios.push(doc_horario);
-            }
-        }
-    }
-    
     const doc = {
         'nome': osDados.nome,
+        'local': osDados.local,
         'endereco': osDados.endereco,
         'bairro': osDados.bairro,
         'cidade': osDados.cidade,
@@ -27,7 +15,7 @@ function setDoc(osDados: any) {
         'url': osDados.burl,
         'email': osDados.email,
         'id_professor': osDados.id_professor,
-        doc_horarios
+        'horarios': osDados.horarios
     }
 
     return doc;

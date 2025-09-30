@@ -14,7 +14,6 @@ router.get('/', async (req, res, next) => {
         const docs = response.docs;
         res.render('dojos',
             {
-                title: 'Dojos cadastrados',
                 docs,
                 total: docs.length,
                 mensagem

@@ -1,7 +1,7 @@
 /* pessoaRouters.ts */
 import { Request, Response, NextFunction } from 'express';
-import * as repositorio from '../repositories/dojoMongooseRepository';
-import * as pessoaRepositorio from '../repositories/pessoaMongooseRepository';
+import * as repositorio from '../../repositories/dojoMongooseRepository';
+import * as pessoaRepositorio from '../../repositories/pessoaMongooseRepository';
 import { IDojo } from '../../models/dojo';
 import { decripta } from '../../utils/crypto';
 import { IPessoa } from 'src/models/pessoa';

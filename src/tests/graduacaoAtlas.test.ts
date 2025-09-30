@@ -1,4 +1,4 @@
-import * as repositorio from "../api/repositories/atlasAppRepository";
+import * as repositorio from "../repositories/atlasAppRepository";
 import { login, logout } from '../realmClient';
 
 describe('Testes de acesso aos dados de graduacao pelo Atlas', () => {

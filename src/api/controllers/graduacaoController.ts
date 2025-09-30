@@ -7,7 +7,7 @@
  */
 
 import { Request, Response, NextFunction } from 'express';
-import * as repositorio from "../repositories/atlasAppRepository";
+import * as repositorio from "../../repositories/atlasAppRepository";
 import { decripta } from '../../utils/crypto';
 
 function setDoc(req: any) {
@@ -33,7 +33,7 @@ function setDoc(req: any) {
         'observacoes': req.body.observacoes,
         'tecnicas': doc_tecnicas
     }
-console.log(doc)
+
     return doc;
 }
 

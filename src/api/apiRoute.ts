@@ -40,7 +40,7 @@ router.delete('/graduacao/:id', graduacaoMongooseController.deleteGraduacao);
 
 /* Dojo routes */
 
-router.get('/dojo/:id', dojoController.buscaPeloId);
+router.get('/dojo/:id', dojoController.busca);
 
 router.get('/dojos/', dojoController.buscaTodos);
 

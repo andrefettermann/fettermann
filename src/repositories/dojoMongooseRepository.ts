@@ -1,5 +1,5 @@
 import { Document, ObjectId } from "mongodb";
-import { Dojo } from "../../models/dojo";
+import { Dojo } from "../models/dojo";
 
 const lookupPessoa = {
     $lookup: {
