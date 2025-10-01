@@ -12,7 +12,7 @@ function setDoc(osDados: any) {
         'cidade': osDados.cidade,
         'uf': osDados.uf,
         'pais': osDados.pais,
-        'url': osDados.burl,
+        'url': osDados.url,
         'email': osDados.email,
         'id_professor': osDados.id_professor,
         'horarios': osDados.horarios

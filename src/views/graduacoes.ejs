@@ -23,7 +23,7 @@
 
     <main>
 
-        <div class="container pt-3 w-75">
+        <div class="container pt-3 w-100">
             
             <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
                 <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
@@ -43,7 +43,7 @@
             </header>
             <div class="mb-2">
                 <a id="botao_nova_graduacao" name="botao_nova_graduacao" 
-                class="btn btn-success" href="/graduacoes/novo">Nova graduação</a>
+                class="btn btn-success btn-sm" href="/graduacoes/novo">Nova graduação</a>
             </div>
 
 
@@ -54,51 +54,23 @@
                         <div class="col-12">
                             <div class="text-info"><%= mensagem %></div>
 
-                            <table id="tabela_graduacoes" class="table table-striped table-hover table-sm">
-                                <thead id="tabela_graduacoes_cabec">
-                                    <tr>
-                                        <th id="col_ordem" name="col_ordem" scope="col">Ordem</th>
-                                        <th id="col_nome" name="col_nome" scope="col">Nome</th>
-                                        <th id="col_faixa" name="col_faixa" scope="col">Faixa</th>
-                                        <th id="col_horas" name="col_horas" scope="col">Horas para exame</th>
-                                        <th id="col_horas" name="col_horas" scope="col">Meses para exame</th>
-                                        <th id="col_horas" name="col_horas" scope="col">Categoria</th>
-                                        <th id="col_acoes" name="col_acoes" width="250px">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tabela_graduacoes_linhas">
-                                    <% docs.forEach(function(doc){ %>
-                                        <tr>
-                                            <th scope="row">
-                                                <a href="graduacoes/detalhes/<%= doc._id %>">
-                                                    <%= doc.ordem %>
-                                                </a>
-                                            </th>
-                                            <td>
-                                                <a href="graduacoes/detalhes/<%= doc._id %>">
-                                                    <%= doc.nome %>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <%= doc.faixa %>
-                                            </td>
-                                            <td>
-                                                <%= doc.minimo_horas_treino_exame %>
-                                            </td>
-                                            <td>
-                                                <%= doc.minimo_tempo_exame %>
-                                            </td>
-                                            <td>
-                                                <%= doc.categoria %>
-                                            </td>
-                                            <td>
-                                                <a href="/graduacoes/detalhes/<%= doc._id %>" class="btn btn-info">Detalhes</a>
-                                                <a href="/graduacoes/edita/<%= doc._id %>" class="btn btn-primary">Edita</a>
-                                            </td>
-                                        </tr>
-                                        <% }); %>
-                                </tbody>
-                            </table>
+                            <% docs.forEach(function(doc){ %>
+                                <div class="card mb-2">
+                                    <div class="card-header fw-bold"><%= doc.ordem + " - " + doc.nome 
+                                        + " (Faixa " + doc.faixa + " " + doc.categoria + ")" %></div>
+                                    <div class="card-body">
+                                        <p><%= doc.minimo_horas_treino_exame %> &nbsp; horas de treino na faixa atual para exame</p>
+                                        <p><%= doc.minimo_tempo_exame %> &nbsp; meses de treino na faixa atual para exame</p>
+                                        <p>
+                                            Ações: 
+                                            <a href="/graduacoes/detalhes/<%= doc._id %>">Detalhes</a>
+                                            &nbsp;|&nbsp;
+                                            <a href="/graduacoes/edita/<%= doc._id %>">Editar</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            <% }); %>
+
                         </div>
                     </div>
                 </div>
@@ -107,7 +79,7 @@
             <div class="container"> 
                 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
                     <div class="col-md-4 d-flex align-items-center"> 
-                        <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.02 - Graduações - Fettermann Aikidô</span>
+                        <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.03 - Graduações - Fettermann Aikidô</span>
                      </div> 
                      <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
                 </footer> 

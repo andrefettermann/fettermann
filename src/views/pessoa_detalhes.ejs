@@ -15,7 +15,7 @@
   <header>
   </header>
   <main>
-    <div class="container pt-3 w-75">
+    <div class="container pt-3 w-100">
             
       <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
         <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
@@ -31,19 +31,15 @@
         </ul>
       </header>
 
+      <div class="mb-2">
+        <a class="btn btn-primary btn-sm" href="/pessoas/edita/<%= doc._id %>">Edita</a>
+        <a class="btn btn-primary btn-sm" href="/pessoas">Cancela</a>
+      </div>
+
+
       <div class="card">
         <div class="card-header">Dados da pessoa</div>
         <div class="card-body">
-          <div class="row pt-1">
-            <div class="col-9"></div>
-            <div class="col-3">
-              <a class="btn btn-primary" href="/pessoas/edita/<%= doc._id %>">Edita</a>
-              <a class="btn btn-primary" href="/pessoas">Cancela</a>
-
-              <a id="exclui_pessoa" class="btn btn-primary disabled" name="exclui_pessoa" 
-              href="/pessoas/exclui/<%= doc._id %>">Excluir</a>
-            </div>
-          </div>
           <div class="row pt-2">
             <div class="col">
                 <span class="fw-bold">Nome: </span>
