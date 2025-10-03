@@ -1,6 +1,7 @@
 // dojoRespository.ts
 import { Document, ObjectId } from "mongodb";
 import { Dojo, IDojo } from "../models/dojo";
+import { connectDB } from "../db";
 
 /**
  * Repositorio de dojo.
@@ -59,6 +60,8 @@ const projectDojo = {
 
 export async function find(id: string): Promise<any> {
     try {
+        await connectDB();
+
         const result: IDojo[] = 
             await Dojo.aggregate([
                 {
@@ -88,6 +91,8 @@ export async function find(id: string): Promise<any> {
 
 export async function findAll(): Promise<any> {
     try{
+        await connectDB();
+
         const result: IDojo[] = await Dojo.aggregate(
             [
                 lookupProfessor,
@@ -113,6 +118,8 @@ export async function findAll(): Promise<any> {
 
 export async function insert(data: any): Promise<any>{
     try {
+        await connectDB();
+
         const result: any = await Dojo.create(data);
         if (result) {
             return {
@@ -132,7 +139,10 @@ export async function insert(data: any): Promise<any>{
 
 export async function update(oId: string, osDados: any): Promise<any>{
     try{
-        const result = await Dojo.findByIdAndUpdate({"_id":oId}, osDados, {new: true})
+        await connectDB();
+
+        const result = 
+            await Dojo.findByIdAndUpdate({"_id":oId}, osDados, {new: true})
 
         if(result){
             return {

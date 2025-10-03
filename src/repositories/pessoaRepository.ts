@@ -80,6 +80,7 @@ export async function findAll(): Promise<any>{
 
 export  async function findBySituacao(situacao: string): Promise<any> {
     try {
+        await connectDB();
         const result: IPessoa[] = await Pessoa.aggregate([
                     {
                         $match: {'situacao': situacao}
@@ -107,6 +108,7 @@ export  async function findBySituacao(situacao: string): Promise<any> {
 
 export async function findByAniversario(mes: string): Promise<any> {
     try {
+        await connectDB();
         const result: IPessoa[] = await Pessoa.aggregate([
             {
                 $match: {'aniversario': { $regex: mes + '$', $options: 'i' }}
@@ -133,6 +135,7 @@ export async function findByAniversario(mes: string): Promise<any> {
 
 export async function findByIdDojo(id: string): Promise<any> {
     try {
+        await connectDB();
         const result: IPessoa[] = await Pessoa.find({id_dojo: id});
         if (result) {
             return {
@@ -152,6 +155,7 @@ export async function findByIdDojo(id: string): Promise<any> {
 
 export async function insert(doc: any): Promise<any>{
     try {
+        await connectDB();
         doc.nome = encripta(doc.nome);
         doc.cpf = encripta(doc.cpf);
 
@@ -174,6 +178,7 @@ export async function insert(doc: any): Promise<any>{
 
 export async function update(id: string, doc: any): Promise<any>{
     try{
+        await connectDB();
         doc.nome = encripta(doc.nome);
         doc.cpf = encripta(doc.cpf);
 

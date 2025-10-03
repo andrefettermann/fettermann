@@ -1,6 +1,7 @@
 /* apiGraduacaoRepository.ts */
 import { ObjectId } from "mongodb";
 import { Graduacao, IGraduacao } from "../models/graduacao";
+import { connectDB } from "../db";
 
 /**
  * Repositorio para graduacao.
@@ -19,6 +20,7 @@ const lookupPessoa = {
 
 export async function find(id: string) {
     try {
+        await connectDB();
         const response: any = await Graduacao.aggregate([
                     {
                         $match: {"_id": new ObjectId(id)}
@@ -43,6 +45,8 @@ export async function find(id: string) {
 
 export async function findAll(){
     try{
+        await connectDB();
+
         const result: any = await 
                 Graduacao.find({}).sort({ sequencia: 1 }).lean();
         if (result) {
@@ -63,6 +67,8 @@ export async function findAll(){
 
 export async function insert(data: any){
     try {
+        await connectDB();
+
         const result: any = await Graduacao.create(data);
         if (result) {
             return {
@@ -82,6 +88,8 @@ export async function insert(data: any){
 
 export async function update(id: string, data: any){
     try{
+        await connectDB();
+
         const result = 
             await Graduacao.findByIdAndUpdate({"_id":id}, data, {new: true})
         if(result){
@@ -102,6 +110,7 @@ export async function update(id: string, data: any){
 
 export async function deleteGraduacao(id: String) {
     try {
+        await connectDB();
         const graduacao = await Graduacao.deleteOne({"_id":id});
         return graduacao;
     } catch(error){

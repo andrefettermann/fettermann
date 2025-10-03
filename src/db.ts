@@ -20,38 +20,11 @@ export async function connectDB(): Promise<typeof mongoose> {
     global.mongooseConn = mongoose.connect(MONGODB_URI, {
       dbName: process.env.MONGO_DB || "aikido",
     });
-    console.log("✅ Conectado ao MongoDB");
+    console.info("✅ Conectado ao MongoDB");
   }
   return global.mongooseConn;
 }
 
-//details from the env
-//const dbHost = process.env.MONGO_HOST;
-//const dbName = process.env.MONGO_DB;
-//const dbPort = process.env.DB_PORT;
-
-//export async function connectDB() {
-//  try {
-//    await mongoose.connect((`${dbHost}`))
-//    console.log(`✅ Mongoose conectado a ${dbName}`);
-//  } catch (err) {
-//    console.error("❌ Erro ao conectar no MongoDB", err);
-//    process.exit(1);
-//  }
-//}
-/*
-//db connection
-export const db = mongoose.connect((`${dbHost}`))
-    //(`${dbHost}/${dbName}`))
-.then(res => {
-    if(res){
-        console.log(`Mongoose conectado a ${dbName}`)
-    }
-    
-}).catch(err => {
-    console.log(err)
-})
-*/
 export async function close() {
     mongoose.connection.close()
     .then(res => {
