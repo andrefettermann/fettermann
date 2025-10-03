@@ -1,17 +1,31 @@
 // middleware/apiAuth.ts
-import jwt from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
+import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
 
-interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Request {
   user?: any;
 }
 
-export function requireApiAuth(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  const token = req.cookies?.authToken;
+export function requireApiAuth(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) {
+  // 🔹 Primeiro tenta Authorization Header
+  const authHeader = req.headers["authorization"];
+  let token: string | undefined;
+
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    token = authHeader.split(" ")[1];
+  }
+
+  // 🔹 Se não veio no header, tenta cookie
+  if (!token && req.cookies?.authToken) {
+    token = req.cookies.authToken;
+  }
 
   if (!token) {
-    // Para API, retorna JSON em vez de redirect
-    return res.status(401).json({ error: 'Token de autenticação necessário' });
+    return res.status(401).json({ error: "Token de autenticação necessário" });
   }
 
   try {
@@ -19,7 +33,6 @@ export function requireApiAuth(req: AuthenticatedRequest, res: Response, next: N
     req.user = decoded;
     next();
   } catch (error) {
-    // Para API, retorna JSON em vez de redirect
-    return res.status(401).json({ error: 'Token inválido' });
+    return res.status(401).json({ error: "Token inválido ou expirado" });
   }
 }

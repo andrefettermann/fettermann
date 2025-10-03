@@ -43,9 +43,10 @@ async function busca(req: Request, res: Response, next: NextFunction) {
 async function buscaTodos(req: Request, res: Response, next: NextFunction) {
     try {
         const response: any = await servico.buscaTodos();
+        
         if (response) {
             if (response.sucesso) {
-                return res.status(200).send(response.doc)
+                return res.status(200).send(response.docs)
             } else {
                 return res.status(204).json( {result: response} )
             }

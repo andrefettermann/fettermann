@@ -3,10 +3,10 @@ import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import apiRouter from './api/apiRoute';
+import consultaRouter from './routers/consultaRoute';
 import pessoaRouter from './routers/pessoaRoute';
 import dojoRouter from './routers/dojoRoute';
 import graduacaoRouter from './routers/graduacaoRoute';
-import authRouter from './routers/loginRoute';
 import path from 'path';
 import { requireAuth } from './middleware/auth';
 import { requireApiAuth } from './middleware/apiAuth';
@@ -27,16 +27,14 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', authRouter);
-//app.use('/api/', requireApiAuth, apiRouter);
-app.use('/api/', apiRouter);
+//app.use('/', authRouter);
+app.use('/api/', requireApiAuth, apiRouter);
+//app.use('/api/', apiRouter);
 app.use('/dojos/', requireAuth, dojoRouter);
 app.use('/graduacoes/', requireAuth, graduacaoRouter);
 app.use('/pessoas/', requireAuth, pessoaRouter);
+app.use('/consulta', consultaRouter);
 
-//app.use((req: Request, res: Response, next: NextFunction) => {
-//   res.send("Hello World");
-//})
 
 // Rota raiz redireciona para login ou pessoas
 app.get('/', (req, res) => {

@@ -3,6 +3,7 @@ import express from 'express';
 import pessoaController from './controllers/pessoaController';
 import graduacaoController from './controllers/graduacaoController';
 import dojoController from './controllers/dojoController';
+import { login } from './auth';
 
 const router = express.Router();
 
@@ -20,7 +21,6 @@ router.post('/pessoa/inclui/', pessoaController.inclui);
 
 router.patch('/pessoa/altera/:id', pessoaController.atualiza);
 
-
 /* Graduacao routes */
 
 router.get('/graduacao/:id', graduacaoController.busca);
@@ -30,7 +30,6 @@ router.get('/graduacoes/', graduacaoController.buscaTodos);
 router.post('/graduacao/',graduacaoController.inclui);
 
 router.patch('/graduacao/:id', graduacaoController.atualiza);
-
 
 /* Dojo routes */
 

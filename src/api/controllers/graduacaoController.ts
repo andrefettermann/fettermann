@@ -32,7 +32,7 @@ async function buscaTodos(req: Request, res: Response, next: NextFunction) {
         const result: any = await servico.buscaTodos();
         if (result) {
             if (result.sucesso) {
-                return res.status(200).send(result.doc)
+                return res.status(200).send(result.docs)
             } else {
                 res.status(500).json({ result });
             }
