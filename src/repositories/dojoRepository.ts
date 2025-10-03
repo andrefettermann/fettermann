@@ -31,11 +31,13 @@ const projectDojos = {
     $project: {
         _id: 1,
         local: 1,
+        bairro: 1,
         nome: 1,
         endereco: 1,
         cidade: 1,
         uf: 1,
         'professor.nome': 1,
+        horarios: 1
     } 
 }
 

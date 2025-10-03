@@ -12,7 +12,8 @@ interface IDojo extends Document {
     pais: string,
     url: string,
     email: string,
-    id_professor: ObjectId
+    id_professor: ObjectId,
+    horarios: string
     //horarios: [
     //    {
     //        horario: string
@@ -59,6 +60,10 @@ const dojoSchema = new Schema<IDojo>({
     },
     id_professor: {
         type: mongodb.ObjectId,
+        required: false
+    },
+    horarios: {
+        type: String,
         required: false
     }
     //,
