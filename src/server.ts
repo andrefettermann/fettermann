@@ -1,20 +1,16 @@
 
 import dotenv from 'dotenv';
 import app from './app';
-import { db } from './db'
+import { connectDB } from "./db";
 import { User } from 'realm-web';
 import { login, logout } from './realmClient';
 
 dotenv.config();
 
-const PORT = parseInt(`${process.env.PORT || 3000}`);
+async function start() {
+    const PORT = parseInt(`${process.env.PORT || 3000}`);
+    await connectDB(); // só continua depois que conectar
+    app.listen(PORT, () => console.log("🚀 Server rodando na porta 3000"));
+}
 
-db.then(() => {
-    app.listen(PORT, () => console.log(`Server is running at ${PORT}.`));
-});
-
-/*
-login("", "").then((u: User) => {
-    //console.log(`Conectado ao Atlas MongoDB com o usuario ${u.id}`)
-})
-*/
+start();
