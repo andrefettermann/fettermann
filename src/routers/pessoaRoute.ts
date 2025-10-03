@@ -52,9 +52,9 @@ router.get('/situacao/:situacao', async (req, res, next) => {
 
 /** Busca os aniversariantes do mes informado */
 router.get('/aniversariantes/:mes', async (req, res, next) => {
-    const mes = req.params.mes;
     try {
-        const response = await pessoaServico.buscaAniversariantes(Number(mes));
+        const response = 
+            await pessoaServico.buscaAniversariantes(req.params.mes);
         const docs = response.docs;
         res.render('pessoas',
             {
