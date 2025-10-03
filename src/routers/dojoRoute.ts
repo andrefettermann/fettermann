@@ -28,14 +28,14 @@ router.get('/', async (req, res, next) => {
 
 router.get('/novo', async (req, res, next) => {
     try {
-        const resultPessoas: any = await pessoaServico.buscaTodos();
-        if (!resultPessoas.sucesso) mensagem = resultPessoas.erro;
+        const responsePessoas: any = await pessoaServico.buscaProfessores();
+        if (!responsePessoas.sucesso) mensagem = responsePessoas.erro;
         
         res.render('dojo',
             {
                 title: 'Dados do dojo (Inclusão)',
                 doc: "",
-                docs_pessoas: resultPessoas.docs,
+                docs_pessoas: responsePessoas.docs,
                 action: '/dojos/inclui/',
                 mensagem
             }
@@ -66,7 +66,7 @@ router.get('/detalhes/:id', async (req, res, next) => {
 router.get('/edita/:id', async (req, res, next) => {
     const id = req.params.id;
     try {
-        const responsePessoas = await pessoaServico.buscaTodos();
+        const responsePessoas = await pessoaServico.buscaProfessores();
         const responseDojo = await dojoServico.busca(id);
         res.render('dojo',
             {
@@ -98,7 +98,6 @@ router.post('/altera/:id', async (req, res, next) => {
     try {
         await dojoServico.atualiza(id, dados);
         mensagem = 'Dojo alterado com sucesso!';
-        console.log(mensagem)
         res.redirect('/dojos');
     } catch (err) {
         next(err);

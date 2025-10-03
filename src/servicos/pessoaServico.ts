@@ -49,6 +49,7 @@ function setDoc(osDados: any) {
         'cpf': osDados.cpf===''?'':osDados.cpf,
         'data_inicio_aikido': osDados.data_inicio,
         'data_matricula': osDados.data_matricula,
+        'is_professor': osDados.is_professor?true:false,
         'id_dojo': osDados.id_dojo == ''?null:osDados.id_dojo,
         'id_graduacao': osDados.id_graduacao,
         'promocoes': doc_promocoes,
@@ -131,6 +132,41 @@ export async function buscaSituacao(aSituacao: string): Promise<any> {
     const situacao = aSituacao;
     try {
         const response: any = await repositorio.findBySituacao(situacao);
+        if (response.sucesso) {
+
+            response.docs.forEach((element: any) => {
+                element.nome = decripta(element.nome);
+                element.cpf = decriptaCpf(element.cpf);
+            });
+
+            response.docs.sort((a: { nome: string; }, b: { nome: string; }) => {
+                var fa = a.nome.toLowerCase();
+                var fb = b.nome.toLowerCase();
+
+                if (fa < fb) {
+                    return -1;
+                }
+                if (fa > fb) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            return {
+                sucesso: true,
+                docs: response.docs
+            };
+        } else {
+            return response;
+        }        
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function buscaProfessores(): Promise<any> {
+    try {
+        const response: any = await repositorio.findByIsProfessor(true);
         if (response.sucesso) {
 
             response.docs.forEach((element: any) => {

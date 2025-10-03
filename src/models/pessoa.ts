@@ -10,6 +10,7 @@ interface IPessoa {
     cpf: string,
     data_inicio_aikido: string,
     data_matricula: string,
+    is_professor: boolean,
     id_dojo: ObjectId,
     id_graduacao: ObjectId,
     pagamentos : [{
@@ -53,6 +54,10 @@ const PessoaSchema = new Schema<IPessoa>({
     },
     data_matricula: {
         type: String,
+        required: false
+    },
+    is_professor: {
+        type: Boolean,
         required: false
     },
     id_dojo: {

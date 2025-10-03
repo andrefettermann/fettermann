@@ -71,6 +71,27 @@ router.get('/aniversariantes/:mes', async (req, res, next) => {
     }
 });
 
+/** Busca os professsores */
+router.get('/professores', async (req, res, next) => {
+    try {
+        const response = 
+            await pessoaServico.buscaProfessores();
+        const docs = response.docs;
+        res.render('pessoas',
+            {
+                title: 'Pessoas cadastradas (professores)',
+                docs,
+                total: docs.length,
+                mensagem,
+                logo: '/images/logo-sm.png',
+                mes: getCurrentMonth()
+            }
+        );
+    } catch (err) {
+        next(err);
+    }
+});
+
 /** Abre a tela de inclusao dos dados da pessoa*/
 router.get('/novo', async (req, res, next) => {
     const token = req.cookies?.authToken;

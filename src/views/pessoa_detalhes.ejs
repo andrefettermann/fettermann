@@ -80,6 +80,16 @@
                 <span id="graduacao_atual" name="graduacao_atual"><%= doc.graduacao[0].nome %></span>
             </div>
           </div>
+
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">Professor? </span>
+                <span id="is_professor" name="is_professor">
+                  <%= doc.is_professor==true?'Sim':'Não' %>
+                </span>
+            </div>
+          </div>
+
           <div class="row pt-2">
             <div class="col">
                 <span class="fw-bold">Situação: </span>

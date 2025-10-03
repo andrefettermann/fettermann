@@ -106,6 +106,34 @@ export  async function findBySituacao(situacao: string): Promise<any> {
     }
 }
 
+export  async function findByIsProfessor(isProfessor: boolean): Promise<any> {
+    try {
+        await connectDB();
+        const result: IPessoa[] = await Pessoa.aggregate([
+                    {
+                        $match: {'is_professor': isProfessor}
+                    },  
+                    lookupDojo,
+                    lookupGraduacao
+                    //{$unwind: '$dojo'},
+                ]);
+        
+        if (result) {
+            return {
+                sucesso: true,
+                docs: result
+            }
+        } else {
+            return {
+                sucesso: false,
+                erro: "Erro ao ler os dados"
+            }
+        }
+    } catch(error){
+        throw error;
+    }
+}
+
 export async function findByAniversario(mes: string): Promise<any> {
     try {
         await connectDB();
