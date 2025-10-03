@@ -4,20 +4,41 @@ import mongoose from 'mongoose'
 
 dotenv.config()
 
-//details from the env
-const dbHost = process.env.MONGO_HOST;
-const dbName = process.env.MONGO_DB;
-const dbPort = process.env.DB_PORT;
-
-export async function connectDB() {
-  try {
-    await mongoose.connect(`${dbHost}/${dbName}`);
-    console.log(`✅ Mongoose conectado a ${dbName}`);
-  } catch (err) {
-    console.error("❌ Erro ao conectar no MongoDB", err);
-    process.exit(1);
-  }
+const MONGODB_URI = process.env.MONGODB_URI as string;
+if (!MONGODB_URI) {
+  throw new Error("⚠️ Defina a variável MONGODB_URI no .env.local");
 }
+
+// Tipagem para o Node global (evita recriar a conexão em serverless)
+declare global {
+  // eslint-disable-next-line no-var
+  var mongooseConn: Promise<typeof mongoose> | undefined;
+}
+
+export async function connectDB(): Promise<typeof mongoose> {
+  if (!global.mongooseConn) {
+    global.mongooseConn = mongoose.connect(MONGODB_URI, {
+      dbName: process.env.MONGO_DB || "aikido",
+    });
+    console.log("✅ Conectado ao MongoDB");
+  }
+  return global.mongooseConn;
+}
+
+//details from the env
+//const dbHost = process.env.MONGO_HOST;
+//const dbName = process.env.MONGO_DB;
+//const dbPort = process.env.DB_PORT;
+
+//export async function connectDB() {
+//  try {
+//    await mongoose.connect((`${dbHost}`))
+//    console.log(`✅ Mongoose conectado a ${dbName}`);
+//  } catch (err) {
+//    console.error("❌ Erro ao conectar no MongoDB", err);
+//    process.exit(1);
+//  }
+//}
 /*
 //db connection
 export const db = mongoose.connect((`${dbHost}`))
