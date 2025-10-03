@@ -1,6 +1,7 @@
 import { Document, ObjectId } from "mongodb";
 import { decripta, encripta } from "../utils/crypto";
 import { IPessoa, Pessoa } from "../models/pessoa";
+import { connectDB } from "../db";
 
 const lookupDojo = {
     $lookup: {
@@ -22,6 +23,7 @@ const lookupGraduacao = {
 
 export async function find(id: string): Promise<any> {
     try {
+        await connectDB();
         const result: IPessoa[] = 
             await Pessoa.aggregate([
                 {
@@ -50,6 +52,7 @@ export async function find(id: string): Promise<any> {
 
 export async function findAll(): Promise<any>{
     try{
+        await connectDB();
         const result: IPessoa[] = await Pessoa.aggregate(
             [
                 lookupDojo,
