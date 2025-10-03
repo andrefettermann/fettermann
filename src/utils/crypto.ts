@@ -1,27 +1,6 @@
 import { createCipheriv, createDecipheriv } from "crypto";
 import * as crypto from 'crypto';
 
-const key = Buffer.from('ABCDEFGHIJKLMNOPabcdefghijklmnop', 'utf-8');
-const iv = Buffer.from('000102030405060708090a0b0c0d0e0f', 'hex');
-
-export function encrypt(message: string) {
-  const cipher = crypto.createCipheriv("aes-256-cbc", key, iv); //Cipher function
-  var encryptedData = cipher.update(message, "utf-8", "hex");   //Encrypted message
-
-  encryptedData += cipher.final("hex");
-
-  return encryptedData.toString();
-}
-
-export function decrypt(message: string) {
-  const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
-  var decryptedData = decipher.update(message, "hex", "utf-8");
-
-  decryptedData += decipher.final("utf8");
-  
-  return decryptedData.toString();
-}
-
 // Ensure your key is 32 bytes (256 bits) for AES-256
 const ENCRYPTION_KEY = 'ABCDEFGHIJKLMNOPabcdefghijklmnop';
             //crypto.randomBytes(32); // Use a securely generated key in a real application

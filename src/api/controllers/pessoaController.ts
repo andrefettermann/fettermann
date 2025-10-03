@@ -1,17 +1,17 @@
+//
+// pessoaController.ts
+//
+
+import { Request, Response, NextFunction } from 'express';
+import * as servico from "../../servicos/pessoaServico";
+import { decripta, encripta } from '../../utils/crypto';
+import { convertDdMmYyyyToDate, formatDateDDMMAAAA } from '../../utils/date';
+
 /**
- *  pessoaController.ts
- * 
  *  Controller de pessoa.
  * 
  * @author Andre Fettermann
  */
-
-import { Request, Response, NextFunction } from 'express';
-import * as repositorio from "../../repositories/atlasAppRepository";
-import { decripta, encripta } from '../../utils/crypto';
-import { convertDdMmYyyyToDate, formatDateDDMMAAAA } from '../../utils/date';
-
-//const repositorio = new PessoaRepository()
 
 function decriptaCpf(cpf: any | null | undefined): string {
     if (cpf && cpf !== null && cpf !== undefined && cpf.length > 0) {
@@ -23,132 +23,72 @@ function decriptaCpf(cpf: any | null | undefined): string {
     return cpf;
 }
 
-async function buscaPeloId(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.id;
-
+async function busca(req: Request, res: Response, next: NextFunction) {
     try {
-        const response: any = await repositorio.find('GetPessoa', id);
-        if (response.sucesso) {
-            let pessoa = response.doc;
-            pessoa.nome = decripta(pessoa.nome);
-            pessoa.cpf = decriptaCpf(pessoa.cpf);
-
-            pessoa.promocoes.forEach(async (p: any) => {
-                p.data_formatada = formatDateDDMMAAAA(p.data);
-            })
-
-            pessoa.pagamentos.forEach((p: any) => {
-                p.data_formatada = formatDateDDMMAAAA(p.data);
-            })
-
-            return res.status(200).send(pessoa)
+        const response: any = await servico.busca(req.params.id);
+        if (response) {
+            if (response.sucesso) {
+                return res.status(200).send(response.doc)
+            } else {
+                return res.status(204).json( {result: response} )
+            }
         } else {
-            console.log(response.error)
-            res.status(500).json({ mensagem: response.error });    
-        }        
+            res.status(500).json({ mensagem: "Erro ao ler os dados" });
+        }
     } catch (error) {
-        console.log(error)
-        res.status(500).json({ mensagem: error });
+        res.status(500).json({ error });
     }
-
 }
 
 async function buscaTodos(req: Request, res: Response, next: NextFunction) {
     try {
-        const response: any = await repositorio.findAll('GetPessoas');
-        if (response.sucesso) {
-            response.docs.forEach((element: any) => {
-                element.nome = decripta(element.nome);
-                element.cpf = decriptaCpf(element.cpf);
-            });
-
-            response.docs.sort((a: { nome: string; }, b: { nome: string; }) => {
-                var fa = a.nome.toLowerCase();
-                var fb = b.nome.toLowerCase();
-
-                if (fa < fb) {
-                    return -1;
-                }
-                if (fa > fb) {
-                    return 1;
-                }
-                return 0;
-            });
-            
-           return res.status(200).json(response.docs)
+        const response: any = await servico.buscaTodos();
+        if (response) {
+            if (response.sucesso) {
+                return res.status(200).send(response.doc)
+            } else {
+                return res.status(204).json( {result: response} )
+            }
         } else {
-            console.log(response.error)
-            res.status(500).json({ mensagem: response.error });    
-        }        
+            res.status(500).json({ mensagem: "Erro ao ler os dados" });
+        }
     } catch (error) {
-        console.log("Error: " + error)
-        res.status(500).json({ mensagem: error });
+        res.status(500).json({ error });
     }
 }
 
 async function buscaAniversariantes(req: Request, res: Response, next: NextFunction) {
-    const mes = Number(req.params.mes);
-
     try {
-        const response: any = await repositorio.findAllBy('GetAniversariantes', mes);
-        if (response.sucesso) {
-            response.docs.forEach((element: any) => {
-                element.nome = decripta(element.nome);
-                element.cpf = decriptaCpf(element.cpf);
-            });
-
-            response.docs.sort((a: { nome: string; }, b: { nome: string; }) => {
-                var fa = a.nome.toLowerCase();
-                var fb = b.nome.toLowerCase();
-
-                if (fa < fb) {
-                    return -1;
-                }
-                if (fa > fb) {
-                    return 1;
-                }
-                return 0;
-            });
-
-           return res.status(200).json(response.docs)
+        const response: any = 
+                    await servico.buscaAniversariantes(req.params.mes);
+        if (response) {
+            if (response.sucesso) {
+                return res.status(200).send(response.doc)
+            } else {
+                return res.status(204).json( {response} )
+            }
         } else {
-            res.status(500).json({ mensagem: response.error });    
-        }        
+            res.status(500).json({ mensagem: "Erro ao ler os dados" });
+        }
     } catch (error) {
-        res.status(500).json({ mensagem: error });
+        res.status(500).json({ error });
     }
 }
 
 async function buscaSituacao(req: Request, res: Response, next: NextFunction) {
-    const situacao = req.params.situacao;
     try {
-        const response: any = await repositorio.findAllBy('GetPessoasSituacao', situacao);
-        if (response.sucesso) {
-
-            response.docs.forEach((element: any) => {
-                element.nome = decripta(element.nome);
-                element.cpf = decriptaCpf(element.cpf);
-            });
-
-            response.docs.sort((a: { nome: string; }, b: { nome: string; }) => {
-                var fa = a.nome.toLowerCase();
-                var fb = b.nome.toLowerCase();
-
-                if (fa < fb) {
-                    return -1;
-                }
-                if (fa > fb) {
-                    return 1;
-                }
-                return 0;
-            });
-
-           return res.status(200).json(response.docs)
+        const response: any = await servico.buscaSituacao(req.params.situacao);
+        if (response) {
+            if (response.sucesso) {
+                return res.status(200).send(response.doc)
+            } else {
+                return res.status(204).json( {response} )
+            }
         } else {
-            res.status(500).json({ mensagem: response.error });    
-        }        
+            res.status(500).json({ mensagem: "Erro ao ler os dados" });
+        }
     } catch (error) {
-        res.status(500).json({ mensagem: error });
+        res.status(500).json({ error });
     }
 }
 
@@ -222,42 +162,42 @@ function setDoc(req: any) {
 }
 
 async function inclui(req: Request, res: Response, next: NextFunction) {
-    const doc = setDoc(req);
     try {
-        const response: any = await repositorio.insert('PostPessoa', doc);
-        
-        if (response.sucesso) {
-            res.status(201).json(response);
+        const result: any = await servico.inclui(req.body);
+        if (result) {
+            if (result.sucesso) {
+                res.status(201).json(result);
+            } else {
+                res.status(500).json({ mensagem: result.erro });
+            }
         } else {
-            res.status(500).json({ mensagem: response.error });
+            res.status(500).json({ result });
         }
     } catch (error) {
-        console.log("e: " + error)
         res.status(500).json({ mensagem: error });
     }
 }
 
 async function atualiza(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.id;
-    const doc = setDoc(req);
-
     try {
-        const response: any = await repositorio.update('PatchPessoa', id, doc);
-        if (response.sucesso) {
-            res.status(201).json(response);
-        
+        const response: any = await servico.atualiza(req.params.id, req.body);
+        if (response) {
+            if (response.sucesso) {
+                res.status(201).json(response);
+            
+            } else {
+                res.status(500).json({ mensagem: response.erro });
+            }
         } else {
-            res.status(500).json({ mensagem: response.error });
+            res.status(500).json({ response });
         }
     } catch (error) {
-        console.log("e: " + error)
         res.status(500).json({ mensagem: error });
     }
-
 }
 
 export default {
-    buscaPeloId,
+    busca,
     buscaTodos,
     buscaAniversariantes,
     buscaSituacao,

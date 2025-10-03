@@ -1,111 +1,75 @@
+// graduacaoController.ts
+
+import { Request, Response, NextFunction } from 'express';
+import * as servico from "../../servicos/graduacaoServico";
+import { decripta } from '../../utils/crypto';
+
 /**
- *  graduacaoController.ts
- * 
  *  Controller de graduacao.
  * 
  * @author Andre Fettermann
  */
 
-import { Request, Response, NextFunction } from 'express';
-import * as repositorio from "../../repositories/atlasAppRepository";
-import { decripta } from '../../utils/crypto';
-
-function setDoc(req: any) {
-    var totalTecnicas = req.body.total_tecnicas;
-    var doc_tecnicas = [];
-    if (totalTecnicas > 0) {
-        for (var i=0; i<req.body.total_tecnicas; i++) {
-            var nome = req.body['nome_' + (i+1)];
-            var doc_tecnica = {
-                    nome 
-            }
-            doc_tecnicas.push(doc_tecnica);
-        }
-    }
-    
-    var doc = {
-        'ordem': parseInt(req.body.ordem),
-        'nome': req.body.nome,
-        'faixa': req.body.faixa,
-        'minimo_horas_treino_exame': parseInt(req.body.horas_exame),
-        'minimo_tempo_exame': parseInt(req.body.meses_exame),
-        'categoria': req.body.categoria,
-        'observacoes': req.body.observacoes,
-        'tecnicas': doc_tecnicas
-    }
-
-    return doc;
-}
-
-async function buscaPeloId(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.id;
+async function busca(req: Request, res: Response, next: NextFunction) {
     try {
-        const response: any = await repositorio.find('GetGraduacao', id);
-        if (response.sucesso) {
-            response.doc.pessoas.forEach((a: any) => {
-                a.nome = decripta(a.nome);
-            })
-            return res.status(200).send(response.doc)
+        const result: any = await servico.busca(req.params.id);
+        if (result) {
+            if (result.sucesso) {
+                return res.status(200).send(result.doc)
+            } else {
+                res.status(500).json({ response: result });
+            }
         } else {
-            res.status(500).json({ mensagem: response.error });    
-        }        
+            res.status(500).json({ response: result });    
+        }
     } catch (error) {
-        console.log(error)
         res.status(500).json({ mensagem: error });
     }
 }
 
 async function buscaTodos(req: Request, res: Response, next: NextFunction) {
     try {
-        const result: any = await repositorio.findAll('GetGraduacoes');
-        if (result.result = "Success") {
-            result.docs.sort((a: { ordem: number; }, b: { ordem: number; }) => {
-                //var fa = a.nome.toLowerCase();
-                //var fb = b.nome.toLowerCase();
-
-                if (a.ordem < b.ordem) {
-                    return -1;
-                }
-                if (a.ordem > b.ordem) {
-                    return 1;
-                }
-                return 0;
-            });
-
-           return res.status(200).json(result.docs)
+        const result: any = await servico.buscaTodos();
+        if (result) {
+            if (result.sucesso) {
+                return res.status(200).send(result.doc)
+            } else {
+                res.status(500).json({ result });
+            }
         } else {
-            res.status(500).json({ mensagem: result.error });    
-        }        
+            res.status(500).json({ result });    
+        }
     } catch (error) {
-        console.log(error)
         res.status(500).json({ mensagem: error });
     }
 }
 
 async function inclui(req: Request, res: Response, next: NextFunction) {
-    const dados = setDoc(req);
     try {
-        const response: any = await repositorio.insert('PostGraduacao', dados);
-        if (response.sucesso) {
-            res.status(201).json(response);
+        const response: any = await servico.inclui(req.body);
+        if (response) {
+            if (response.sucesso) {
+                res.status(201).json(response);
+            } else {
+                res.status(500).json({ response });
+            }
         } else {
-            res.status(500).json({ mensagem: response.error });
+            res.status(500).json({ response });
         }
     } catch (error) {
-        console.log("e: " + error)
         res.status(500).json({ mensagem: error });
     }
 }
 
 async function atualiza(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.id;
-    const dados = setDoc(req) ;
-
     try {
-        const response: any = await repositorio.update('PatchGraduacao', id, dados);
-        if (response.success) {
-            res.status(201).json(response);
-        
+        const response: any = await servico.atualiza(req.params.id, req.body);
+        if (response) {
+            if (response.success) {
+                res.status(201).json(response);
+            } else {
+                res.status(500).json({ mensagem: response.error });
+            }
         } else {
             res.status(500).json({ mensagem: response.error });
         }
@@ -116,7 +80,7 @@ async function atualiza(req: Request, res: Response, next: NextFunction) {
 }
 
 export default {
-    buscaPeloId,
+    busca,
     buscaTodos,
     inclui,
     atualiza

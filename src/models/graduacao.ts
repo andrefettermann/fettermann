@@ -2,17 +2,18 @@
 import { model, Schema } from "mongoose";
 
 interface IGraduacao {
-    ordem: number,
+    sequencia: number,
     nome: string,
     faixa: string,
     minimo_horas_treino_exame: number,
     minimo_tempo_exame: number,
     categoria: string,
-    observacoes: string
+    observacoes: string,
+    tecnicas: [ { nome: string } ]
 };
 
 const GraduacaoSchema = new Schema<IGraduacao>({
-    ordem: {
+    sequencia: {
         type: Number,
         required: true
     },
@@ -38,9 +39,13 @@ const GraduacaoSchema = new Schema<IGraduacao>({
     },
     observacoes: {
         type: String,
-        required: true
+        required: false
+    },
+    tecnicas : {
+        type: [ { nome: {type: String, required: false} } ],
+        required: false
     }
-}, {collection : 'graduacoes'})
+})
 
 const Graduacao = model<IGraduacao>('graduacoes', GraduacaoSchema);
 

@@ -1,9 +1,10 @@
 // models/schema.ts
 import * as mongodb from 'mongodb';
-import { ObjectId, Schema, model } from 'mongoose';
+import { Document, ObjectId, Schema, model } from 'mongoose';
 
-interface IDojo {
+interface IDojo extends Document {
     nome: string,
+    local: string,
     endereco: string,
     cidade: string,
     bairro: string,
@@ -12,17 +13,21 @@ interface IDojo {
     url: string,
     email: string,
     id_professor: ObjectId
-    horarios: [
-        {
-            horario: string
-        }
-    ]
+    //horarios: [
+    //    {
+    //        horario: string
+    //    }
+    //]
 };
 
 const dojoSchema = new Schema<IDojo>({
     nome: {
         type: String,
         required: true
+    },
+    local: {
+        type: String,
+        required: false
     },
     endereco: {
         type: String,
@@ -55,16 +60,17 @@ const dojoSchema = new Schema<IDojo>({
     id_professor: {
         type: mongodb.ObjectId,
         required: false
-    },
-    horarios: [
-        {
-            horario: {
-                type: String,
-                required: false
-            },
-        }
-    ],
-}, {collection : 'dojos'})
+    }
+    //,
+    //horarios: [
+    //    {
+    //        horario: {
+    //            type: String,
+    //            required: false
+    //        },
+    //    }
+    //],
+})
 
 const Dojo = model<IDojo>('dojos', dojoSchema )
 

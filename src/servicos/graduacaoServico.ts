@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import * as repositorio from '../repositories/atlasAppRepository';
+import * as repositorio from '../repositories/graduacaoRepository';
 import { decripta, encripta } from '../utils/crypto';
 
 function setDoc(osDados: any) {
@@ -14,7 +14,7 @@ function setDoc(osDados: any) {
     }
     
     var doc = {
-        'ordem': parseInt(osDados.ordem),
+        'sequencia': parseInt(osDados.sequencia),
         'nome': osDados.nome,
         'faixa': osDados.faixa,
         'minimo_horas_treino_exame': parseInt(osDados.horas_exame),
@@ -30,18 +30,18 @@ function setDoc(osDados: any) {
 export async function busca(oId: string) {
     const id = oId;
     try {
-        const response: any = await repositorio.find('GetGraduacao', id);
-        if (response.sucesso) {
-            response.doc.pessoas.forEach((a: any) => {
+        const result: any = await repositorio.find(id);
+        if (result.sucesso) {
+            result.doc.pessoas.forEach((a: any) => {
                 a.nome = decripta(a.nome);
             });
 
             return {
                 sucesso: true,
-                docs: response.doc
+                docs: result.doc
             };
         } else {
-            throw response.error;
+            throw result.error;
         }        
     } catch (error) {
         throw error;
@@ -50,14 +50,14 @@ export async function busca(oId: string) {
 
 export async function buscaTodos() {
     try {
-        const response: any = await repositorio.findAll('GetGraduacoes');
-        if (response.result = "Success") {
+        const result: any = await repositorio.findAll();
+        if (result.sucesso) {
 
-            response.docs.forEach((g: any) => {
+            result.docs.forEach((g: any) => {
                 g._id = g._id.toString();
             })
 
-            response.docs.sort((a: { ordem: number; }, b: { ordem: number; }) => {
+            result.docs.sort((a: { ordem: number; }, b: { ordem: number; }) => {
                 //var fa = a.nome.toLowerCase();
                 //var fb = b.nome.toLowerCase();
 
@@ -71,10 +71,10 @@ export async function buscaTodos() {
             });
             return {
                 sucesso: true,
-                docs: response.docs
+                docs: result.docs
             };
         } else {
-            throw response.error;
+            throw result.error;
         }        
     } catch (error) {
         throw error;
@@ -84,14 +84,15 @@ export async function buscaTodos() {
 export async function inclui(osDados: any) {
     const dados = setDoc(osDados);
     try {
-        const response: any = await repositorio.insert('PostGraduacao', dados);
-        if (response.sucesso) {
+        const result: any = await repositorio.insert( dados);
+        console.log(result)
+        if (result.sucesso) {
             return {
                 sucesso: true,
-                docs: response.docs
+                docs: result.docs
             };            
         } else {
-            throw response.error;
+            throw result.error;
         }
     } catch (error) {
         throw error;
@@ -104,7 +105,7 @@ export async function atualiza(oId: string, osDados: any) {
 
     try {
         const response: any = 
-            await repositorio.update('PatchGraduacao', id, dados);
+            await repositorio.update(id, dados);
         if (response.sucesso) {
             return {
                 sucesso: true,

@@ -1,104 +1,81 @@
+// dojoController.ts
+
+import { Request, Response, NextFunction } from 'express';
+import * as servico from "../../servicos/dojoServico";
+//import { decripta } from '../../utils/crypto';
+
 /**
- *  dojoController.ts
- * 
  *  Controller de dojo.
  * 
  * @author Andre Fettermann
  */
 
-import { Request, Response, NextFunction } from 'express';
-import * as repositorio from "../../repositories/atlasAppRepository";
-import { decripta } from '../../utils/crypto';
-
-var totalHorarios = 0;
-
-function setDoc(req: any) {
-    const doc = {
-        'nome': req.body.nome,
-        'local': req.body.local,
-        'endereco': req.body.endereco,
-        'bairro': req.body.bairro,
-        'cidade': req.body.cidade,
-        'uf': req.body.uf,
-        'pais': req.body.pais,
-        'url': req.body.url,
-        'email': req.body.email,
-        'id_professor': req.body.professor_id,
-        'horarios': req.body.horarios
-    }
-
-    return doc;
-}
 
 async function busca(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.id;
     try {
-        const response: any = await repositorio.find('GetDojo', id);
-        if (response.sucesso) {
-            if (response.doc.professor[0])
-                response.doc.professor[0].nome = 
-                    decripta(response.doc.professor[0].nome);
-
-            response.doc.alunos.forEach((a: any) => {
-                a.nome = decripta(a.nome);
-            })
-            return res.status(200).send(response.doc)
+        const result: any = await servico.busca(req.params.id);
+        if (result) {
+            if (result.sucesso) {
+                return res.status(200).send(result.doc)
+            } else {
+                return res.status(204).json( {result} )
+            }
         } else {
-            res.status(500).json({ mensagem: response.error });    
-        }        
+            res.status(500).json({ mensagem: "Erro ao ler os dados" });
+        }
     } catch (error) {
-        console.log(error)
-        res.status(500).json({ mensagem: error });
+        res.status(500).json({ error });
     }
 }
 
 async function buscaTodos(req: Request, res: Response, next: NextFunction) {
     try {
-        const response: any = await repositorio.findAll('GetDojos');
-        if (response.sucesso) {
-            response.docs.forEach((element: any) => {
-                element.professor.forEach((p: any) =>{
-                    if (p.nome) p.nome = decripta(p.nome);
-                })
-            });
-           return res.status(200).send(response.docs)
+        const result: any = await servico.buscaTodos();
+        if (result) {
+            if (result.sucesso) {
+                return res.status(200).send(result.docs)
+            } else {
+                res.status(500).json({ mensagem: result });
+            }
         } else {
-            res.status(500).json({ mensagem: response.error });    
-        }        
+            res.status(500).json({ mensagem: "Erro ao ler os dados" });
+        }
     } catch (error) {
         res.status(500).json({ mensagem: error });
     }
 }
 
 async function inclui(req: Request, res: Response, next: NextFunction) {
-    const dados = setDoc(req);
     try {
-        const response: any = await repositorio.insert('PostDojo', dados);
-        if (response.sucesso) {
-            res.status(201).json(response);
+        const response: any = await servico.inclui(req.body);
+        if (response) {
+            if (response.sucesso) {
+                res.status(201).json(response);
+            } else {
+                res.status(500).json({ mensagem: response });
+            }
         } else {
-            res.status(500).json({ mensagem: response.error });
+            res.status(500).json({ mensagem: "Erro ao incluir os dados" });
         }
     } catch (error) {
-        console.log("e: " + error)
         res.status(500).json({ mensagem: error });
     }
 }
 
 async function atualiza(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.id;
-    const dados = setDoc(req) ;
-
     try {
-        const response: any = await repositorio.update('PatchDojo', id, dados);
-        if (response.success) {
-            res.status(201).json(response);
-        
+        const response: any = await servico.atualiza(req.params.id, req.body);
+        if (response) {
+            if (response.success) {
+                res.status(201).json(response);
+            
+            } else {
+                res.status(500).json({ mensagem: response.error });
+            }
         } else {
-            res.status(500).json({ mensagem: response.error });
+            res.status(500).json({ mensagem: "Erro ao atualizar os dados" });
         }
     } catch (error) {
-        console.log("e: " + error)
         res.status(500).json({ mensagem: error });
     }
 }

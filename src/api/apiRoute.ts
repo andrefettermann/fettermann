@@ -1,18 +1,14 @@
 /* apiRoute.ts */
 import express from 'express';
-import pessoaMongooseController from './controllers/pessoaMongooseController';
-import graduacaoMongooseController from './controllers/graduacaoMongooseController';
-import dojoMongooseController from './controllers/dojoMongooseController';
-
-import dojoController from './controllers/dojoController';
-import graduacaoController from './controllers/graduacaoController';
 import pessoaController from './controllers/pessoaController';
+import graduacaoController from './controllers/graduacaoController';
+import dojoController from './controllers/dojoController';
 
 const router = express.Router();
 
 /* Pessoa routes */
 
-router.get('/pessoa/:id', pessoaController.buscaPeloId);
+router.get('/pessoa/:id', pessoaController.busca);
 
 router.get('/pessoas/', pessoaController.buscaTodos);
 
@@ -24,11 +20,10 @@ router.post('/pessoa/inclui/', pessoaController.inclui);
 
 router.patch('/pessoa/altera/:id', pessoaController.atualiza);
 
-router.delete('/pessoa/exclui/:id', pessoaMongooseController.deletePessoa);
 
 /* Graduacao routes */
 
-router.get('/graduacao/:id', graduacaoController.buscaPeloId);
+router.get('/graduacao/:id', graduacaoController.busca);
 
 router.get('/graduacoes/', graduacaoController.buscaTodos);
 
@@ -36,7 +31,6 @@ router.post('/graduacao/',graduacaoController.inclui);
 
 router.patch('/graduacao/:id', graduacaoController.atualiza);
 
-router.delete('/graduacao/:id', graduacaoMongooseController.deleteGraduacao);
 
 /* Dojo routes */
 
@@ -47,7 +41,5 @@ router.get('/dojos/', dojoController.buscaTodos);
 router.post('/dojo/', dojoController.inclui);
 
 router.patch('/dojo/:id', dojoController.atualiza);
-
-router.delete('/dojo/:id', dojoMongooseController.deleteDojo);
 
 export default router;

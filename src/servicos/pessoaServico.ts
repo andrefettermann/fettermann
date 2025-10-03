@@ -1,6 +1,6 @@
 // services/pessoaService.ts
 import { convertDdMmYyyyToDate, formatDateDDMMAAAA } from '../utils/date';
-import * as repositorio from '../repositories/atlasAppRepository';
+import * as repositorio from '../repositories/pessoaRepository';
 import { decripta, encripta } from '../utils/crypto';
 
 function setDoc(osDados: any) {
@@ -44,9 +44,9 @@ function setDoc(osDados: any) {
     doc = {
         'aniversario': osDados.aniversario,
         'matricula': osDados.matricula,
-        'nome': encripta(osDados.nome),
+        'nome': osDados.nome,
         'situacao': osDados.situacao,
-        'cpf': osDados.cpf===''?'':encripta(osDados.cpf),
+        'cpf': osDados.cpf===''?'':osDados.cpf,
         'data_inicio_aikido': osDados.data_inicio,
         'data_matricula': osDados.data_matricula,
         'id_dojo': osDados.id_dojo == ''?null:osDados.id_dojo,
@@ -67,7 +67,7 @@ function decriptaCpf(cpf: any | null | undefined): string {
 
 export async function buscaTodos(): Promise<any> {
     try {
-        const response: any = await repositorio.findAll('GetPessoas');
+        const response: any = await repositorio.findAll();
         
         if (response.sucesso) {
             response.docs.forEach((element: any) => {
@@ -88,7 +88,7 @@ export async function buscaTodos(): Promise<any> {
                 }
                 return 0;
             });
-            
+            //console.log(response.docs)
             return {
                 sucesso: true,
                 docs: response.docs
@@ -96,38 +96,23 @@ export async function buscaTodos(): Promise<any> {
         } else {
             return {
                 sucesso: false,
-                error: response.error
+                erro: response.erro
             };
         }        
     } catch (error) {
-        console.log("Error: " + error);
         throw error;
     }
 }
 
-export async function buscaAniversariantes(oMes: number) {
+export async function buscaAniversariantes(oMes: string): Promise<any> {
     const mes = oMes;
 
     try {
-        const response: any = 
-            await repositorio.findAllBy('GetAniversariantes', mes);
+        const response: any = await repositorio.findByAniversario(mes);
         if (response.sucesso) {
             response.docs.forEach((element: any) => {
                 element.nome = decripta(element.nome);
                 element.cpf = decriptaCpf(element.cpf);
-            });
-
-            response.docs.sort((a: { nome: string; }, b: { nome: string; }) => {
-                var fa = a.nome.toLowerCase();
-                var fb = b.nome.toLowerCase();
-
-                if (fa < fb) {
-                    return -1;
-                }
-                if (fa > fb) {
-                    return 1;
-                }
-                return 0;
             });
 
             return {
@@ -135,17 +120,17 @@ export async function buscaAniversariantes(oMes: number) {
                 docs: response.docs
             };
         } else {
-            throw response.error;
+            return response;
         }        
     } catch (error) {
         throw error;
     }
 }
 
-export async function buscaSituacao(aSituacao: string) {
+export async function buscaSituacao(aSituacao: string): Promise<any> {
     const situacao = aSituacao;
     try {
-        const response: any = await repositorio.findAllBy('GetPessoasSituacao', situacao);
+        const response: any = await repositorio.findBySituacao(situacao);
         if (response.sucesso) {
 
             response.docs.forEach((element: any) => {
@@ -171,45 +156,30 @@ export async function buscaSituacao(aSituacao: string) {
                 docs: response.docs
             };
         } else {
-            throw response.error;
+            return response;
         }        
     } catch (error) {
         throw error;
     }
 }
 
-export async function inclui(osDados: any) {
-    const doc = setDoc(osDados);
+export async function inclui(osDados: any): Promise<any> {
+    const dados = setDoc(osDados);
     try {
-        const response: any = await repositorio.insert('PostPessoa', doc);
-        
-        if (response.sucesso) {
-            return {
-                sucesso: true,
-                docs: response.docs
-            };
-        } else {
-            throw response.error;
-        }
+        const response: any = await repositorio.insert(dados);
+        return response;
     } catch (error) {
         throw error;
     }
 }
 
-export async function atualiza(oId: string, osDados: any) {
+export async function atualiza(oId: string, osDados: any): Promise<any> {
     const id = oId;
-    const doc = setDoc(osDados);
+    const dados = setDoc(osDados);
 
     try {
-        const response: any = await repositorio.update('PatchPessoa', id, doc);
-        if (response.sucesso) {
-            return {
-                sucesso: true,
-                docs: response.docs
-            };
-        } else {
-            throw response.error;
-        }
+        const response: any = await repositorio.update(id, dados);
+        return response;
     } catch (error) {
         throw error;
     }
@@ -219,7 +189,7 @@ export async function atualiza(oId: string, osDados: any) {
 export async function busca(oId: string): Promise<any> {
     const id = oId;
     try {
-        const response: any = await repositorio.find('GetPessoa', id);
+        const response: any = await repositorio.find(id);
         if (response.sucesso) {
             let pessoa = response.doc;
             pessoa.nome = decripta(pessoa.nome);
@@ -249,13 +219,9 @@ export async function busca(oId: string): Promise<any> {
                 doc: pessoa
             };
         } else {
-            return {
-                sucesso: false,
-                error: response.error
-            };
+            return response;
         }        
     } catch (error) {
-        console.log(error);
         throw error;
     }
 }

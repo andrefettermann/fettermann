@@ -14,7 +14,7 @@ export const db = mongoose.connect((`${dbHost}`))
     //(`${dbHost}/${dbName}`))
 .then(res => {
     if(res){
-        console.log(`Database connection succeffully to ${dbName}`)
+        console.log(`Mongoose conectado a ${dbName}`)
     }
     
 }).catch(err => {

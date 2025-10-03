@@ -78,9 +78,9 @@
                                     <p class="text-muted mb-0">
                                         <%= doc.matricula + " | " 
                                         + doc.graduacao[0].nome 
-                                        + " | " + doc.situacao %>
+                                        + " | " + doc.situacao + " | " + 
+                                        doc.aniversario%>
                                     </p>
-                                    <p><%= doc.aniversario %></p>
                                     <p>
                                         <% if (doc.dojo[0]) { %> 
                                             <%= doc.dojo[0].nome %>

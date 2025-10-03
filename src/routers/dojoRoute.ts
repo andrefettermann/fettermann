@@ -10,12 +10,13 @@ var mensagem = "";
 /* Busca todos os dojos */
 router.get('/', async (req, res, next) => {
     try {
-        const response = await dojoServico.buscaTodos();
-        const docs = response.docs;
+        const response: any = await dojoServico.buscaTodos();
+        if (!response.sucesso) mensagem = response.erro;
+        
         res.render('dojos',
             {
-                docs,
-                total: docs.length,
+                docs: response.docs,
+                total: response.docs.length,
                 mensagem
             }
         );
@@ -27,14 +28,16 @@ router.get('/', async (req, res, next) => {
 
 router.get('/novo', async (req, res, next) => {
     try {
-        const pessoas = await pessoaServico.buscaTodos();
-        const docsPessoas = pessoas.docs;
+        const resultPessoas: any = await pessoaServico.buscaTodos();
+        if (!resultPessoas.sucesso) mensagem = resultPessoas.erro;
+        
         res.render('dojo',
             {
                 title: 'Dados do dojo (Inclusão)',
                 doc: "",
-                docs_pessoas: docsPessoas,
-                action: '/dojos/inclui/'
+                docs_pessoas: resultPessoas.docs,
+                action: '/dojos/inclui/',
+                mensagem
             }
         );
     } catch (err) {
@@ -45,16 +48,13 @@ router.get('/novo', async (req, res, next) => {
 router.get('/detalhes/:id', async (req, res, next) => {
     const id = req.params.id;
     try {
-        const graduacoes = await graduacaoServico.buscaTodos();
-        const response = await dojoServico.busca(id);
-
-        const docs_graduacoes = graduacoes.docs;
-        const doc = response.docs;
+        const responseGraduacoes = await graduacaoServico.buscaTodos();
+        const responseDojo = await dojoServico.busca(id);
         res.render('dojo_detalhes',
             {
                 title: 'Dados do dojo (Consulta)',
-                doc,
-                docs_graduacoes,
+                doc: responseDojo.doc,
+                docs_graduacoes: responseGraduacoes.docs,
                 action: '/dojos/altera/' + id
             }
         );
@@ -66,16 +66,13 @@ router.get('/detalhes/:id', async (req, res, next) => {
 router.get('/edita/:id', async (req, res, next) => {
     const id = req.params.id;
     try {
-        const pessoas = await pessoaServico.buscaTodos();
-        const docsPessoas = pessoas.docs;
-
-        const response = await dojoServico.busca(id);
-        const doc = response.docs;
+        const responsePessoas = await pessoaServico.buscaTodos();
+        const responseDojo = await dojoServico.busca(id);
         res.render('dojo',
             {
                 title: 'Dados do dojo (Edição)',
-                doc,
-                docs_pessoas: docsPessoas,
+                doc: responseDojo.doc,
+                docs_pessoas: responsePessoas.docs,
                 action: '/dojos/altera/' + id
             }
         );
@@ -87,7 +84,7 @@ router.get('/edita/:id', async (req, res, next) => {
 router.post('/inclui', async (req, res, next) => {
     var dados = req.body;
     try {
-        const response = await dojoServico.inclui(dados);
+        await dojoServico.inclui(dados);
         mensagem = 'Dojo incluído com sucesso!';
         res.redirect('/dojos');
     } catch (err) {
@@ -99,12 +96,11 @@ router.post('/altera/:id', async (req, res, next) => {
     const id = req.params.id;
     const dados = req.body;
     try {
-        const response = await dojoServico.atualiza(id, dados);
+        await dojoServico.atualiza(id, dados);
         mensagem = 'Dojo alterado com sucesso!';
         console.log(mensagem)
         res.redirect('/dojos');
     } catch (err) {
-        console.log(err)
         next(err);
     }
 })

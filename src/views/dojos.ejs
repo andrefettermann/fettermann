@@ -47,6 +47,11 @@
                 class="btn btn-success" href="/dojos/novo">Novo dojo</a>
             </div>
 
+            <div id="mensagem-topo" class="alert alert-danger alert-dismissible d-none" >
+              <span id="texto-mensagem"><%= mensagem %></span>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
             <div class="card">
                 <div class="card-header fw-bold">Dojos cadastrados
                     <span id="total" name="total">(<%= total %>)</span>
@@ -54,7 +59,13 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <div class="text-info"><%= mensagem %></div>
+
+                            <% if (mensagem) { %>
+                                <div id="mensagem-topo" class="alert alert-info alert-dismissible" >
+                                    <span id="texto-mensagem"><%= mensagem %></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            <% } %>
 
                             <% docs.forEach(function(doc){ %>
                             <div class="card mb-2">

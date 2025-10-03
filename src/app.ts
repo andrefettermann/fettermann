@@ -28,7 +28,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', authRouter);
-app.use('/api/', requireApiAuth, apiRouter);
+//app.use('/api/', requireApiAuth, apiRouter);
+app.use('/api/', apiRouter);
 app.use('/dojos/', requireAuth, dojoRouter);
 app.use('/graduacoes/', requireAuth, graduacaoRouter);
 app.use('/pessoas/', requireAuth, pessoaRouter);

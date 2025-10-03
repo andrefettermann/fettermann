@@ -76,7 +76,9 @@ router.get('/detalhes/:id', async (req, res, next) => {
 router.post('/inclui', async (req, res, next) => {
     const dados = req.body;
     try {
+        console.log("Vai incluir")
         await graduacaoServico.inclui(dados);
+        console.log("Incluiu")
         mensagem = 'Graduação incluída com sucesso!';
         res.redirect('/graduacoes');
     } catch (err) {
