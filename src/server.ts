@@ -2,8 +2,6 @@
 import dotenv from 'dotenv';
 import app from './app';
 import { connectDB } from "./db";
-import { User } from 'realm-web';
-import { login, logout } from './realmClient';
 
 dotenv.config();
 

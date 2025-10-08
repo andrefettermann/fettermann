@@ -1,7 +1,12 @@
+// Pessoa.ts
 import * as mongodb from 'mongodb';
 import { Decimal128, model, ObjectId, Schema } from "mongoose";
 
-// Pessoa.ts
+/**
+ * Interface de dados da pessoa.
+ * 
+ * @author Andre Fettermann
+ */
 interface IPessoa {
     aniversario: string,
     matricula: string,
@@ -27,6 +32,12 @@ interface IPessoa {
     }]
 };
 
+
+/**
+ * Schema de pessoa.
+ * 
+ * @author Andre Fettermann
+ */
 const PessoaSchema = new Schema<IPessoa>({
     aniversario: {
         type: String,

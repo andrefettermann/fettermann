@@ -1,5 +1,12 @@
+// taxaRoute.ts
 import express from 'express';
-import * as graduacaoServico from '../servicos/graduacaoServico';
+import * as taxaServico from '../servicos/taxaServico';
+
+/**
+ * Router de taxas.
+ * 
+ * @author Andre Fettermann
+ */
 
 const router = express.Router();
 
@@ -7,13 +14,11 @@ var mensagem = "";
 
 router.get('/', async (req, res, next) => {
     try {
-        const response = await graduacaoServico.buscaTodos();
-        const docs = response.docs;
-        res.render('graduacoes',
+        const response = await taxaServico.buscaTodos();
+        res.render('taxas',
             {
-                title: 'Graduações cadastradas',
-                docs,
-                total: docs.length,
+                docs: response.docs,
+                total: response.docs.length,
                 mensagem
             }
         );
@@ -25,12 +30,11 @@ router.get('/', async (req, res, next) => {
 
 router.get('/novo', async (req, res, next) => {
     try {
-        res.render('graduacao',
+        res.render('taxa',
             {
-                title: 'Dados da graduação (Inclusão)',
+                title: 'Dados da taxa (Inclusão)',
                 doc: "",
-                total_tecnicas: 0,
-                action: '/graduacoes/inclui/'
+                action: '/taxas/inclui/'
             }
         );
     } catch (err) {
@@ -39,16 +43,13 @@ router.get('/novo', async (req, res, next) => {
 });
 
 router.get('/edita/:id', async (req, res, next) => {
-    const id = req.params.id;
     try {
-        const response = await graduacaoServico.busca(id);
-        const doc = await response.docs;
+        const response = await taxaServico.busca(req.params.id);
         res.render('graduacao',
             {
                 title: 'Dados da graduação (Edição)',
-                doc,
-                total_tecnicas: doc.tecnicas?doc.tecnicas.length:0,
-                action: '/graduacoes/altera/' + id
+                doc: response.doc,
+                action: '/taxas/altera/' + req.params.id
             }
         );
     } catch (err) {
@@ -59,13 +60,12 @@ router.get('/edita/:id', async (req, res, next) => {
 router.get('/detalhes/:id', async (req, res, next) => {
     const id = req.params.id;
     try {
-        const response = await graduacaoServico.busca(id);
-        const doc = await response.docs;
+        const response = await taxaServico.busca(id);
         res.render('graduacao_detalhes',
             {
                 title: 'Dados da graduação (Consulta)',
-                doc,
-                action: '/graduacoes/altera/' + id
+                doc: response.doc,
+                action: '/taxas/altera/' + id
             }
         );
     } catch (err) {
@@ -76,9 +76,9 @@ router.get('/detalhes/:id', async (req, res, next) => {
 router.post('/inclui', async (req, res, next) => {
     const dados = req.body;
     try {
-        await graduacaoServico.inclui(dados);
-        mensagem = 'Graduação incluída com sucesso!';
-        res.redirect('/graduacoes');
+        await taxaServico.inclui(dados);
+        mensagem = 'Taxa incluída com sucesso!';
+        res.redirect('/taxas');
     } catch (err) {
         next(err);
     }
@@ -88,9 +88,9 @@ router.post('/altera/:id', async (req, res, next) => {
     const id = req.params.id;
     const dados = req.body;
     try {
-        await graduacaoServico.atualiza(id, dados);
-        mensagem = 'Graduação alterada com sucesso!';
-        res.redirect('/graduacoes');
+        await taxaServico.atualiza(id, dados);
+        mensagem = 'Taxa alterada com sucesso!';
+        res.redirect('/taxas');
     } catch (err) {
         next(err);
     }

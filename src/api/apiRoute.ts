@@ -1,25 +1,10 @@
 /* apiRoute.ts */
 import express from 'express';
-import pessoaController from './controllers/pessoaController';
 import graduacaoController from './controllers/graduacaoController';
 import dojoController from './controllers/dojoController';
 import { login } from './auth';
 
 const router = express.Router();
-
-/* Pessoa routes */
-
-router.get('/pessoa/:id', pessoaController.busca);
-
-router.get('/pessoas/', pessoaController.buscaTodos);
-
-router.get('/pessoas/situacao/:situacao', pessoaController.buscaSituacao);
-
-router.get('/pessoas/aniversariantes/:mes', pessoaController.buscaAniversariantes);
-
-router.post('/pessoa/inclui/', pessoaController.inclui);
-
-router.patch('/pessoa/altera/:id', pessoaController.atualiza);
 
 /* Graduacao routes */
 

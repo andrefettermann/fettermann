@@ -16,6 +16,7 @@
     "@types/cookie-parser": "^1.4.9",
     "@types/jsonwebtoken": "^9.0.10",
     "abort-controller": "^3.0.0",
+    "axios": "^1.12.2",
     "chai": "^5.2.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -29,8 +30,7 @@
     "morgan": "^1.10.0",
     "next-auth": "^4.24.11",
     "node-fetch": "^3.3.2",
-    "passport": "^0.7.0",
-    "realm-web": "^2.0.1"
+    "passport": "^0.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",

@@ -4,16 +4,35 @@ import { convertDdMmYyyyToDate, getCurrentMonth } from '../utils/date';
 import * as pessoaServico from '../servicos/pessoaServico';
 import * as dojoServico from '../servicos/dojoServico';
 import * as graduacaoServico from '../servicos/graduacaoServico';
+import axios from 'axios';
+import { authMiddleware } from '../middleware/tokenManager';
 
 const router = express.Router();
 
 var mensagem: string = "";
 
 /** Busca todas as pessoas */
-router.get('/', async (req, res, next) => {
+router.get('/', authMiddleware, async (req, res, next) => {
     try {
-        const result = await pessoaServico.buscaTodos();
-        const docs = result.docs;
+        //const result = await pessoaServico.buscaTodos();
+
+        const token = req.headers.authorization;
+        if (!token) {
+        return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        const response:any = await axios.get(
+            'https://fettermannaikidoapi.vercel.app/api/pessoas', {
+        headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+            'User-Agent': 'PostmanRuntime/7.48.0',
+            'Connection': 'keep-alive'
+        }
+        });
+
+        const docs = response.data;
         res.render('pessoas',
             {
                 title: 'Pessoas cadastradas',
@@ -24,7 +43,11 @@ router.get('/', async (req, res, next) => {
                 mes: getCurrentMonth()
             }
         );
-    } catch (err) {
+    } catch (err: any) {
+        console.error('ERRO COMPLETO:');
+        console.error('Status:', err.response?.status);
+        console.error('Data:', err.response?.data);
+        console.error('Headers enviados:', err.config?.headers);
         next(err);
     }
 });
