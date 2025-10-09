@@ -35,10 +35,26 @@
                 </a> 
 
                 <ul class="nav nav-pills"> 
-                        <li class="nav-item"><a href="/dojos" class="nav-link">Dojos</a></li> 
-                        <li class="nav-item"><a href="/pessoas" class="nav-link">Pessoas</a></li> 
-                        <li class="nav-item"><a href="/graduacoes" class="nav-link active" aria-current="page">Graduações</a></li> 
-                        <li class="nav-item"><a href="/logout" class="nav-link">Sair</a></li> 
+                    <li class="nav-item"><a id="menu-dojos" name="menu-dojos" 
+                        href="/dojos" class="nav-link">Dojos</a></li> 
+                    <li class="nav-item"><a id="menu-pessoas" name="menu-pessoas" 
+                        href="/pessoas" class="nav-link" aria-current="page">Pessoas</a></li> 
+                    <li class="nav-item"><a id="menu-graduacoes" name="menu-graduacoes" 
+                        href="/graduacoes" class="nav-link active">Graduações</a></li> 
+                    <li class="nav-item dropdown">
+                        <a id="menu-financeiro" name="menu-financeiro" 
+                        class="nav-link dropdown-toggle" href="#" 
+                        role="button" data-bs-toggle="dropdown" 
+                        aria-expanded="false">
+                                Financeiro
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a id="menu-taxas" name="menu-taxas" href="/taxas" 
+                                class="nav-link" aria-current="page">Taxas</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a id="menu-sair" name="menu-sair" 
+                        href="/logout" class="nav-link">Sair</a></li> 
                 </ul>
             </header>
             <div class="mb-2">

@@ -10,6 +10,8 @@ import { authMiddleware } from '../middleware/tokenManager';
 const router = express.Router();
 
 var mensagem: string = "";
+const API_URL = "https://fettermannaikidoapi.vercel.app/api";
+//const API_URL = "http://localhost:3001/api";
 
 /** Busca todas as pessoas */
 router.get('/', authMiddleware, async (req, res, next) => {
@@ -18,11 +20,10 @@ router.get('/', authMiddleware, async (req, res, next) => {
 
         const token = req.headers.authorization;
         if (!token) {
-        return res.status(401).json({ message: 'Token não fornecido' });
+            return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const response:any = await axios.get(
-            'https://fettermannaikidoapi.vercel.app/api/pessoas', {
+        const response: any = await axios.get(API_URL + '/pessoas/lista/todos', {
         headers: { 
             'Authorization': token,
             'Accept': 'application/json',
@@ -35,7 +36,7 @@ router.get('/', authMiddleware, async (req, res, next) => {
         const docs = response.data;
         res.render('pessoas',
             {
-                title: 'Pessoas cadastradas',
+                title: docs.length + ' pessoa(s) encontrada(s)',
                 docs,
                 total: docs.length,
                 mensagem,
@@ -53,14 +54,34 @@ router.get('/', authMiddleware, async (req, res, next) => {
 });
 
 /** Busca as pessoas ativas ou inativas */
-router.get('/situacao/:situacao', async (req, res, next) => {
-    const situacao = req.params.situacao;
+router.get('/situacao/:situacao', authMiddleware, async (req, res, next) => {
+    var situacao = req.params.situacao;
     try {
-        const response = await pessoaServico.buscaSituacao(situacao);
-        const docs = response.docs;
+        //const response = await pessoaServico.buscaSituacao(situacao);
+
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        const response: any = await axios.get(
+            API_URL + '/pessoas/lista/situacao/' + situacao, {
+        headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+            'User-Agent': 'PostmanRuntime/7.48.0',
+            'Connection': 'keep-alive'
+        }
+        });
+
+        if (situacao === 'Ativo') situacao = "ativa(s)";
+        else situacao = "inativa(s)";
+
+        const docs = response.data;
         res.render('pessoas',
             {
-                title: 'Pessoas cadastradas ('+ situacao + ')',
+                title: docs.length + ' pessoa(s) '+ situacao + ' encontrada(s)',
                 docs,
                 total: docs.length,
                 mensagem,
@@ -74,14 +95,32 @@ router.get('/situacao/:situacao', async (req, res, next) => {
 });
 
 /** Busca os aniversariantes do mes informado */
-router.get('/aniversariantes/:mes', async (req, res, next) => {
+router.get('/aniversariantes/:mes', authMiddleware, async (req, res, next) => {
+    const mes = req.params.mes;
     try {
-        const response = 
-            await pessoaServico.buscaAniversariantes(req.params.mes);
-        const docs = response.docs;
+//        const response = 
+//            await pessoaServico.buscaAniversariantes(req.params.mes);
+
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        const response:any = await axios.get(
+            API_URL + '/pessoas/lista/aniversariantes/' + mes, {
+        headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+            'User-Agent': 'PostmanRuntime/7.48.0',
+            'Connection': 'keep-alive'
+        }
+        });
+
+        const docs = response.data;
         res.render('pessoas',
             {
-                title: 'Pessoas cadastradas (aniversariantes do mês)',
+                title: docs.length + ' aniversariante(s) do mês encontrado(s)',
                 docs,
                 total: docs.length,
                 mensagem,
@@ -95,14 +134,31 @@ router.get('/aniversariantes/:mes', async (req, res, next) => {
 });
 
 /** Busca os professsores */
-router.get('/professores', async (req, res, next) => {
+router.get('/professores', authMiddleware, async (req, res, next) => {
     try {
-        const response = 
-            await pessoaServico.buscaProfessores();
-        const docs = response.docs;
+        //const response = 
+        //    await pessoaServico.buscaProfessores();
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        const response:any = await axios.get(
+            API_URL + '/pessoas/lista/professores/' 
+            , {
+        headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+            'User-Agent': 'PostmanRuntime/7.48.0',
+            'Connection': 'keep-alive'
+        }
+        });
+
+        const docs = response.data;
         res.render('pessoas',
             {
-                title: 'Pessoas cadastradas (professores)',
+                title: docs.length + ' professor(es) encontrado(s)',
                 docs,
                 total: docs.length,
                 mensagem,
@@ -141,14 +197,31 @@ router.get('/novo', async (req, res, next) => {
 });
 
 /** Abre a tela com os detalhes da pessoa */
-router.get('/detalhes/:id', async (req, res, next) => {
+router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
     const id = req.params.id;
+    const token = req.headers.authorization;
     try {
         const graduacoes = await graduacaoServico.buscaTodos();
-        const response = await pessoaServico.busca(id);
+        //const response = await pessoaServico.busca(id);
+
+        if (!token) {
+            return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        const response:any = await axios.get(
+            API_URL + '/pessoas/busca/' + id 
+            , {
+        headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+            'User-Agent': 'PostmanRuntime/7.48.0',
+            'Connection': 'keep-alive'
+        }
+        });
 
         const docs_graduacoes = graduacoes.docs;
-        const doc = response.doc;
+        const doc = response.data;
         res.render('pessoa_detalhes',
             {
                 title: 'Dados da pessoa (Consulta)',
@@ -162,16 +235,34 @@ router.get('/detalhes/:id', async (req, res, next) => {
 });
 
 /** Abre a tela para alteracao dos dados da pessoa */
-router.get('/edita/:id', async (req, res, next) => {
+router.get('/edita/:id', authMiddleware, async (req, res, next) => {
     const id = req.params.id;
+    const token = req.headers.authorization;
     try {
         const dojos = await dojoServico.buscaTodos();
         const graduacoes = await graduacaoServico.buscaTodos();
-        const response = await pessoaServico.busca(id);
+
+        //const response = await pessoaServico.busca(id);
+        if (!token) {
+            return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        const response:any = await axios.get(
+            API_URL + '/pessoas/busca/' + id 
+            , {
+        headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+            'User-Agent': 'PostmanRuntime/7.48.0',
+            'Connection': 'keep-alive'
+        }
+        });
+
 
         const docs_dojos = dojos.docs;
         const docs_graduacoes = graduacoes.docs;
-        const doc = response.doc;
+        const doc = response.data;
         res.render('pessoa',
             {
                 title: 'Dados da pessoa (Alteração)',

@@ -35,11 +35,26 @@
                 </a> 
 
                 <ul class="nav nav-pills"> 
-                        <li class="nav-item"><a href="/dojos" class="nav-link">Dojos</a></li> 
-                        <li class="nav-item"><a href="/pessoas" class="nav-link">Pessoas</a></li> 
-                        <li class="nav-item"><a href="/graduacoes" class="nav-link" aria-current="page">Graduações</a></li> 
-                        <li class="nav-item"><a href="/taxas" class="nav-link active" aria-current="page">Taxas</a></li> 
-                        <li class="nav-item"><a href="/logout" class="nav-link">Sair</a></li> 
+                        <li class="nav-item"><a id="menu-dojos" name="menu-dojos" 
+                            href="/dojos" class="nav-link">Dojos</a></li> 
+                        <li class="nav-item"><a id="menu-pessoas" name="menu-pessoas" 
+                            href="/pessoas" class="nav-link" aria-current="page">Pessoas</a></li> 
+                        <li class="nav-item"><a id="menu-graduacoes" name="menu-graduacoes" 
+                            href="/graduacoes" class="nav-link">Graduações</a></li> 
+                        <li class="nav-item dropdown">
+                            <a id="menu-financeiro" name="menu-financeiro" 
+                            class="nav-link dropdown-toggle active" href="#" 
+                            role="button" data-bs-toggle="dropdown" 
+                            aria-expanded="false">
+                                    Financeiro
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a id="menu-taxas" name="menu-taxas" href="/taxas" 
+                                    class="nav-link active" aria-current="page">Taxas</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a id="menu-sair" name="menu-sair" 
+                            href="/logout" class="nav-link">Sair</a></li> 
                 </ul>
             </header>
             <div class="mb-2">
@@ -61,19 +76,15 @@
 
                             <% docs.forEach(function(doc){ %>
                                 <div class="card mb-2">
-                                    <div class="card-header fw-bold"><%= doc.nome %></div>
+                                    <div class="card-header fw-bold"><%= doc.descricao %></div>
                                     <div class="card-body">
-                                        <p><%= doc.descricao %></p>
-                                        <p><%= "Período ao qual a taxa se refere: " + doc.periodo %></p>
-                                        <p><%= "Valor bruto da taxa: " + doc.valor_bruto %></p>
-                                        <p><%= "Percentual a ser deduzido: " + doc.percentual %></p>
-                                        <p><%= "Valor líquido da taxa: " + doc.valor_liquido %></p>
-                                        <p><%= "Observações: " + doc.observacoes %></p>
+                                        <p>Valor padrão: <%= doc.valor_padrao.$numberDecimal %></p>
+                                        <p>Ativa? <%= doc.is_ativa?'Sim':'Não' %></p>
                                         <p>
                                             Ações: 
-                                            <a href="/graduacoes/detalhes/<%= doc._id %>">Detalhes</a>
+                                            <a href="/taxas/detalhes/<%= doc._id %>">Detalhes</a>
                                             &nbsp;|&nbsp;
-                                            <a href="/graduacoes/edita/<%= doc._id %>">Editar</a>
+                                            <a href="/taxas/edita/<%= doc._id %>">Editar</a>
                                         </p>
                                     </div>
                                 </div>
@@ -87,7 +98,7 @@
             <div class="container"> 
                 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
                     <div class="col-md-4 d-flex align-items-center"> 
-                        <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.03 - Graduações - Fettermann Aikidô</span>
+                        <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.01 - Taxas - Fettermann Aikidô</span>
                      </div> 
                      <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
                 </footer> 

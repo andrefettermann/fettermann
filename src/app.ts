@@ -28,6 +28,15 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "script-src 'self' https://cdn.jsdelivr.net"
+  );
+  next();
+});
+
+
 app.use('/', authRouter);
 app.use('/dojos/', requireAuth, dojoRouter);
 app.use('/graduacoes/', requireAuth, graduacaoRouter);
