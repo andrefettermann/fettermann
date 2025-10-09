@@ -6,12 +6,16 @@ import * as dojoServico from '../servicos/dojoServico';
 import * as graduacaoServico from '../servicos/graduacaoServico';
 import axios from 'axios';
 import { authMiddleware } from '../middleware/tokenManager';
+import dotenv from 'dotenv'
 
 const router = express.Router();
 
-var mensagem: string = "";
-const API_URL = "https://fettermannaikidoapi.vercel.app/api";
+dotenv.config()
+
+const API_URL = process.env.API_URL;
 //const API_URL = "http://localhost:3001/api";
+
+var mensagem: string = "";
 
 /** Busca todas as pessoas */
 router.get('/', authMiddleware, async (req, res, next) => {
@@ -23,7 +27,8 @@ router.get('/', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const response: any = await axios.get(API_URL + '/pessoas/lista/todos', {
+        const url = API_URL + '/api/pessoas/lista/todos';
+        const response: any = await axios.get(url , {
         headers: { 
             'Authorization': token,
             'Accept': 'application/json',
@@ -64,8 +69,8 @@ router.get('/situacao/:situacao', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const response: any = await axios.get(
-            API_URL + '/pessoas/lista/situacao/' + situacao, {
+        const url = API_URL + '/api/pessoas/lista/situacao/' + situacao;
+        const response: any = await axios.get(url, {
         headers: { 
             'Authorization': token,
             'Accept': 'application/json',
@@ -106,8 +111,8 @@ router.get('/aniversariantes/:mes', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const response:any = await axios.get(
-            API_URL + '/pessoas/lista/aniversariantes/' + mes, {
+        const url = API_URL + '/api/pessoas/lista/aniversariantes/' + mes;
+        const response:any = await axios.get(url, {
         headers: { 
             'Authorization': token,
             'Accept': 'application/json',
@@ -143,9 +148,8 @@ router.get('/professores', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const response:any = await axios.get(
-            API_URL + '/pessoas/lista/professores/' 
-            , {
+        const url = API_URL + '/api/pessoas/lista/professores/';
+        const response:any = await axios.get(url, {
         headers: { 
             'Authorization': token,
             'Accept': 'application/json',
@@ -208,9 +212,8 @@ router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const response:any = await axios.get(
-            API_URL + '/pessoas/busca/' + id 
-            , {
+        const url = API_URL + '/api/pessoas/busca/' + id;
+        const response:any = await axios.get(url, {
         headers: { 
             'Authorization': token,
             'Accept': 'application/json',
@@ -247,9 +250,8 @@ router.get('/edita/:id', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const response:any = await axios.get(
-            API_URL + '/pessoas/busca/' + id 
-            , {
+        const url = API_URL + '/api/pessoas/busca/' + id;
+        const response:any = await axios.get(url, {
         headers: { 
             'Authorization': token,
             'Accept': 'application/json',

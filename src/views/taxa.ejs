@@ -5,10 +5,14 @@
   <meta charset="UTF-8">
   <title>Fettermann Aikidô - <%= title %>
   </title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
+    crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+    crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
@@ -71,28 +75,52 @@
                 <% if (doc.tipo=="anuidade" ) { %>
                   <option selected value="anuidade">Anuidade</option>
                   <option value="aula_avulsa">Aula avulsa</option>
+                  <option value="exame">Exame</option>
                   <option value="inscricao_evento">Inscrição em evento</option>
                   <option value="mensalidade">Mensalidade</option>
-                <% } else if (doc.categoria=="aula_avulsa" ) { %>
+                  <option value="promocao">Promoção</option>
+                <% } else if (doc.tipo=="aula_avulsa" ) { %>
                   <option value="anuidade">Anuidade</option>
                   <option selected value="aula_avulsa">Aula avulsa</option>
+                  <option value="exame">Exame</option>
                   <option value="inscricao_evento">Inscrição em evento</option>
                   <option value="mensalidade">Mensalidade</option>
-                <% } else if (doc.categoria=="inscricao_evento" ) { %>
+                  <option value="promocao">Promoção</option>
+                <% } else if (doc.tipo=="exame" ) { %>
                   <option value="anuidade">Anuidade</option>
                   <option value="aula_avulsa">Aula avulsa</option>
+                  <option selected value="exame">Exame</option>
+                  <option value="inscricao_evento">Inscrição em evento</option>
+                  <option value="mensalidade">Mensalidade</option>
+                  <option value="promocao">Promoção</option>
+                <% } else if (doc.tipo=="inscricao_evento" ) { %>
+                  <option value="anuidade">Anuidade</option>
+                  <option value="aula_avulsa">Aula avulsa</option>
+                  <option value="exame">Exame</option>
                   <option selected value="inscricao_evento">Inscrição em evento</option>
                   <option value="mensalidade">Mensalidade</option>
-                <% } else if (doc.categoria=="mensalidade" ) { %>
+                  <option value="promocao">Promoção</option>
+                <% } else if (doc.tipo=="mensalidade" ) { %>
                   <option value="anuidade">Anuidade</option>
                   <option value="aula_avulsa">Aula avulsa</option>
+                  <option value="exame">Exame</option>
                   <option value="inscricao_evento">Inscrição em evento</option>
                   <option selected value="mensalidade">Mensalidade</option>
+                  <option value="promocao">Promoção</option>
+                <% } else if (doc.tipo=="promocao" ) { %>
+                  <option value="anuidade">Anuidade</option>
+                  <option value="aula_avulsa">Aula avulsa</option>
+                  <option value="exame">Exame</option>
+                  <option value="inscricao_evento">Inscrição em evento</option>
+                  <option value="mensalidade">Mensalidade</option>
+                  <option selected ="promocao">Promoção</option>
                 <% } else { %>
                   <option value="anuidade">Anuidade</option>
                   <option value="aula_avulsa">Aula avulsa</option>
+                  <option value="exame">Exame</option>
                   <option value="inscricao_evento">Inscrição em evento</option>
                   <option value="mensalidade">Mensalidade</option>
+                  <option value="promocao">Promoção</option>
                 <% } %>
                 </select>
               </div>

@@ -1,8 +1,8 @@
 // taxaRoute.ts
 import express from 'express';
-import * as taxaServico from '../servicos/taxaServico';
 import axios from 'axios';
 import { authMiddleware } from '../middleware/tokenManager';
+import { formataValorComDecimais } from '../utils/formata_decimal';
 
 /**
  * Router de taxas.
@@ -16,6 +16,40 @@ var mensagem = "";
 
 const API_URL = "https://fettermannaikidoapi.vercel.app/api";
 //const API_URL = "http://localhost:3001/api";
+
+
+function formataDoc(osDados: any): any {
+    osDados.forEach((element: any) => {        
+        if (element.valor_padrao) {
+            element.valor_padrao = formataValorComDecimais(
+                element.valor_padrao.$numberDecimal.replace('.', ','));
+        }
+    });
+
+    osDados.sort((a: { tipo: string, nome: string; }, b: { tipo: string, nome: string; }) => {
+        var tipoa = a.tipo.toLowerCase();
+        var tipob = b.tipo.toLowerCase();
+        var nomea = a.nome.toLowerCase();
+        var nomeb = b.nome.toLowerCase();
+
+        if (tipoa < tipob) {
+            return -1;
+        }
+        if (tipoa > tipob) {
+            return 1;
+        }
+
+        if (nomea < nomeb) {
+            return -1;
+        }
+        if (nomea > nomeb) {
+            return 1;
+        }
+        return 0;
+    });
+
+    return osDados;
+}
 
 router.get('/', authMiddleware, async (req, res, next) => {
     try {
@@ -36,7 +70,7 @@ router.get('/', authMiddleware, async (req, res, next) => {
         }
         });
 
-        const docs = response.data;
+        const docs = formataDoc(response.data);
         res.render('taxas',
             {
                 docs,
@@ -51,11 +85,14 @@ router.get('/', authMiddleware, async (req, res, next) => {
 });
 
 router.get('/novo', async (req, res, next) => {
+    const doc = {
+        "valor_padrao": 0,
+    }
     try {
         res.render('taxa',
             {
                 title: 'Dados da taxa (Inclusão)',
-                doc: "",
+                doc,
                 action: '/taxas/inclui/'
             }
         );

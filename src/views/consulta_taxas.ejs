@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Fettermann Aikidô - Consulta pública de dojos
+    <title>Fettermann Aikidô - Consulta pública de taxas
     </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
     rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
@@ -34,41 +34,28 @@
                 </a> 
 
                 <ul class="nav nav-pills"> 
-                    <li class="nav-item"><a href="/consulta/dojos" class="btn btn-primary btn-sm" aria-current="page">Dojos</a></li> 
+                    <li class="nav-item"><a href="/consulta/dojos" class="btn btn-sm" aria-current="page">Dojos</a></li> 
                     <li class="nav-item">
                         <a id="botao_aniversariantes" name="botao_aniversariantes" class="btn btn-sm" 
                         href="/consulta/aniversariantes/<%= mes %>">Aniversariantes</a>
                     </li> 
-                    <li class="nav-item"><a href="/consulta/graduacoes" class="btn btn-sm">Graduações</a></li> 
+                    <li class="nav-item"><a href="/consulta/graduacoes" class="btn btn-primary btn-sm">Graduações</a></li> 
                 </ul>
             </header>
 
             <div class="card">
                 <div class="card-header fw-bold">
-                    <span id="total" name="total"><%= total + " dojo(s) encontrado(s)"%></span>
+                    <span id="total" name="total"><%= total + " taxa(s) encontrada(s)" %></span>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-12">
+
+                        <div class="col">
 
                             <% docs.forEach(function(doc){ %>
-                            <div class="card mb-2">
-                                <div class="card-header fw-bold"><%= doc.nome %></div>
-                                <div class="card-body">
-                                    <h5><%= doc.local %></h5>
-                                    <p>
-                                        <%= doc.endereco %> <br/>
-                                        <%= doc.bairro + " - " + doc.cidade + " - " + doc.uf %>
-                                    </p>
-                                    <p>
-                                        <% if (doc.professor[0]) { %>
-                                            <%=  doc.professor[0].nome  %> <br/>
-                                        <% } %>
-
-                                        <%= doc.horarios %>
-                                    </p>
-                                </div>
-                            </div>
+                                <ul class="list-group">
+                                    <li class="list-group-item"><%= doc.descricao + ": R$ " + doc.valor_padrao %></li>
+                                </ul>
                             <% }); %>
 
                         </div>
@@ -79,9 +66,9 @@
             <div class="container"> 
                 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
                     <div class="col-md-4 d-flex align-items-center"> 
-                        <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.01 - Dojos - Fettermann Aikidô</span>
-                        </div> 
-                        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
+                        <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.01 - Taxas - Fettermann Aikidô</span>
+                     </div> 
+                     <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
                 </footer> 
             </div>
 
