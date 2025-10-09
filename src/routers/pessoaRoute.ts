@@ -33,8 +33,6 @@ router.get('/', authMiddleware, async (req, res, next) => {
             'Authorization': token,
             'Accept': 'application/json',
             'Content-Type': 'application/json', // ✅ permitido e seguro
-            'User-Agent': 'PostmanRuntime/7.48.0',
-            'Connection': 'keep-alive'
         }
         });
 
