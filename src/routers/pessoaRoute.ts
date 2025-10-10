@@ -1,7 +1,6 @@
 /* pessoaRoute.ts */
 import express from 'express';
 import { convertDdMmYyyyToDate, getCurrentMonth } from '../utils/date';
-import * as pessoaServico from '../servicos/pessoaServico';
 import * as dojoServico from '../servicos/dojoServico';
 import * as graduacaoServico from '../servicos/graduacaoServico';
 import axios from 'axios';
@@ -13,7 +12,6 @@ const router = express.Router();
 dotenv.config()
 
 const API_URL = process.env.API_URL;
-//const API_URL = "http://localhost:3001/api";
 
 var mensagem: string = "";
 
@@ -27,7 +25,7 @@ router.get('/', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const url = API_URL + '/api/pessoas/lista/todos';
+        const url = `${API_URL}/api/pessoas/lista/todos`;
         const response: any = await axios.get(url , {
         headers: { 
             'Authorization': token,
@@ -44,7 +42,8 @@ router.get('/', authMiddleware, async (req, res, next) => {
                 total: docs.length,
                 mensagem,
                 logo: 'images/logo-sm.png',
-                mes: getCurrentMonth()
+                mes: getCurrentMonth(),
+                pageAtiva: 'pessoas'
             }
         );
     } catch (err: any) {
@@ -67,7 +66,7 @@ router.get('/situacao/:situacao', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const url = API_URL + '/api/pessoas/lista/situacao/' + situacao;
+        const url = `${API_URL}/api/pessoas/lista/situacao/${situacao}`;
         const response: any = await axios.get(url, {
         headers: { 
             'Authorization': token,
@@ -89,7 +88,8 @@ router.get('/situacao/:situacao', authMiddleware, async (req, res, next) => {
                 total: docs.length,
                 mensagem,
                 logo: '/images/logo-sm.png',
-                mes: getCurrentMonth()
+                mes: getCurrentMonth(),
+                pageAtiva: 'pessoas'
             }
         );
     } catch (err) {
@@ -109,7 +109,7 @@ router.get('/aniversariantes/:mes', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const url = API_URL + '/api/pessoas/lista/aniversariantes/' + mes;
+        const url = `${API_URL}/api/pessoas/lista/aniversariantes/${mes}`;
         const response:any = await axios.get(url, {
         headers: { 
             'Authorization': token,
@@ -128,7 +128,8 @@ router.get('/aniversariantes/:mes', authMiddleware, async (req, res, next) => {
                 total: docs.length,
                 mensagem,
                 logo: '/images/logo-sm.png',
-                mes: getCurrentMonth()
+                mes: getCurrentMonth(),
+                pageAtiva: 'pessoas'
             }
         );
     } catch (err) {
@@ -146,7 +147,7 @@ router.get('/professores', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const url = API_URL + '/api/pessoas/lista/professores/';
+        const url = `${API_URL}/api/pessoas/lista/professores/`;
         const response:any = await axios.get(url, {
         headers: { 
             'Authorization': token,
@@ -165,7 +166,8 @@ router.get('/professores', authMiddleware, async (req, res, next) => {
                 total: docs.length,
                 mensagem,
                 logo: '/images/logo-sm.png',
-                mes: getCurrentMonth()
+                mes: getCurrentMonth(),
+                pageAtiva: 'pessoas'
             }
         );
     } catch (err) {
@@ -191,6 +193,7 @@ router.get('/novo', async (req, res, next) => {
                 total_promocoes: 0,
                 total_pagamentos: 0,
                 action: '/pessoas/inclui/',
+                pageAtiva: 'pessoas'
             }
         );
     } catch (err) {
@@ -210,7 +213,7 @@ router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const url = API_URL + '/api/pessoas/busca/' + id;
+        const url = `${API_URL}/api/pessoas/busca/${id}`;
         const response:any = await axios.get(url, {
         headers: { 
             'Authorization': token,
@@ -227,7 +230,8 @@ router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
             {
                 title: 'Dados da pessoa (Consulta)',
                 doc,
-                docs_graduacoes
+                docs_graduacoes,
+                pageAtiva: 'pessoas'
             }
         );
     } catch (err) {
@@ -248,7 +252,7 @@ router.get('/edita/:id', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const url = API_URL + '/api/pessoas/busca/' + id;
+        const url = `${API_URL}/api/pessoas/busca/${id}`;
         const response:any = await axios.get(url, {
         headers: { 
             'Authorization': token,
@@ -272,7 +276,8 @@ router.get('/edita/:id', authMiddleware, async (req, res, next) => {
                 total_promocoes: doc.promocoes.length,
                 docs_dojos,
                 docs_graduacoes,
-                mensagem: ''
+                mensagem: '',
+                pageAtiva: 'pessoas'
             }
         );
     } catch (err) {
@@ -281,9 +286,25 @@ router.get('/edita/:id', authMiddleware, async (req, res, next) => {
 });
 
 /** Inclui os dados da pessoa */
-router.post('/inclui', async (req, res, next) => {
+router.post('/inclui', authMiddleware, async (req, res, next) => {
+    const dados = req.body;
     try {
-        const response = await pessoaServico.inclui(req.body);
+        //await pessoaServico.inclui(req.body);
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        const url = `${API_URL}/api/pessoas/inclui/`;
+        await axios.post(url, 
+            dados, 
+            {headers: { 
+                'Authorization': token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json', // ✅ permitido e seguro
+            }
+        });
+
         mensagem = 'Pessoa incluída com sucesso!';
         res.redirect('/pessoas');
     } catch (err) {
@@ -292,10 +313,26 @@ router.post('/inclui', async (req, res, next) => {
 });
 
 /** Altera os dados da pessoa */
-router.post('/altera/:id', async (req, res, next) => {
+router.post('/altera/:id', authMiddleware, async (req, res, next) => {
     const id = req.params.id;
+    const dados = req.body;
     try {
-        const response = await pessoaServico.atualiza(id, req.body);
+        //const response = await pessoaServico.atualiza(id, req.body);
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        const url = `${API_URL}/api/pessoas/altera/${id}`;
+        await axios.patch(url, 
+            dados, 
+            {headers: { 
+                'Authorization': token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json', // ✅ permitido e seguro
+            }
+        });
+
         mensagem = 'Pessoa alterada com sucesso!';
         res.redirect('/pessoas');
     } catch (err) {

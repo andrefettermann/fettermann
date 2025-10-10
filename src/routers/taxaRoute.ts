@@ -3,6 +3,8 @@ import express from 'express';
 import axios from 'axios';
 import { authMiddleware } from '../middleware/tokenManager';
 import { formataValorComDecimais } from '../utils/formata_decimal';
+import dotenv from 'dotenv'
+
 
 /**
  * Router de taxas.
@@ -12,11 +14,11 @@ import { formataValorComDecimais } from '../utils/formata_decimal';
 
 const router = express.Router();
 
+dotenv.config()
+
 var mensagem = "";
 
-const API_URL = "https://fettermannaikidoapi.vercel.app/api";
-//const API_URL = "http://localhost:3001/api";
-
+const API_URL = process.env.API_URL;
 
 function formataDoc(osDados: any): any {
     osDados.forEach((element: any) => {        
@@ -60,7 +62,8 @@ router.get('/', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const response: any = await axios.get(API_URL + '/taxas/lista/todos', {
+        const url = `${API_URL}/api/taxas/lista/todos`;
+        const response: any = await axios.get(url, {
         headers: { 
             'Authorization': token,
             'Accept': 'application/json',
@@ -111,7 +114,8 @@ router.get('/edita/:id', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const response: any = await axios.get(API_URL + '/taxas/busca/' + id, {
+        const url = `${API_URL}/api/taxas/busca/${id}`;
+        const response: any = await axios.get(url, {
         headers: { 
             'Authorization': token,
             'Accept': 'application/json',
@@ -141,7 +145,8 @@ router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const response: any = await axios.get(API_URL + '/taxas/busca/' + id, {
+        const url = `${API_URL}/api/taxas/busca/${id}`;
+        const response: any = await axios.get(url, {
         headers: { 
             'Authorization': token,
             'Accept': 'application/json',
@@ -172,7 +177,8 @@ router.post('/inclui', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const response: any = await axios.post(API_URL + '/taxas/inclui', 
+        const url = `${API_URL}/api/taxas/inclui`;
+        await axios.post(url, 
             dados, 
             {headers: { 
             'Authorization': token,
@@ -198,7 +204,8 @@ router.post('/altera/:id', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const response: any = await axios.patch(API_URL + '/taxas/altera/' + id, 
+        const url = `${API_URL}/api/taxas/altera/${id}`;
+        await axios.patch(url, 
             dados, 
             {headers: { 
             'Authorization': token,

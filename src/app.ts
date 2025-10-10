@@ -20,6 +20,9 @@ app.use(cookieParser());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+console.log('Views path:', app.get('views'));
+console.log('Diretório atual:', __dirname);
+
 app.use(morgan('tiny'));
 app.use(cors());
 app.use(helmet());
@@ -36,11 +39,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// Verificar configuração
+app.use((req, res, next) => {
+  console.log('Renderizando:', req.path);
+  next();
+});
 
 app.use('/', authRouter);
 app.use('/dojos/', requireAuth, dojoRouter);
 app.use('/graduacoes/', requireAuth, graduacaoRouter);
-app.use('/pessoas/', requireAuth, pessoaRouter);
+app.use('/pessoas', requireAuth, pessoaRouter);
 app.use('/taxas/', requireAuth, taxaRouter);
 app.use('/consulta', consultaRouter);
 

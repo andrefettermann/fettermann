@@ -8,19 +8,31 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
   rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
   crossorigin="anonymous">
-  <!-- JavaScript Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
-  integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
-  crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../css/consulta-menu.css">
+  <link rel="icon" href="../../images/logo-sm.png" type="image/png">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-  <header>
-  </header>
+
+  <div class="container pt-3 w-100">
+      <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+          <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
+              <!--
+              <svg class="bi me-2" width="40" height="32" aria-hidden="true"><use xlink:href="#bootstrap"></use></svg> 
+              -->
+              <img src="../../images/logo-sm.png"/>
+              <span class="fs-4">Fettermann Aikidô</span>
+          </a> 
+
+          <%- include('partials/menu_principal') %>
+      </header>
+  </div>
+  
   <main>
     <div class="container pt-3 w-100">
-
+<!--
         <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
           <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
             <img src="/images/logo-sm.png"/>
@@ -43,7 +55,7 @@
           </ul>
         </header>
 
-
+      -->
       <div class="card">
         <div class="card-header"><%= title %></div>
         <div class="card-body">
@@ -106,12 +118,11 @@
               <div class="col-2">
                 <select id="id_graduacao" name="id_graduacao" class="form-select" aria-label="Graduação atual" data-obrigatorio="Por favor, selecione a graduação atual da pessoa.">
                   <option value="" selected>Selecione</option>
-                  <% docs_graduacoes.forEach(function(graduacao) { 
-                       if (doc.id_graduacao && graduacao._id == doc.id_graduacao) { %>
-                      <option value="<%= graduacao._id %>" selected><%= graduacao.nome + ' - ' + graduacao.faixa %></option>
-                    <% } else { %>
-                      <option value="<%= graduacao._id %>"><%= graduacao.nome + ' - ' + graduacao.faixa %></option>
-                    <% } %>
+                  <% docs_graduacoes.forEach(function(graduacao) { %>
+                  <option value="<%= graduacao._id %>"  
+                    <%= graduacao._id == doc.id_graduacao ? 'selected' : '' %> > 
+                    <%= graduacao.nome + ' - ' + graduacao.faixa %>
+                  </option>
                   <% }) %>
               </select>
               </div>
@@ -125,13 +136,14 @@
               <div class="col-2">
                 <select id="situacao" name="situacao" class="form-select" aria-label="Situacao">
                   <option value="" selected>Situação</option>
-                  <% if (doc.situacao=="Inativo" ) { %>
-                    <option selected value="Inativo">Inativo</option>
-                    <option value="Ativo">Ativo</option>
-                    <% } else { %>
-                      <option value="Inativo">Inativo</option>
-                      <option selected value="Ativo">Ativo</option>
-                      <% } %>
+                  <option selected value="Inativo" 
+                    <%= doc.situacao=="Inativo"?'selected':''%>>
+                    <%= doc.situacao %>
+                  </option>
+                  <option selected value="Ativo" 
+                    <%= doc.situacao=="Ativo"?'selected':''%>>
+                    <%= doc.situacao %>
+                  </option>
                 </select>
               </div>
             </div>
@@ -179,11 +191,8 @@
                 <label for="is_professor" class="form-label">Professor?</label>
               </div>
               <div class="col-2">
-                  <% if (doc.is_professor) { %>
-                    <input class="form-check-input" type="checkbox" id="is_professor" name="is_professor" checked>
-                  <% } else { %>
-                    <input class="form-check-input" type="checkbox" id="is_professor" name="is_professor">
-                  <% } %>
+                <input class="form-check-input" type="checkbox" id="is_professor" 
+                name="is_professor" <%= doc.is_professor?'checked':''%> >
               </div>
             </div>
 
@@ -196,11 +205,9 @@
                 <select id="id_dojo" name="id_dojo" class="form-select" aria-label="Dojo">
                   <option value="">Selecione</option>
                   <% docs_dojos.forEach(function(dojo) { %>
-                    <% if (doc.dojo && dojo._id == doc.id_dojo) {%>
-                      <option value="<%= dojo._id %>" selected><%= dojo.nome %></option>
-                    <% } else { %>
-                      <option value="<%= dojo._id %>"><%= dojo.nome %></option>
-                    <% } %>
+                    <option value="<%= dojo._id %>" <%= dojo._id == doc.id_dojo?'selected':'' %>>
+                      <%= dojo.nome %>
+                    </option>
                   <% }) %>
                 </select>
               </div>
@@ -231,11 +238,9 @@
                           class="form-select" aria-label="Graduação" required>
                           <option value="" selected>Selecione</option>
                           <% docs_graduacoes.forEach(function(graduacao) { %>
-                            <% if (promocao.id_graduacao && graduacao._id == promocao.id_graduacao) { %>
-                              <option value="<%= graduacao._id %>" selected><%= graduacao.nome + ' - ' + graduacao.faixa %></option>
-                            <% } else { %>
-                              <option value="<%= graduacao._id %>"><%= graduacao.nome + ' - ' + graduacao.faixa %></option>
-                            <% } %>
+                            <option value="<%= graduacao._id %>" <%= graduacao._id == promocao.id_graduacao?'selected':''%>>
+                              <%= graduacao.nome + ' - ' + graduacao.faixa %>
+                            </option>
                           <% }) %>
                         </select>
                         </div>
@@ -327,6 +332,10 @@
   <script src="/js/adiciona_promocao.js"></script>
   <script src="/js/adiciona_pagamento.js"></script>
   <script src="/js/verifica_campos_obrigatorios.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+  integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+  crossorigin="anonymous"></script>
+
 </body>
 
 </html>
