@@ -33,13 +33,19 @@
                 </a> 
 
                 <ul class="nav nav-pills"> 
-                        <li class="nav-item"><a href="/consulta/dojos" class="btn btn-sm" aria-current="page">Dojos</a></li> 
-                        <li class="nav-item">
-                            <a id="botao_aniversariantes" name="botao_aniversariantes" class="btn btn-primary btn-sm" 
-                            href="/consulta/aniversariantes/<%= mes %>">Aniversariantes</a>
-                        </li> 
-                        <li class="nav-item"><a href="/consulta/graduacoes" class="btn btn-sm">Graduações</a></li> 
-                        <li class="nav-item"><a href="/consulta/taxas" class="btn btn-sm">Taxas</a></li> 
+                    <li class="nav-item"><a id="menu-inicio" id="menu-inicio" 
+                        href="/consulta" class="btn btn-sm" aria-current="page">Início</a></li> 
+
+                    <li class="nav-item"><a id="menu-dojos" name="menu-dojos" 
+                        href="/consulta/dojos" class="btn btn-sm" aria-current="page">Dojos</a></li> 
+                    <li class="nav-item">
+                        <a id="menu-aniversariantes" name="menu-aniversariantes" class="btn btn-primary btn-sm" 
+                        href="/consulta/aniversariantes/<%= mes %>">Aniversariantes</a>
+                    </li> 
+                    <li class="nav-item"><a id="menu-graduacoes" name="menu-graduacoes" 
+                        href="/consulta/graduacoes" class="btn btn-sm">Graduações</a></li> 
+                    <li class="nav-item"><a id="menu-taxas" name="menu-taxas" 
+                        href="/consulta/taxas" class="btn btn-sm">Taxas</a></li> 
                 </ul>
             </header>
 
@@ -51,13 +57,14 @@
                     <div class="row">
 
                         <div class="col">
-
+                            <ul class="list-group" id="lista-aniversariantes" 
+                            name="lista-aniversariantes">
                             <% docs.forEach(function(doc){ %>
-                                <ul class="list-group">
-                                    <li class="list-group-item"><%= doc.aniversario + " - " + doc.nome + " (" + doc.dojo[0].nome + ")"%></li>
-                                </ul>
+                                <li class="list-group-item">
+                                    <%= doc.aniversario + " - " + doc.nome + " (" + doc.dojo[0].nome + ")"%>
+                                </li>
                             <% }); %>
-
+                            </ul>
                         </div>
                     </div>
                 </div>
