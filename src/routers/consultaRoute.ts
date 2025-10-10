@@ -53,7 +53,8 @@ router.get('/', async (req, res, next) => {
     try {
         res.render('consulta_publica',
             {
-                mes: getCurrentMonth()
+                mes: getCurrentMonth(),
+                pageAtiva: 'inicio'
             }
         );
     } catch (err) {
@@ -69,7 +70,8 @@ router.get('/dojos', async (req, res, next) => {
             {
                 docs: result.docs,
                 total: result.docs.length,
-                mes: getCurrentMonth()
+                mes: getCurrentMonth(),
+                pageAtiva: 'dojos'
             }
         );
     } catch (err) {
@@ -103,7 +105,8 @@ router.get('/aniversariantes/:mes', authMiddleware, async (req, res, next) => {
             {
                 docs,
                 total: docs.length,
-                mes: getCurrentMonth()
+                mes: getCurrentMonth(),
+                pageAtiva: 'aniversariantes'
             }
         );
     } catch (err: any) {
@@ -123,7 +126,8 @@ router.get('/graduacoes', async (req, res, next) => {
             {
                 docs: response.docs,
                 total: response.docs.length,
-                mes: getCurrentMonth()
+                mes: getCurrentMonth(),
+                pageAtiva: 'graduacoes'
             }
         );
     } catch (err) {
@@ -155,7 +159,8 @@ router.get('/taxas', authMiddleware, async (req, res, next) => {
             {
                 docs: docs,
                 total: docs.length,
-                mes: getCurrentMonth()
+                mes: getCurrentMonth(),
+                pageAtiva: 'taxas'
             }
         );
     } catch (err: any) {

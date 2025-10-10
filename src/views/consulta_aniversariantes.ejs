@@ -8,47 +8,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
     rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
     crossorigin="anonymous">
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
-    crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../../css/consulta-menu.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../../images/logo-sm.png" type="image/png">
 </head>
 
 <body>
-    <header>
-    </header>
+    <div class="container pt-3 w-100">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
+                <img src="../../images/logo-sm.png"/>
+                <span class="fs-4">Fettermann Aikidô</span>
+            </a> 
+            <%- include('partials/consulta_menu') %>
+        </header>
+    </div>
 
     <main>
 
         <div class="container pt-3 w-100">
-            
-            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-                <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
-                    <!--
-                    <svg class="bi me-2" width="40" height="32" aria-hidden="true"><use xlink:href="#bootstrap"></use></svg> 
-                    -->
-                    <img src="../../images/logo-sm.png"/>
-                    <span class="fs-4">Fettermann Aikidô</span>
-                </a> 
-
-                <ul class="nav nav-pills"> 
-                    <li class="nav-item"><a id="menu-inicio" id="menu-inicio" 
-                        href="/consulta" class="btn btn-sm" aria-current="page">Início</a></li> 
-
-                    <li class="nav-item"><a id="menu-dojos" name="menu-dojos" 
-                        href="/consulta/dojos" class="btn btn-sm" aria-current="page">Dojos</a></li> 
-                    <li class="nav-item">
-                        <a id="menu-aniversariantes" name="menu-aniversariantes" class="btn btn-primary btn-sm" 
-                        href="/consulta/aniversariantes/<%= mes %>">Aniversariantes</a>
-                    </li> 
-                    <li class="nav-item"><a id="menu-graduacoes" name="menu-graduacoes" 
-                        href="/consulta/graduacoes" class="btn btn-sm">Graduações</a></li> 
-                    <li class="nav-item"><a id="menu-taxas" name="menu-taxas" 
-                        href="/consulta/taxas" class="btn btn-sm">Taxas</a></li> 
-                </ul>
-            </header>
-
             <div class="card">
                 <div class="card-header fw-bold">
                     <span id="total" name="total"><%= total + " aniversariante(s) do mês encontrado(s)" %></span>
@@ -80,6 +58,12 @@
             </div>
         </div>
     </main>
+    
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+    crossorigin="anonymous"></script>
+
 </body>
 
 </html>

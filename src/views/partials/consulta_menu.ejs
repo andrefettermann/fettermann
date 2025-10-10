@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto"> 
+            <li class="nav-item">
+                <a id="menu-inicio" name="menu-inicio" href="/consulta" 
+                class="nav-link <%= pageAtiva === 'inicio' ? 'active' : '' %>" 
+                aria-current="page">Início</a>
+            </li> 
+
+            <li class="nav-item">
+                <a id="menu-dojos" name="menu-dojos" href="/consulta/dojos" 
+                class="nav-link <%= pageAtiva === 'dojos' ? 'active' : '' %>" 
+                aria-current="page">Dojos</a>
+            </li> 
+            
+            <li class="nav-item">
+                <a id="menu-aniversariantes" name="menu-aniversariantes" 
+                class="nav-link <%= pageAtiva === 'aniversariantes' ? 'active' : '' %>" 
+                href="/consulta/aniversariantes/<%= mes %>">Aniversariantes</a>
+            </li> 
+
+            <li class="nav-item">
+                <a id="menu-graduacoes" name="menu-graduacoes" 
+                href="/consulta/graduacoes" class="nav-link 
+                <%= pageAtiva === 'graduacoes' ? 'active' : '' %>">Graduações</a>
+            </li>
+
+            <li class="nav-item">
+                <a id="menu-taxas" name="menu-taxas" 
+                href="/consulta/taxas" class="nav-link 
+                <%= pageAtiva === 'taxas' ? 'active' : '' %>">Taxas</a>
+            </li> 
+        </ul>
+    </div>
+  </div>
+</nav>

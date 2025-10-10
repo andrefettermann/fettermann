@@ -1,0 +1,19 @@
+.navbar-nav .nav-link.active {
+  background-color: #0db1fd;
+  border-radius: 5px;
+}
+
+.navbar-nav .nav-link {
+  margin: 0 5px;
+  transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
