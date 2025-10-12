@@ -1,20 +1,28 @@
 import express from 'express';
 import * as graduacaoServico from '../servicos/graduacaoServico';
+import { authMiddleware } from '../middleware/tokenManager';
 
 const router = express.Router();
 
 var mensagem = "";
+const pageAtiva = 'graduacoes';
 
-router.get('/', async (req, res, next) => {
+router.get('/', authMiddleware, async (req, res, next) => {
     try {
-        const response = await graduacaoServico.buscaTodos();
-        const docs = response.docs;
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        const resposta: any = await graduacaoServico.buscaTodos(token);
+        const docs = resposta.data;
         res.render('graduacoes',
             {
                 title: 'Graduações cadastradas',
                 docs,
                 total: docs.length,
-                mensagem
+                mensagem,
+                pageAtiva
             }
         );
         mensagem = "";
@@ -30,7 +38,8 @@ router.get('/novo', async (req, res, next) => {
                 title: 'Dados da graduação (Inclusão)',
                 doc: "",
                 total_tecnicas: 0,
-                action: '/graduacoes/inclui/'
+                action: '/graduacoes/inclui/',
+                pageAtiva
             }
         );
     } catch (err) {
@@ -38,17 +47,23 @@ router.get('/novo', async (req, res, next) => {
     }
 });
 
-router.get('/edita/:id', async (req, res, next) => {
+router.get('/edita/:id', authMiddleware, async (req, res, next) => {
     const id = req.params.id;
     try {
-        const response = await graduacaoServico.busca(id);
-        const doc = await response.docs;
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        const response = await graduacaoServico.busca(token, id);
+        const doc = response.data;
         res.render('graduacao',
             {
                 title: 'Dados da graduação (Edição)',
                 doc,
                 total_tecnicas: doc.tecnicas?doc.tecnicas.length:0,
-                action: '/graduacoes/altera/' + id
+                action: '/graduacoes/altera/' + id,
+                pageAtiva
             }
         );
     } catch (err) {
@@ -56,16 +71,22 @@ router.get('/edita/:id', async (req, res, next) => {
     }
 });
 
-router.get('/detalhes/:id', async (req, res, next) => {
+router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
     const id = req.params.id;
     try {
-        const response = await graduacaoServico.busca(id);
-        const doc = await response.docs;
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        const response = await graduacaoServico.busca(token, id);
+        const doc = response.data;
         res.render('graduacao_detalhes',
             {
                 title: 'Dados da graduação (Consulta)',
                 doc,
-                action: '/graduacoes/altera/' + id
+                action: '/graduacoes/altera/' + id,
+                pageAtiva
             }
         );
     } catch (err) {
@@ -73,10 +94,15 @@ router.get('/detalhes/:id', async (req, res, next) => {
     }
 });
 
-router.post('/inclui', async (req, res, next) => {
+router.post('/inclui', authMiddleware, async (req, res, next) => {
     const dados = req.body;
     try {
-        await graduacaoServico.inclui(dados);
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        await graduacaoServico.inclui(token, dados);
         mensagem = 'Graduação incluída com sucesso!';
         res.redirect('/graduacoes');
     } catch (err) {
@@ -84,11 +110,16 @@ router.post('/inclui', async (req, res, next) => {
     }
 });
 
-router.post('/altera/:id', async (req, res, next) => {
+router.post('/altera/:id', authMiddleware, async (req, res, next) => {
     const id = req.params.id;
     const dados = req.body;
     try {
-        await graduacaoServico.atualiza(id, dados);
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ message: 'Token não fornecido' });
+        }
+
+        await graduacaoServico.atualiza(token, id, dados);
         mensagem = 'Graduação alterada com sucesso!';
         res.redirect('/graduacoes');
     } catch (err) {

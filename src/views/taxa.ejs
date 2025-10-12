@@ -8,44 +8,27 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
     rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
     crossorigin="anonymous">
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
-    crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../../css/consulta-menu.css">
+    <link rel="icon" href="../../images/logo-sm.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-  <header>
-  </header>
+  <div class="container pt-3 w-100">
+      <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+          <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
+              <!--
+              <svg class="bi me-2" width="40" height="32" aria-hidden="true"><use xlink:href="#bootstrap"></use></svg> 
+              -->
+              <img src="../../images/logo-sm.png"/>
+              <span class="fs-4">Fettermann Aikidô</span>
+          </a> 
+
+          <%- include('partials/menu_principal') %>
+      </header>
+  </div>
   <main>
     <div class="container pt-3 w-75">
-            
-      <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-                <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
-                    <!--
-                    <svg class="bi me-2" width="40" height="32" aria-hidden="true"><use xlink:href="#bootstrap"></use></svg> 
-                    -->
-                    <img src="/images/logo-sm.png"/>
-                    <span class="fs-4">Fettermann Aikidô</span>
-                </a> 
-
-                <ul class="nav nav-pills"> 
-                        <li class="nav-item"><a href="/dojos" class="nav-link">Dojos</a></li> 
-                        <li class="nav-item"><a href="/pessoas" class="nav-link">Pessoas</a></li> 
-                        <li class="nav-item"><a href="/graduacoes" class="nav-link" aria-current="page">Graduações</a></li> 
-                        <li class="nav-item dropdown">
-                          <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Financeiro
-                          </a>
-                          <ul class="dropdown-menu">
-                            <li><a href="/taxas" class="nav-link active" aria-current="page">Taxas</a></li>
-                          </ul>
-                      </li>
-                      <li class="nav-item"><a href="/logout" class="nav-link">Sair</a></li> 
-                </ul>
-      </header>
-
       <div class="card">
         <div class="card-header"><%= title %></div>
         <div class="card-body">
@@ -72,56 +55,12 @@
                 <select id="tipo" name="tipo" class="form-select" aria-label="Tipo"
                 data-obrigatorio="Por favor, selecione o tipo.">
                   <option value="" selected>Selecione</option>
-                <% if (doc.tipo=="anuidade" ) { %>
-                  <option selected value="anuidade">Anuidade</option>
-                  <option value="aula_avulsa">Aula avulsa</option>
-                  <option value="exame">Exame</option>
-                  <option value="inscricao_evento">Inscrição em evento</option>
-                  <option value="mensalidade">Mensalidade</option>
-                  <option value="promocao">Promoção</option>
-                <% } else if (doc.tipo=="aula_avulsa" ) { %>
-                  <option value="anuidade">Anuidade</option>
-                  <option selected value="aula_avulsa">Aula avulsa</option>
-                  <option value="exame">Exame</option>
-                  <option value="inscricao_evento">Inscrição em evento</option>
-                  <option value="mensalidade">Mensalidade</option>
-                  <option value="promocao">Promoção</option>
-                <% } else if (doc.tipo=="exame" ) { %>
-                  <option value="anuidade">Anuidade</option>
-                  <option value="aula_avulsa">Aula avulsa</option>
-                  <option selected value="exame">Exame</option>
-                  <option value="inscricao_evento">Inscrição em evento</option>
-                  <option value="mensalidade">Mensalidade</option>
-                  <option value="promocao">Promoção</option>
-                <% } else if (doc.tipo=="inscricao_evento" ) { %>
-                  <option value="anuidade">Anuidade</option>
-                  <option value="aula_avulsa">Aula avulsa</option>
-                  <option value="exame">Exame</option>
-                  <option selected value="inscricao_evento">Inscrição em evento</option>
-                  <option value="mensalidade">Mensalidade</option>
-                  <option value="promocao">Promoção</option>
-                <% } else if (doc.tipo=="mensalidade" ) { %>
-                  <option value="anuidade">Anuidade</option>
-                  <option value="aula_avulsa">Aula avulsa</option>
-                  <option value="exame">Exame</option>
-                  <option value="inscricao_evento">Inscrição em evento</option>
-                  <option selected value="mensalidade">Mensalidade</option>
-                  <option value="promocao">Promoção</option>
-                <% } else if (doc.tipo=="promocao" ) { %>
-                  <option value="anuidade">Anuidade</option>
-                  <option value="aula_avulsa">Aula avulsa</option>
-                  <option value="exame">Exame</option>
-                  <option value="inscricao_evento">Inscrição em evento</option>
-                  <option value="mensalidade">Mensalidade</option>
-                  <option selected ="promocao">Promoção</option>
-                <% } else { %>
-                  <option value="anuidade">Anuidade</option>
-                  <option value="aula_avulsa">Aula avulsa</option>
-                  <option value="exame">Exame</option>
-                  <option value="inscricao_evento">Inscrição em evento</option>
-                  <option value="mensalidade">Mensalidade</option>
-                  <option value="promocao">Promoção</option>
-                <% } %>
+                  <option <%= doc.tipo=='anuidade'?'selected':'' %> value="anuidade">Anuidade</option>
+                  <option <%= doc.tipo=='aula_avulsa'?'selected':'' %> value="aula_avulsa">Aula avulsa</option>
+                  <option <%= doc.tipo=='exame'?'selected':'' %> value="exame">Exame</option>
+                  <option <%= doc.tipo=='inscricao_evento'?'selected':'' %> value="exame"> value="inscricao_evento">Inscrição em evento</option>
+                  <option <%= doc.tipo=='mensalidade'?'selected':'' %> value="mensalidade">Mensalidade</option>
+                  <option <%= doc.tipo=='promocao'?'selected':'' %> value="promocao">Promoção</option>
                 </select>
               </div>
             </div>
@@ -159,11 +98,7 @@
                 <label for="is_ativa" class="form-label">Ativa?</label>
               </div>
               <div class="col-2">
-                  <% if (doc.is_ativa) { %>
-                    <input class="form-check-input" type="checkbox" id="is_ativa" name="is_ativa" checked>
-                  <% } else { %>
-                    <input class="form-check-input" type="checkbox" id="is_ativa" name="is_ativa">
-                  <% } %>
+                <input class="form-check-input" type="checkbox" id="is_ativa" name="is_ativa" <%= doc.is_ativa?'checked':''%>>
               </div>
             </div>
 
@@ -173,11 +108,7 @@
                 <label for="is_recorrente" class="form-label">Recorrente?</label>
               </div>
               <div class="col-2">
-                  <% if (doc.is_recorrente) { %>
-                    <input class="form-check-input" type="checkbox" id="is_recorrente" name="is_recorrente" checked>
-                  <% } else { %>
-                    <input class="form-check-input" type="checkbox" id="is_recorrente" name="is_recorrente">
-                  <% } %>
+                <input class="form-check-input" type="checkbox" id="is_recorrente" name="is_recorrente" <%= doc.is_recorrente?'checked':''%>>
               </div>
             </div>
 
@@ -189,23 +120,9 @@
               <div class="col-2">
                 <select id="periodicidade" name="periodicidade" class="form-select" aria-label="Tipo">
                   <option value="" selected>Selecione</option>
-                <% if (doc.periodicidade=="anual" ) { %>
-                  <option selected value="anual">Anual</option>
-                  <option value="mensal">Mensal</option>
-                  <option value="unica">Única</option>
-                <% } else if (doc.periodicidade=="mensal" ) { %>
-                  <option value="anual">Anual</option>
-                  <option selected value="mensal">Mensal</option>
-                  <option value="unica">Única</option>
-                <% } else if (doc.periodicidade=="unica" ) { %>
-                  <option value="anual">Anual</option>
-                  <option value="mensal">Mensal</option>
-                  <option selected value="unica">Única</option>
-                <% } else { %>
-                  <option value="anual">Anual</option>
-                  <option value="mensal">Mensal</option>
-                  <option value="unica">Única</option>
-                <% } %>
+                  <option <%= doc.periodicidade=='anual'?'selected':''%> value="anual">Anual</option>
+                  <option <%= doc.periodicidade=='mensal'?'selected':''%> value="mensal">Mensal</option>
+                  <option <%= doc.periodicidade=='unica'?'selected':''%> value="unica">Única</option>
                 </select>
               </div>
             </div>
@@ -232,19 +149,23 @@
           </form>
         </div>
       </div>
-
-      <div class="container"> 
-          <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
-              <div class="col-md-4 d-flex align-items-center"> 
-                  <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.01 - Taxas - Fettermann Aikidô</span>
-                </div> 
-                <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
-          </footer> 
-      </div>
-
     </div>
   </main>
+
+  <div class="container"> 
+      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
+          <div class="col-md-4 d-flex align-items-center"> 
+              <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.02 - Taxas - Fettermann Aikidô</span>
+            </div> 
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
+      </footer> 
+  </div>
+
   <script src="/js/verifica_campos_obrigatorios.js"></script>
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+  integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+  crossorigin="anonymous"></script>
 </body>
 
 </html>

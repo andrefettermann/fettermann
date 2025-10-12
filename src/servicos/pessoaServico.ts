@@ -1,8 +1,75 @@
-// services/pessoaService.ts
-import { convertDdMmYyyyToDate, formatDateDDMMAAAA } from '../utils/date';
-import * as repositorio from '../repositories/pessoaRepository';
-import { decripta, encripta } from '../utils/crypto';
+// src/servicos/pessoaService.ts
+import dotenv from 'dotenv'
+import axios from 'axios';
+import { formatDateDDMMAAAA } from '../utils/date';
 
+dotenv.config()
+
+const API_URL = process.env.API_URL;
+
+async function get(token: any, url: string): Promise<any> {
+    return await axios.get(url, {
+        headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+        }
+    });
+}
+
+export async function busca(token: any, id: string): Promise<any> {
+    const url = `${API_URL}/api/pessoas/busca/${id}`;
+    const resposta: any = await get(token, url);
+    return resposta;
+}
+
+export async function buscaTodos(token: any): Promise<any> {
+    const url = `${API_URL}/api/pessoas/lista/todos`;
+    return await get(token, url);
+}
+
+export async function buscaSituacao(token: any, situacao: string): Promise<any> {
+    const url = `${API_URL}/api/pessoas/lista/situacao/${situacao}`;
+    return await get(token, url);
+}
+
+export async function buscaAniversariantes(token: any, mes: string): Promise<any> {
+    const url = `${API_URL}/api/pessoas/lista/aniversariantes/${mes}`;
+    return await get(token, url);
+}
+
+export async function buscaProfessores(token: any): Promise<any> {
+    const url = `${API_URL}/api/pessoas/lista/professores/`;
+    return await get(token, url);
+}
+
+export async function inclui(token: any, dados: any): Promise<any> {
+    const url = `${API_URL}/api/pessoas/inclui/`;
+    return await axios.post(url, 
+            dados, 
+            {headers: { 
+                'Authorization': token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json', // ✅ permitido e seguro
+            }
+        });
+}
+
+export async function atualiza(token: any, id: string, dados: string): Promise<any> {
+    const url = `${API_URL}/api/pessoas/altera/${id}`;
+    
+    const resposta: any = await axios.patch(url, 
+        dados, 
+        {headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+        }
+    });
+    return resposta;
+}
+
+/*
 function setDoc(osDados: any) {
     var totalPromocoes = osDados.total_promocoes;
     var totalPagamentos = osDados.total_pagamentos;
@@ -261,4 +328,4 @@ export async function busca(oId: string): Promise<any> {
         throw error;
     }
 }
-
+*/

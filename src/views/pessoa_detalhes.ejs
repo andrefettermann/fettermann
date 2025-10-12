@@ -85,9 +85,9 @@
 
           <div class="row pt-2">
             <div class="col">
-                <span class="fw-bold">Professor? </span>
-                <span id="is_professor" name="is_professor">
-                  <%= doc.is_professor==true?'Sim':'Não' %>
+                <span class="fw-bold">Tipo: </span>
+                <span id="tipo" name="tipo">
+                  <%= doc.tipo.charAt(0).toUpperCase() + doc.tipo.slice(1); %>
                 </span>
             </div>
           </div>
@@ -123,7 +123,7 @@
                 <% if (doc.pagamentos) { %>
                       <% doc.pagamentos.forEach(function(pagamento){ %>
                         <li class="list-group-item"><%= pagamento.data_formatada 
-                          + " - " + pagamento.valor_pago + " - " + pagamento.descricao 
+                          + " - " + pagamento.valor_pago.$numberDecimal + " - " + pagamento.descricao 
                           + " - " + pagamento.observacoes %></li>
                       <% }); %>
                 <% }; %>
@@ -133,18 +133,18 @@
 
         </div>
       </div>
-
-      <div class="container"> 
-          <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
-              <div class="col-md-4 d-flex align-items-center"> 
-                  <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.02 - Pessoas - Fettermann Aikidô</span>
-                </div> 
-                <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
-          </footer> 
-      </div>
-
     </div>
   </main>
+
+  <div class="container"> 
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
+        <div class="col-md-4 d-flex align-items-center"> 
+            <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.04 - Pessoas - Fettermann Aikidô</span>
+          </div> 
+          <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
+    </footer> 
+  </div>
+
     <script src="/js/exclusao.js"></script>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 

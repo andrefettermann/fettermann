@@ -1,6 +1,6 @@
-// dojoServico.ts
-import * as repositorio from '../repositories/dojoRepository';
-import { decripta, encripta } from '../utils/crypto';
+// src/servicos/dojoServico.ts
+import axios from 'axios';
+import dotenv from 'dotenv'
 
 /**
  * Servicos para o dojo.
@@ -8,101 +8,51 @@ import { decripta, encripta } from '../utils/crypto';
  * @author Andre Fettermann
  */
 
-var totalHorarios = 0;
+dotenv.config();
 
-function setDoc(osDados: any) {
-    const doc = {
-        'nome': osDados.nome,
-        'local': osDados.local,
-        'endereco': osDados.endereco,
-        'bairro': osDados.bairro,
-        'cidade': osDados.cidade,
-        'uf': osDados.uf,
-        'pais': osDados.pais,
-        'url': osDados.url,
-        'email': osDados.email,
-        'id_professor': osDados.id_professor==""?null:osDados.id_professor,
-        'horarios': osDados.horarios
-    }
+const API_URL = process.env.API_URL;
 
-    return doc;
+async function get(token: any, url: string): Promise<any> {
+    return await axios.get(url, {
+        headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+        }
+    });
 }
 
-export async function busca(oId: string) {
-    const id = oId;
-    try {
-        const response: any = await repositorio.find(id);
-        if (response.sucesso) {
-
-            if (response.doc.id_professor) {
-                response.doc.id_professor = response.doc.id_professor.toString();
-            }
-            
-            if (response.doc.professor[0]) {
-                response.doc.professor[0].nome = 
-                    decripta(response.doc.professor[0].nome);
-            }
-
-            response.doc.alunos.forEach((a: any) => {
-                a.nome = decripta(a.nome);
-            })
-
-            return {
-                sucesso: true,
-                doc: response.doc
-            };
-        } else {
-            return response;
-        }        
-    } catch (error) {
-        throw error;
-    }
+export async function buscaTodos(token: any): Promise<any> {
+    const url = `${API_URL}/api/dojos/lista/todos`;
+    return await get(token, url);
 }
 
-export async function buscaTodos() {
-    try {
-        const response: any = await repositorio.findAll();
-        if (response.sucesso) {
-            response.docs.forEach((element: any) => {
-                if (element.id_professor) {
-                    element.id_professor = element.id_professor.toString();
-                }
-
-                element.professor.forEach((p: any) =>{
-                    if (p.nome) p.nome = decripta(p.nome);
-                })
-            });
-
-            return {
-                sucesso: true,
-                docs: response.docs
-            };
-        } else {
-            return response;
-        }        
-    } catch (error) {
-        throw error;
-    }
+export async function busca(token: any, id: string): Promise<any> {
+    const url = `${API_URL}/api/dojos/busca/`+id;
+    return await get(token, url);
 }
 
-export async function inclui(osDados: any): Promise<any> {
-    const dados = setDoc(osDados);
-    try {
-        const response: any = await repositorio.insert(dados);
-        return response;
-    } catch (error) {
-        throw error;
-    }
+export async function inclui(token: any, dados: any): Promise<any> {
+    const url = `${API_URL}/api/dojos/inclui/`;
+    await axios.post(url, 
+        dados, 
+        {headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+        }
+    });    
 }
 
-export async function atualiza(oId: string, osDados: any): Promise<any> {
-    const id = oId;
-    const dados = setDoc(osDados) ;
-
-    try {
-        const response: any = await repositorio.update(id, dados);
-        return response;
-    } catch (error) {
-        throw error;
-    }
+export async function atualiza(token: any, id: string, dados: any): Promise<any> {
+    const url = `${API_URL}/api/dojos/altera/${id}`;
+    const resposta =  await axios.patch(url, 
+        dados, 
+        {headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+        }
+    });
+    return resposta;
 }

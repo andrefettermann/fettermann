@@ -1,5 +1,11 @@
 // taxaServico.ts
-import * as repositorio from '../repositories/taxaRepository';
+import { formataValorComDecimais } from '../utils/formata_decimal';
+import axios from 'axios';
+import dotenv from 'dotenv'
+
+dotenv.config();
+
+const API_URL = process.env.API_URL;
 
 /**
  * Servico para taxas
@@ -7,77 +13,83 @@ import * as repositorio from '../repositories/taxaRepository';
  * @author Andre Fettermann 
  */
 
-function setDoc(osDados: any) {
-    var doc = {
-        'nome': osDados.nome,
-        'descricao': osDados.descricao,
-        'periodo': osDados.periodo,
-        'valor_bruto': parseInt(osDados.valor_bruto),
-        'percentual': osDados.categoria,
-        'observacoes': osDados.observacoes
-    }
-
-    return doc;
-}
-
-export async function busca(oId: string): Promise<any> {
-    const id = oId;
-    try {
-        return await repositorio.find(id);
-    } catch (error) {
-        throw error;
-    }
-}
-
-export async function buscaTodos(): Promise<any> {
-    try {
-        var docs: any = []
-        const result: any = await repositorio.findAll();
-        if (result) {
-            result.docs.forEach((t: any) => {
-                var doc = {
-                    '_id': t._id,
-                    'nome': t.nome,
-                    'descricao': t.descricao,
-                    'periodo': t.periodo,
-                    'valor_bruto': t.valor_bruto,
-                    'percentual': t.percentual,
-                    'valor_liquido': parseInt(t.valor_bruto) * 
-                                    (1 - parseFloat(t.percentual) / 100),
-                    'observacoes': t.observacoes
-                }
-                docs.push(doc);
-            })
-
-            return {
-                sucesso: true,
-                docs
-            }
-        } else {
-            return result
+async function get(token: any, url: string): Promise<any> {
+    return await axios.get(url, {
+        headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
         }
-    } catch (error) {
-        throw error;
-    }
+    });
 }
 
-export async function inclui(osDados: any) {
-    const dados = setDoc(osDados);
-    try {
-        return await repositorio.insert(dados);
-    } catch (error) {
-        throw error;
-    }
+export function formata(osDados: any): any {
+    osDados.forEach((element: any) => {        
+        if (element.valor_padrao) {
+            element.valor_padrao = formataValorComDecimais(
+                element.valor_padrao.$numberDecimal.replace('.', ','));
+        }
+    });
+
+    osDados.sort((a: { tipo: string, nome: string; }, b: { tipo: string, nome: string; }) => {
+        var tipoa = a.tipo.toLowerCase();
+        var tipob = b.tipo.toLowerCase();
+        var nomea = a.nome.toLowerCase();
+        var nomeb = b.nome.toLowerCase();
+
+        if (tipoa < tipob) {
+            return -1;
+        }
+        if (tipoa > tipob) {
+            return 1;
+        }
+
+        if (nomea < nomeb) {
+            return -1;
+        }
+        if (nomea > nomeb) {
+            return 1;
+        }
+        return 0;
+    });
+
+    return osDados;
 }
 
-export async function atualiza(oId: string, osDados: any) {
-    const id = oId;
-    const dados = setDoc(osDados) ;
-
-    try {
-        return await repositorio.update(id, dados);
-    } catch (error) {
-        throw error;
-    }
+export async function buscaTodos(token: any): Promise<any> {
+    const url = `${API_URL}/api/taxas/lista/todos`;
+    return await get(token, url);
 }
 
+export async function busca(token: any, id: string): Promise<any> {
+    const url = `${API_URL}/api/taxas/busca/${id}`;
+    return await get(token, url);
+}
+
+export async function inclui(token: any, osDados: any): Promise<any> {
+    const url = `${API_URL}/api/taxas/inclui`;
+    return await axios.post(url, 
+        osDados, 
+        {
+            headers: { 
+                'Authorization': token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json', // ✅ permitido e seguro
+            }
+        }
+    );
+}
+
+export async function atualiza(token: any, id: string, osDados: any): Promise<any> {
+    const url = `${API_URL}/api/taxas/altera/${id}`;
+    await axios.patch(url, 
+        osDados, 
+        {
+            headers: { 
+                'Authorization': token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json', // ✅ permitido e seguro
+            }
+        }
+    );
+}

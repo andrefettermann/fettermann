@@ -1,10 +1,7 @@
 // taxaRoute.ts
-import express from 'express';
-import axios from 'axios';
+import express, { Request, Response } from 'express';
 import { authMiddleware } from '../middleware/tokenManager';
-import { formataValorComDecimais } from '../utils/formata_decimal';
-import dotenv from 'dotenv'
-
+import * as taxaServico from '../servicos/taxaServico';
 
 /**
  * Router de taxas.
@@ -14,71 +11,26 @@ import dotenv from 'dotenv'
 
 const router = express.Router();
 
-dotenv.config()
-
 var mensagem = "";
 
-const API_URL = process.env.API_URL;
-
-function formataDoc(osDados: any): any {
-    osDados.forEach((element: any) => {        
-        if (element.valor_padrao) {
-            element.valor_padrao = formataValorComDecimais(
-                element.valor_padrao.$numberDecimal.replace('.', ','));
-        }
-    });
-
-    osDados.sort((a: { tipo: string, nome: string; }, b: { tipo: string, nome: string; }) => {
-        var tipoa = a.tipo.toLowerCase();
-        var tipob = b.tipo.toLowerCase();
-        var nomea = a.nome.toLowerCase();
-        var nomeb = b.nome.toLowerCase();
-
-        if (tipoa < tipob) {
-            return -1;
-        }
-        if (tipoa > tipob) {
-            return 1;
-        }
-
-        if (nomea < nomeb) {
-            return -1;
-        }
-        if (nomea > nomeb) {
-            return 1;
-        }
-        return 0;
-    });
-
-    return osDados;
-}
+const pageAtiva = 'financeiro';
 
 router.get('/', authMiddleware, async (req, res, next) => {
     try {
         //const response = await taxaServico.buscaTodos();
-        
         const token = req.headers.authorization;
         if (!token) {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const url = `${API_URL}/api/taxas/lista/todos`;
-        const response: any = await axios.get(url, {
-        headers: { 
-            'Authorization': token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json', // ✅ permitido e seguro
-            'User-Agent': 'PostmanRuntime/7.48.0',
-            'Connection': 'keep-alive'
-        }
-        });
-
-        const docs = formataDoc(response.data);
+        const resposta: any = await taxaServico.buscaTodos(token);
+        const docs = taxaServico.formata(resposta.data);
         res.render('taxas',
             {
                 docs,
                 total: docs.length,
-                mensagem
+                mensagem,
+                pageAtiva
             }
         );
         mensagem = "";
@@ -96,7 +48,8 @@ router.get('/novo', async (req, res, next) => {
             {
                 title: 'Dados da taxa (Inclusão)',
                 doc,
-                action: '/taxas/inclui/'
+                action: '/taxas/inclui/',
+                pageAtiva
             }
         );
     } catch (err) {
@@ -107,28 +60,19 @@ router.get('/novo', async (req, res, next) => {
 router.get('/edita/:id', authMiddleware, async (req, res, next) => {
     const id = req.params.id;
     try {
-        //const response = await taxaServico.busca(req.params.id);
-
         const token = req.headers.authorization;
         if (!token) {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const url = `${API_URL}/api/taxas/busca/${id}`;
-        const response: any = await axios.get(url, {
-        headers: { 
-            'Authorization': token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json', // ✅ permitido e seguro
-        }
-        });
-
-        const doc = response.data;
+        const resposta: any = await taxaServico.busca(token, id);
+        const doc = resposta.data;
         res.render('taxa',
             {
                 title: 'Dados da taxa (Edição)',
                 doc,
-                action: '/taxas/altera/' + id
+                action: '/taxas/altera/' + id,
+                pageAtiva
             }
         );
     } catch (err) {
@@ -138,28 +82,19 @@ router.get('/edita/:id', authMiddleware, async (req, res, next) => {
 
 router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
     const id = req.params.id;
-    try {
-        //const response = await taxaServico.busca(id);
-                const token = req.headers.authorization;
+    try {        
+        const token = req.headers.authorization;
         if (!token) {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const url = `${API_URL}/api/taxas/busca/${id}`;
-        const response: any = await axios.get(url, {
-        headers: { 
-            'Authorization': token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json', // ✅ permitido e seguro
-        }
-        });
-
-        const doc = response.data;
+        const resposta: any = await taxaServico.busca(token, id);
+        const doc = resposta.data;
         res.render('taxa_detalhes',
             {
                 title: 'Dados da taxa (Consulta)',
                 doc,
-                //action: '/taxas/altera/' + id
+                pageAtiva
             }
         );
     } catch (err) {
@@ -170,22 +105,12 @@ router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
 router.post('/inclui', authMiddleware, async (req, res, next) => {
     const dados = req.body;
     try {
-//        await taxaServico.inclui(dados);
-
         const token = req.headers.authorization;
         if (!token) {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const url = `${API_URL}/api/taxas/inclui`;
-        await axios.post(url, 
-            dados, 
-            {headers: { 
-            'Authorization': token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json', // ✅ permitido e seguro
-        }
-        });
+        await taxaServico.inclui(token, dados);
 
         mensagem = 'Taxa incluída com sucesso!';
         res.redirect('/taxas');
@@ -198,21 +123,13 @@ router.post('/altera/:id', authMiddleware, async (req, res, next) => {
     const id = req.params.id;
     const dados = req.body;
     try {
-        //await taxaServico.atualiza(id, dados);
         const token = req.headers.authorization;
         if (!token) {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const url = `${API_URL}/api/taxas/altera/${id}`;
-        await axios.patch(url, 
-            dados, 
-            {headers: { 
-            'Authorization': token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json', // ✅ permitido e seguro
-        }
-        });
+        await taxaServico.atualiza(token, id, dados);
+
         mensagem = 'Taxa alterada com sucesso!';
         res.redirect('/taxas');
     } catch (err) {

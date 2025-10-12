@@ -136,13 +136,11 @@
               <div class="col-2">
                 <select id="situacao" name="situacao" class="form-select" aria-label="Situacao">
                   <option value="" selected>Situação</option>
-                  <option selected value="Inativo" 
-                    <%= doc.situacao=="Inativo"?'selected':''%>>
-                    <%= doc.situacao %>
+                  <option value="Inativo" <%= doc.situacao=="Inativo"?'selected':''%>>
+                    Inativo
                   </option>
-                  <option selected value="Ativo" 
-                    <%= doc.situacao=="Ativo"?'selected':''%>>
-                    <%= doc.situacao %>
+                  <option value="Ativo" <%= doc.situacao=="Ativo"?'selected':''%>>
+                    Ativo
                   </option>
                 </select>
               </div>
@@ -185,14 +183,23 @@
               </div>
             </div>
 
-              <!--Professor?-->
+              <!--Tipo-->
             <div class="form-group row mb-3">
               <div class="col-2">
-                <label for="is_professor" class="form-label">Professor?</label>
+                <label for="tipo" class="form-label">Tipo</label>
               </div>
               <div class="col-2">
-                <input class="form-check-input" type="checkbox" id="is_professor" 
-                name="is_professor" <%= doc.is_professor?'checked':''%> >
+
+                <select id="tipo" name="tipo" class="form-select" aria-label="Tipo">
+                  <option value="">Selecione</option>
+                  <option value="aluno" <%= doc.tipo=="aluno"?'selected':''%>>
+                    Aluno
+                  </option>
+                  <option value="professor" <%= doc.tipo=="professor"?'selected':''%>>
+                    Professor
+                  </option>
+                </select>
+
               </div>
             </div>
 
@@ -290,7 +297,7 @@
                         -->
                         <div class="col-2">
                           <input id="valor_pagamento_<%= index+1 %>" name="valor_pagamento_<%= index+1 %>" 
-                          type="text" class="form-control" value="<%= pagamento.valor_pago %>"/>
+                          type="text" class="form-control" value="<%= pagamento.valor_pago.$numberDecimal %>"/>
                         </div>
 
                         <!--
@@ -317,18 +324,18 @@
           </form>
         </div>
       </div>
-
-      <div class="container"> 
-          <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
-              <div class="col-md-4 d-flex align-items-center"> 
-                  <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.02 - Pessoas - Fettermann Aikidô</span>
-                </div> 
-                <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
-          </footer> 
-      </div>
-
     </div>
   </main>
+
+  <div class="container"> 
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
+        <div class="col-md-4 d-flex align-items-center"> 
+            <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.04 - Pessoas - Fettermann Aikidô</span>
+          </div> 
+          <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
+    </footer> 
+  </div>
+
   <script src="/js/adiciona_promocao.js"></script>
   <script src="/js/adiciona_pagamento.js"></script>
   <script src="/js/verifica_campos_obrigatorios.js"></script>

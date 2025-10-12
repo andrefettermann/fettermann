@@ -8,53 +8,29 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
     rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
     crossorigin="anonymous">
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
-    crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/consulta-menu.css">
+    <link rel="icon" href="../images/logo-sm.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-    <header>
-    </header>
+    <div class="container pt-3 w-100">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
+                <!--
+                <svg class="bi me-2" width="40" height="32" aria-hidden="true"><use xlink:href="#bootstrap"></use></svg> 
+                -->
+                <img src="../images/logo-sm.png"/>
+                <span class="fs-4">Fettermann Aikidô</span>
+            </a> 
+
+            <%- include('partials/menu_principal') %>
+        </header>
+    </div>
 
     <main>
 
         <div class="container pt-3 w-100">
-            
-            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-                <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
-                    <!--
-                    <svg class="bi me-2" width="40" height="32" aria-hidden="true"><use xlink:href="#bootstrap"></use></svg> 
-                    -->
-                    <img src="images/logo-sm.png"/>
-                    <span class="fs-4">Fettermann Aikidô</span>
-                </a> 
-
-                <ul class="nav nav-pills"> 
-                        <li class="nav-item"><a id="menu-dojos" name="menu-dojos" 
-                            href="/dojos" class="nav-link">Dojos</a></li> 
-                        <li class="nav-item"><a id="menu-pessoas" name="menu-pessoas" 
-                            href="/pessoas" class="nav-link" aria-current="page">Pessoas</a></li> 
-                        <li class="nav-item"><a id="menu-graduacoes" name="menu-graduacoes" 
-                            href="/graduacoes" class="nav-link">Graduações</a></li> 
-                        <li class="nav-item dropdown">
-                            <a id="menu-financeiro" name="menu-financeiro" 
-                            class="nav-link dropdown-toggle active" href="#" 
-                            role="button" data-bs-toggle="dropdown" 
-                            aria-expanded="false">
-                                    Financeiro
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a id="menu-taxas" name="menu-taxas" href="/taxas" 
-                                    class="nav-link" aria-current="page">Taxas</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item"><a id="menu-sair" name="menu-sair" 
-                            href="/logout" class="nav-link">Sair</a></li> 
-                </ul>
-            </header>
             <div class="mb-2">
                 <a id="botao_nova_taxa" name="botao_nova_taxa" 
                 class="btn btn-success btn-sm" href="/taxas/novo">Nova taxa</a>
@@ -93,18 +69,22 @@
                     </div>
                 </div>
             </div>
-
-            <div class="container"> 
-                <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
-                    <div class="col-md-4 d-flex align-items-center"> 
-                        <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.01 - Taxas - Fettermann Aikidô</span>
-                     </div> 
-                     <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
-                </footer> 
-            </div>
-
         </div>
     </main>
+
+    <div class="container"> 
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
+            <div class="col-md-4 d-flex align-items-center"> 
+                <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.02 - Taxas - Fettermann Aikidô</span>
+                </div> 
+                <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
+        </footer> 
+    </div>
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
