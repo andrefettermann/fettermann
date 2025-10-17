@@ -2,6 +2,7 @@
 import express, { Request, Response } from 'express';
 import { authMiddleware } from '../middleware/tokenManager';
 import * as taxaServico from '../servicos/taxaServico';
+import * as cobrancaServico from '../servicos/cobrancaServico';
 
 /**
  * Router de taxas.
@@ -24,7 +25,7 @@ router.get('/', authMiddleware, async (req, res, next) => {
         }
 
         const resposta: any = await taxaServico.buscaTodos(token);
-        const docs = taxaServico.formata(resposta.data);
+        const docs = taxaServico.formataLista(resposta.data);
         res.render('taxas',
             {
                 docs,
@@ -66,7 +67,8 @@ router.get('/edita/:id', authMiddleware, async (req, res, next) => {
         }
 
         const resposta: any = await taxaServico.busca(token, id);
-        const doc = resposta.data;
+        const doc = taxaServico.formata(resposta.data);
+        console.log(doc)
         res.render('taxa',
             {
                 title: 'Dados da taxa (Edição)',
@@ -88,12 +90,18 @@ router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
+        const resposta_cobrancas: any = 
+                        await cobrancaServico.buscaPorTaxa(token, id);
+        const docs_cobrancas = 
+                    cobrancaServico.formataLista(resposta_cobrancas.data);
+
         const resposta: any = await taxaServico.busca(token, id);
         const doc = resposta.data;
         res.render('taxa_detalhes',
             {
                 title: 'Dados da taxa (Consulta)',
                 doc,
+                docs_cobrancas,
                 pageAtiva
             }
         );

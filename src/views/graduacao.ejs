@@ -64,7 +64,8 @@
               </div>
               <div class="col-2">
                 <input type="text" class="form-control" id="nome" name="nome" value="<%= doc.nome %>"
-                placeholder="O nome da graduação" title="O nome da graduação" data-obrigatorio="Por favor, preencha o nome da graduação.">
+                placeholder="O nome da graduação" title="O nome da graduação" 
+                data-obrigatorio="Por favor, preencha o nome da graduação.">
               </div>
             </div>
 
@@ -111,21 +112,20 @@
             <!-- Categoria -->
             <div class="form-group row mb-3">
               <div class="col-2">
-                <label for="categoria" class="form-label">Categoria</label>
+                <label for="categoria" class="form-label">*Categoria</label>
               </div>
               <div class="col-2">
-                <select id="categoria" name="categoria" class="form-select" aria-label="Categoria">
-                  <option value="" selected>Selecione</option>
-                  <% if (doc.categoria=="Infantil" ) { %>
-                    <option selected value="Infantil">Infantil</option>
-                    <option value="Adulto">Adulto</option>
-                    <% } else if (doc.categoria=="Adulto" ) { %>
-                      <option value="Infantil">Infantil</option>
-                      <option selected value="Adulto">Adulto</option>
-                      <% } else { %>
-                      <option value="Infantil">Infantil</option>
-                      <option value="Adulto">Adulto</option>
-                      <% } %>
+                <select id="categoria" name="categoria" class="form-select" aria-label="Categoria"
+                data-obrigatorio="Por favor, seleciona a categoria.">
+                  <option value="" <%= doc.categoria=='Selecione'?'selected':'' %>>
+                    Selecione
+                  </option>
+                  <option value="Infantil" <%= doc.categoria=='Infantil'?'selected':''%>>
+                    Infantil
+                  </option>
+                  <option value="Adulto" <%= doc.categoria=='Adulto'?'selected':''%>>
+                    Adulto
+                  </option>
                 </select>
               </div>
             </div>

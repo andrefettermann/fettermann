@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Fettermann Aikidô - <%= title %>
+  </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
+    crossorigin="anonymous">
+    <link rel="stylesheet" href="../../../css/consulta-menu.css">
+    <link rel="icon" href="../../../images/logo-sm.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <div class="container pt-3 w-100">
+      <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+          <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
+              <!--
+              <svg class="bi me-2" width="40" height="32" aria-hidden="true"><use xlink:href="#bootstrap"></use></svg> 
+              -->
+              <img src="../../../images/logo-sm.png"/>
+              <span class="fs-4">Fettermann Aikidô</span>
+          </a> 
+
+          <%- include('partials/menu_principal') %>
+      </header>
+  </div>
+  <main>
+    <div class="container pt-3 w-75">
+      <div class="card">
+        <div class="card-header"><%= title %></div>
+        <div class="card-body">
+          <form id="formulario" name="formulario" action="<%= action %>" 
+            method="POST">
+            <input type="hidden" id="id_cobranca" name="id_cobranca" value="<%= id_cobranca %>">
+            <input type="hidden" id="id_pagamento" name="id_pagamento" value="<%= id_pagamento %>">
+
+
+            <!-- Info Alert -->
+            <div class="alert alert-info alert-dismissible fade show">
+              <strong>Info!</strong> O '*'' indica os campos obrigatórios.
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div id="mensagem-topo" class="alert alert-danger alert-dismissible d-none" >
+              <span id="texto-mensagem"></span>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Cobranca -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label class="col-form-label">Cobrança</label>
+              </div>
+              <div class="col-6">
+                <label class="col-form-label"><%= doc_cobranca.taxa.descricao %> de <%= doc_cobranca.periodo_referencia %></label>
+              </div>
+            </div>
+
+            <!-- Valor pago -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="valor_pago" class="col-form-label">*Valor pago (R$)</label>
+              </div>
+              <div class="col-2">
+                <input type="text" class="form-control" id="valor_pago" name="valor_pago" 
+                value="<%= doc.valor_pago %>"
+                placeholder="O valor pago" 
+                aria-colcount="10" data-toggle="tooltip" data-placement="top" 
+                title="O valor pago" data-obrigatorio="Por favor, informe o valor pago.">
+              </div>
+            </div>
+
+            <!-- Data do pagamento -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="data_pagamento" class="col-form-label">Data do pagamento (dd/mm/aaaa)</label>
+              </div>
+              <div class="col-2">
+                <input type="text" class="form-control" id="data_emissao" 
+                name="data_pagamento" value="<%= doc.data_pagamento %>"
+                placeholder="A date de pagamento" 
+                aria-colcount="10" data-toggle="tooltip" data-placement="top" 
+                title="A data de pagamento">
+              </div>
+            </div>
+
+            <!--Forma de pagamento-->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="forma_pagamento" class="form-label">Forma de pagamento</label>
+              </div>
+              <div class="col-3">
+                <select id="forma_pagamento" name="forma_pagamento" class="form-select" aria-label="Forma de pagamento">
+                  <option value="" >Selecione</option>
+                  <option value="cartao_credito" <%= doc.forma_pagamento=="cartao_credito" ? ' selected' : ''%>>Cartão de crédito</option>
+                  <option value="cartao_debito" <%= doc.forma_pagamento=="cartao_debito" ? ' selected' : ''%>>Cartão de débito</option>
+                  <option value="dinheiro" <%= doc.forma_pagamento=="dinheiro" ? ' selected' : ''%>>Dinheiro</option>
+                  <option value="pix" <%= doc.forma_pagamento=="pix" ? ' selected' : ''%>>PIX</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Comprovante -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="comprovante" class="col-form-label">Comprovante</label>
+              </div>
+              <div class="col-4">
+                <input type="text" class="form-control" id="comprovante" 
+                name="comprovante" value="<%= doc.comprovante %>"
+                placeholder="O id ou url do arquivo do comprovante" 
+                aria-colcount="10" data-toggle="tooltip" data-placement="top" 
+                title="O id ou url do arquivo do comprovante" >
+              </div>
+            </div>
+
+            <!-- Desconto -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="desconto" class="col-form-label">Desconto (R$)</label>
+              </div>
+              <div class="col-2">
+                <input type="text" class="form-control" id="desconto" 
+                name="desconto" value="<%= doc.desconto %>"
+                placeholder="O valor do desconto em R$" 
+                aria-colcount="10" data-toggle="tooltip" data-placement="top" 
+                title="O valor do desconto em R$">
+              </div>
+            </div>
+
+            <!-- Juros -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="juros" class="col-form-label">Juros (R$)</label>
+              </div>
+              <div class="col-2">
+                <input type="text" class="form-control" id="juros" 
+                name="juros" value="<%= doc.juros %>"
+                placeholder="O valor dos juros em R$" 
+                aria-colcount="10" data-toggle="tooltip" data-placement="top" 
+                title="O valor dos juros em R$">
+              </div>
+            </div>
+
+            <!-- Observacoes -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="observacoes" class="col-form-label">Observações</label>
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" id="observacoes" 
+                name="observacoes" value="<%= doc.observacoes %>"
+                placeholder="Observações" aria-colcount="10" 
+                data-toggle="tooltip" data-placement="top" 
+                title="Observações">
+              </div>
+            </div>
+
+            <div class="col-12">
+              <input id="botao_grava" name="botao_grava" class="btn btn-primary" type="submit" value="Grava" />
+              <a id="botao_cancela" name="botao_cancela" class="btn btn-primary" href="/cobrancas">Cancela</a>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="container"> 
+      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
+          <div class="col-md-4 d-flex align-items-center"> 
+              <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.01 - Pagamentos - Fettermann Aikidô</span>
+            </div> 
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
+      </footer> 
+  </div>
+
+  <script src="/js/verifica_campos_obrigatorios.js"></script>
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+  integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+  crossorigin="anonymous"></script>
+</body>
+
+</html>

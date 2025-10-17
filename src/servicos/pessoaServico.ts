@@ -1,11 +1,34 @@
 // src/servicos/pessoaService.ts
 import dotenv from 'dotenv'
 import axios from 'axios';
+import { formataValorComDecimais } from '../utils/formata_decimal';
 import { formatDateDDMMAAAA } from '../utils/date';
 
 dotenv.config()
 
 const API_URL = process.env.API_URL;
+
+export function formata(doc: any): any {
+    doc.promocoes.forEach(async (p: any) => {
+        p.data_formatada = formatDateDDMMAAAA(new Date(p.data));
+    });
+
+    doc.pagamentos.forEach((p: any) => {
+        p.data_formatada = formatDateDDMMAAAA(new Date(p.data));
+        //p.valor_pago = formataValorComDecimais(
+        //    p.valor_pago.$numberDecimal.replace('.', ','));
+    });
+
+    return doc;
+}
+
+export function formataLista(osDados: any): any {
+    osDados.forEach((doc: any) => {        
+        doc = formata(doc)
+    });
+
+    return osDados;
+}
 
 async function get(token: any, url: string): Promise<any> {
     return await axios.get(url, {

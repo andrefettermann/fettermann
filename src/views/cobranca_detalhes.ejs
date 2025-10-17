@@ -30,75 +30,90 @@
   <main>
     <div class="container pt-3 w-100">
       <div class="mb-2">
-        <a class="btn btn-primary btn-sm" href="/taxas/edita/<%= doc._id %>">Edita</a>
-        <a class="btn btn-primary btn-sm" href="/taxas">Cancela</a>
+        <a class="btn btn-primary btn-sm" href="/cobrancas/edita/<%= doc._id %>">Edita</a>
+        <a class="btn btn-primary btn-sm" href="/cobrancas">Cancela</a>
       </div>
 
       <div class="card">
-        <div class="card-header">Dados da taxa (Consulta)</div>
+        <div class="card-header">Dados da cobrança (Consulta)</div>
         <div class="card-body">
           <div class="row pt-2">
             <div class="col">
-                <span class="fw-bold">Tipo: </span>
-                <span id="tipo" name="tipo"><%= doc.tipo %></span>
+                <span class="fw-bold">Pessoa: </span>
+                <span id="pessoa" name="pessoa"><%= doc.pessoa.nome %></span>
             </div>
           </div>
           <div class="row pt-2">
             <div class="col">
-                <span class="fw-bold">Nome: </span>
-                <span id="nome" name="nome"><%= doc.nome %></span>
+                <span class="fw-bold">Taxa: </span>
+                <span id="taxa" name="taxa"><%= doc.taxa.descricao %></span>
             </div>
           </div>
           <div class="row pt-2">
             <div class="col">
                 <span class="fw-bold">Descrição: </span>
-                <span id="descricao" name="descricao"><%= doc.descricao %></span>
+                <span id="valor" name="valor"><%= doc.descricao %></span>
             </div>
           </div>
           <div class="row pt-2">
             <div class="col">
-                <span class="fw-bold">Ativa? </span>
-                <span id="is_ativa" name="is_ativa"><%= doc.is_ativa?'Sim':'Não' %></span>
+                <span class="fw-bold">Valor devido: R$</span>
+                <span id="valor" name="valor"><%= doc.valor %></span>
             </div>
           </div>
           <div class="row pt-2">
             <div class="col">
-                <span class="fw-bold">Recorrente? </span>
-                <span id="is_recorrente" name="is_recorrente"><%= doc.is_recorrente?'Sim':'Não' %></span>
+                <span class="fw-bold">Data de emissão (dd/mm/aaaa):</span>
+                <span id="data_emissao" name="data_emissao"><%= doc.data_emissao %></span>
             </div>
           </div>
           <div class="row pt-2">
             <div class="col">
-                <span class="fw-bold">Periodicidade: </span>
-                <span id="periodicidade" name="periodicidade"><%= doc.periodicidade.toUpperCase() %></span>
+                <span class="fw-bold">Data de vencimento (dd/mm/aaaa):</span>
+                <span id="data_vencimento" name="data_vencimento"><%= doc.data_vencimento %></span>
             </div>
           </div>
-          <div class="row pt-2 mb-2">
+          <div class="row pt-2">
             <div class="col">
-                <span class="fw-bold">Valor padrão atual: </span>
-                <span id="valor_padrao" name="valor_padrao"><%= doc.valor_padrao.$numberDecimal %></span>
+                <span class="fw-bold">Situação: </span>
+                <span id="situacao" name="situacao"><%= doc.situacao.toUpperCase() %></span>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">Período: </span>
+                <span id="periodo" name="periodo"><%= doc.periodo_referencia %></span>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col">
+                <span class="fw-bold">Observacoes: </span>
+                <span id="observacoes" name="observacoes"><%= doc.observacoes %></span>
             </div>
           </div>
 
-          <div class="card mb-3">
-            <div class="card-header fw-bold">Cobranças e pagamentos</div>
+          <div class="card mb-3 mt-2">
+            <div class="card-header fw-bold">Pagamentos</div>
             <div class="card-body">    
               <ol id="cobrancas" name="cobrancas" class="list-group list-group-flush">
-                <% if (docs_cobrancas) { %>
-                  <% docs_cobrancas.forEach(function(cobranca) { %>
+                <% if (doc.pagamentos) { %>
+                  <% doc.pagamentos.forEach(function(pagamento) { %>
                     <li class="list-group-item">
-                      <b><%= cobranca.periodo_referencia %> - <%= cobranca.pessoa.nome %></b> <br/>
-                      <%= cobranca.descricao %> no valor de R$ <%= cobranca.valor %> está <%= cobranca.situacao %> <br/>
-                      <% if (cobranca.pagamentos) { %>
-                        <% cobranca.pagamentos.forEach(function(pagamento) { %>
-                          Pagamento de R$ <%= pagamento.valor_pago %> efetuado em <%= pagamento.data_pagamento%><br/>
-                        <% }); %>
+                      <a href="/cobrancas/pagamento/edita/<%= pagamento._id %>">
+                      Pagamento de R$ <%= pagamento.valor_pago %> efetuado em <%= pagamento.data_pagamento %>
+                      através de <%= pagamento.forma_pagamento %>.
+                      </a>
+                      <% if (pagamento.desconto>0) { %>
+                        <p>Desconto aplicados: <%= pagamento.desconto %></p>
+                      <% } %>
+                      <% if (pagamento.juros>0) { %>
+                        <p>Juros aplicados: <%= pagamento.juros %></p>
                       <% } %>
                     </li>
                   <% }); %>
-                  <% } else { %>
-                    <p>Nenhum pagamento ou cobrança encontrados.</p>
-                  <% } %>
+                <% } else {%>
+                  <p>Nenhum pagamento registrado.</p>
+                <% } %>
               </ol>
             </div>
           </div>
@@ -111,7 +126,7 @@
   <div class="container"> 
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
         <div class="col-md-4 d-flex align-items-center"> 
-          <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.03 - Taxas - Fettermann Aikidô</span>
+          <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.02 - Cobranças - Fettermann Aikidô</span>
         </div> 
         <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
     </footer> 

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Fettermann Aikidô - <%= title %>
+    <title>Fettermann Aikidô - Cobranças cadastradas
     </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
     rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
@@ -32,16 +32,14 @@
 
         <div class="container pt-3 w-100">
             <div class="mb-2">
-                <a id="botao_nova_graduacao" name="botao_nova_graduacao" 
-                class="btn btn-success btn-sm" href="/graduacoes/novo">Nova graduação</a>
+                <a id="botao_nova_taxa" name="botao_nova_taxa" 
+                class="btn btn-success btn-sm" href="/cobrancas/novo">Nova cobrança</a>
             </div>
 
             <input class="form-control mt-2 mb-2" id="myInput" type="text" placeholder="Filtrar...">
 
             <div class="card">
-                <div class="card-header fw-bold">
-                    <%= total %> graduação(ões) encontrada(s)
-                </div>
+                <div class="card-header fw-bold"><%= total %> cobranças(s) encontrada(s)</div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
@@ -52,25 +50,39 @@
                                 </div>
                             <% } %>
 
-                                <ul id="lista" class="list-group mb-2">
+                            <% var taxaAnterior = ""; %>
                             <% docs.forEach(function(doc){ %>
-                                    <li class="list-group-item">
-                                        <h5>
-                                            <%= doc.nome %>
-                                            (Faixa <%= doc.faixa %> - <%= doc.categoria %>)
-                                        </h5>
-                                        <hr>
-                                        <%= doc.minimo_horas_treino_exame %> horas de treino na faixa atual para exame<br/>
-                                        <%= doc.minimo_tempo_exame %> meses de treino na faixa atual para exame<br/>
-                                        <br/>
-                                        Ações: 
-                                        <a href="/graduacoes/detalhes/<%= doc._id %>">Detalhes</a>
-                                        &nbsp;|&nbsp;
-                                        <a href="/graduacoes/edita/<%= doc._id %>">Editar</a>
-                                    </li>                                
-
+                            <%  if (taxaAnterior != doc.taxa.nome) { %>
+                            <%    if (taxaAnterior != "") { %>
+                                        </ul>
+                                    </div>
+                                </div>
+                            <%    } %>
+                                <div class="card mb-2">
+                                    <div class="card-header fw-bold">
+                                        <%= doc.taxa.descricao %>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul id="lista" class="list-group">
+                            <%    taxaAnterior = doc.taxa.nome; %>
+                            <% } %>
+                                            <li class="list-group-item">
+                                                <h5><%= doc.periodo_referencia %> - <%= doc.pessoa.nome %></h5>
+                                                <p class="fs-6 text-secondary ">
+                                                   <%= doc.descricao %> emitido em <%= doc.data_emissao %> com o valor de R$ <%= doc.valor %> vence em <%= doc.data_vencimento %><br/>
+                                                    <% if (doc.pagamentos) { %>
+                                                        <% doc.pagamentos.forEach(function(pagamento) { %>
+                                                            Pago em <%= pagamento.data_pagamento %> o valor de R$ <%= pagamento.valor_pago %>.<br/>
+                                                        <% }); %>
+                                                    <% } %>
+                                                </p>
+                                                <a href="/cobrancas/detalhes/<%= doc._id %>">Detalhes</a>
+                                                &nbsp;|&nbsp;
+                                                <a href="/cobrancas/edita/<%= doc._id %>">Editar</a>
+                                                &nbsp;|&nbsp;
+                                                <a href="/cobrancas/pagamento/novo/<%= doc._id %>">Novo pagamento</a>
+                                            </li>
                             <% }); %>
-                                </ul>
                         </div>
                     </div>
                 </div>
@@ -81,7 +93,7 @@
     <div class="container"> 
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
             <div class="col-md-4 d-flex align-items-center"> 
-                <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.05 - Graduações - Fettermann Aikidô</span>
+                <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.01 - Cobranças - Fettermann Aikidô</span>
                 </div> 
                 <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
         </footer> 

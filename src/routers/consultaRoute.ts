@@ -113,7 +113,7 @@ router.get('/taxas', authMiddleware, async (req, res, next) => {
         }
 
         const resposta: any = await taxaServico.buscaTodos(token);
-        const docs = taxaServico.formata(resposta.data);
+        const docs = taxaServico.formataLista(resposta.data);
         res.render('consulta_taxas',
             {
                 docs: docs,

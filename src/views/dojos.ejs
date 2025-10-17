@@ -37,11 +37,13 @@
                 class="btn btn-success btn-sm" href="/dojos/novo">Novo dojo</a>
             </div>
 
+            <input class="form-control mt-2 mb-2" id="myInput" type="text" placeholder="Filtrar...">
+
             <div class="card">
                 <div id="total" name="total" class="card-header fw-bold">
                     <%= total %> dojo(s) encontrado(s)
                 </div>
-                <div class="card-body">
+                <div class="card-body" >
                     <div class="row">
                         <div class="col-12">
 
@@ -51,30 +53,26 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                                 </div>
                             <% } %>
-
+                                <ul id="lista" class="list-group mb-2">
                             <% docs.forEach(function(doc){ %>
-                            <div class="card mb-2">
-                                <div class="card-header fw-bold"><%= doc.nome %></div>
-                                <div class="card-body">
-                                    <h5>
+                                    <li class="list-group-item">
+                                        <h5><%= doc.nome %></h5>
+                                        <hr>
                                         <% if (doc.professor[0]) { %>
                                             <%=  doc.professor[0].nome  %> <br/>
                                         <% } %>
-                                    </h5>
-                                    <p>
+
                                         <%= doc.endereco %> <br/>
                                         <%= doc.cidade + " - " + doc.uf %>
-                                    </p>
-                                    <p>
+                                        <p>
                                         Ações: 
                                         <a href="/dojos/detalhes/<%= doc._id %>">Detalhes</a>
                                         &nbsp;|&nbsp;
                                         <a href="/dojos/edita/<%= doc._id %>">Editar</a>
-                                    </p>
-                                </div>
-                            </div>
+                                        </p>
+                                    </li>                                
                             <% }); %>
-
+                                </ul>
                         </div>
                     </div>
                 </div>
@@ -85,16 +83,16 @@
     <div class="container"> 
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
             <div class="col-md-4 d-flex align-items-center"> 
-                <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.04 - Dojos - Fettermann Aikidô</span>
+                <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.05 - Dojos - Fettermann Aikidô</span>
                 </div> 
                 <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
         </footer> 
     </div>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
     crossorigin="anonymous"></script>
-
+    <script src="/js/filtra_lista.js"></script>
 </body>
 
 </html>

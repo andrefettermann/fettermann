@@ -4,7 +4,7 @@ import { getCurrentMonth } from '../utils/date';
 import * as pessoaServico from '../servicos/pessoaServico';
 import * as graduacaoServico from '../servicos/graduacaoServico';
 import * as dojoServico from '../servicos/dojoServico';
-import axios from 'axios';
+import * as cobrancaServico from '../servicos/cobrancaServico';
 import { authMiddleware } from '../middleware/tokenManager';
 
 const router = express.Router();
@@ -173,17 +173,21 @@ router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const respostaGraduacoes: any = await graduacaoServico.buscaTodos(token);
-        const docs_graduacoes = respostaGraduacoes.data;
+        const resposta_graduacoes: any = await graduacaoServico.buscaTodos(token);
+        const docs_graduacoes = resposta_graduacoes.data;
+
+        const resposta_cobrancas: any = await cobrancaServico.buscaPorPessoa(token, id);
+        const docs_cobrancas = cobrancaServico.formataLista(resposta_cobrancas.data);
 
         const respostaPessoas: any = await pessoaServico.busca(token, id);
-        const doc = respostaPessoas.data;
+        const doc = pessoaServico.formata(respostaPessoas.data);
 
         res.render('pessoa_detalhes',
             {
                 title: 'Dados da pessoa (Consulta)',
                 doc,
                 docs_graduacoes,
+                docs_cobrancas,
                 pageAtiva
             }
         );
@@ -206,14 +210,14 @@ router.get('/edita/:id', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const respostaGraduacoes = await graduacaoServico.buscaTodos(token);
-        const docs_graduacoes = respostaGraduacoes.data;
+        const resposta_graduacoes = await graduacaoServico.buscaTodos(token);
+        const docs_graduacoes = resposta_graduacoes.data;
 
-        const respostaDojos = await dojoServico.buscaTodos(token);
-        const docs_dojos = respostaDojos.data;
+        const resposta_dojos = await dojoServico.buscaTodos(token);
+        const docs_dojos = resposta_dojos.data;
 
-        const respostaPessoas: any = await pessoaServico.busca(token, id);
-        const doc = respostaPessoas.data;
+        const resposta_pessoas: any = await pessoaServico.busca(token, id);
+        const doc = pessoaServico.formata(resposta_pessoas.data);
 
         res.render('pessoa',
             {

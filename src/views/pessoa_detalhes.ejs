@@ -117,16 +117,27 @@
           </div>
 
           <div class="card mb-3">
-            <div class="card-header fw-bold">Pagamentos</div>
+            <div class="card-header fw-bold">Cobranças e pagamentos</div>
             <div class="card-body">    
               <ol id="pagamentos" name="pagamentos" class="list-group list-group-flush">
-                <% if (doc.pagamentos) { %>
-                      <% doc.pagamentos.forEach(function(pagamento){ %>
-                        <li class="list-group-item"><%= pagamento.data_formatada 
-                          + " - " + pagamento.valor_pago.$numberDecimal + " - " + pagamento.descricao 
-                          + " - " + pagamento.observacoes %></li>
-                      <% }); %>
-                <% }; %>
+                <% if (docs_cobrancas) { %>
+                  <% docs_cobrancas.forEach(function(cobranca) { %>
+                    <li class="list-group-item">
+                      <b><%= cobranca.periodo_referencia %> - <%= cobranca.taxa.descricao %></b> <br/>
+                      <%= cobranca.descricao %> no valor de R$ <%= cobranca.valor %> está <%= cobranca.situacao %>.
+                      <% if(cobranca.pagamentos) { %>
+                          <% cobranca.pagamentos.forEach(function(pagamento) { %>
+                            <p>
+                              Pagamento de R$ <%= pagamento.valor_pago %> efetuado em <%= pagamento.data_pagamento %>
+                              através de <%= pagamento.forma_pagamento %>.
+                            </p>
+                          <% }); %> 
+                        </ul>
+                      <% } %>
+                    </li>
+                  <% }); %>
+                <% } %>
+
               </ol>
             </div>
           </div>
@@ -139,7 +150,7 @@
   <div class="container"> 
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
         <div class="col-md-4 d-flex align-items-center"> 
-            <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.04 - Pessoas - Fettermann Aikidô</span>
+            <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.05 - Pessoas - Fettermann Aikidô</span>
           </div> 
           <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
     </footer> 

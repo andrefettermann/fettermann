@@ -36,6 +36,8 @@
                 class="btn btn-success btn-sm" href="/taxas/novo">Nova taxa</a>
             </div>
 
+            <input class="form-control mt-2 mb-2" id="myInput" type="text" placeholder="Filtrar...">
+
             <div class="card">
                 <div class="card-header fw-bold"><%= total %> taxa(s) encontrada(s)</div>
                 <div class="card-body">
@@ -47,24 +49,21 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                                 </div>
                             <% } %>
-
+                                <ul id="lista" class="list-group mb-2">
                             <% docs.forEach(function(doc){ %>
-                                <div class="card mb-2">
-                                    <div class="card-header fw-bold"><%= doc.tipo.toUpperCase() + " - " + doc.nome %></div>
-                                    <div class="card-body">
-                                        <p><%= doc. descricao %></p>
-                                        <p>Valor padrão: R$ <%= doc.valor_padrao %></p>
-                                        <p>Ativa? <%= doc.is_ativa?'Sim':'Não' %></p>
-                                        <p>
-                                            Ações: 
-                                            <a href="/taxas/detalhes/<%= doc._id %>">Detalhes</a>
-                                            &nbsp;|&nbsp;
-                                            <a href="/taxas/edita/<%= doc._id %>">Editar</a>
+                                    <li class="list-group-item">
+                                        <h5><%= doc.descricao %></h5>
+                                        <p class="fs-6 text-secondary">
+                                             | Valor padrão: R$ <%= doc.valor_padrao %>
+                                            | Ativa? <%= doc.is_ativa?'Sim':'Não' %>
                                         </p>
-                                    </div>
-                                </div>
+                                        Ações: 
+                                        <a href="/taxas/detalhes/<%= doc._id %>">Detalhes</a>
+                                        &nbsp;|&nbsp;
+                                        <a href="/taxas/edita/<%= doc._id %>">Editar</a>
+                                    </li>                                
                             <% }); %>
-
+                                </ul>
                         </div>
                     </div>
                 </div>
@@ -75,16 +74,18 @@
     <div class="container"> 
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
             <div class="col-md-4 d-flex align-items-center"> 
-                <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.02 - Taxas - Fettermann Aikidô</span>
+                <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.04 - Taxas - Fettermann Aikidô</span>
                 </div> 
                 <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
         </footer> 
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
     crossorigin="anonymous"></script>
+    <script src="/js/filtra_lista.js"></script>
 </body>
 
 </html>

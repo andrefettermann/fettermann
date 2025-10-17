@@ -58,7 +58,7 @@
                   <option <%= doc.tipo=='anuidade'?'selected':'' %> value="anuidade">Anuidade</option>
                   <option <%= doc.tipo=='aula_avulsa'?'selected':'' %> value="aula_avulsa">Aula avulsa</option>
                   <option <%= doc.tipo=='exame'?'selected':'' %> value="exame">Exame</option>
-                  <option <%= doc.tipo=='inscricao_evento'?'selected':'' %> value="exame"> value="inscricao_evento">Inscrição em evento</option>
+                  <option <%= doc.tipo=='inscricao_evento'?'selected':'' %> value="inscricao_evento">Inscrição em evento</option>
                   <option <%= doc.tipo=='mensalidade'?'selected':'' %> value="mensalidade">Mensalidade</option>
                   <option <%= doc.tipo=='promocao'?'selected':'' %> value="promocao">Promoção</option>
                 </select>
@@ -134,7 +134,7 @@
               </div>
               <div class="col-2">
                 <input type="text" class="form-control" id="valor_padrao" name="valor_padrao" 
-                value="<%= doc.valor_padrao.$numberDecimal %>"
+                value="<%= doc.valor_padrao %>"
                 placeholder="O valor bruto da taxa" 
                 aria-colcount="10" data-toggle="tooltip" data-placement="top" 
                 title="O valor bruto da taxa">

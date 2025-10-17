@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Fettermann Aikidô - <%= title %>
+  </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
+    crossorigin="anonymous">
+    <link rel="stylesheet" href="../../css/consulta-menu.css">
+    <link rel="icon" href="../../images/logo-sm.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <div class="container pt-3 w-100">
+      <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+          <a href="/pessoas" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"> 
+              <!--
+              <svg class="bi me-2" width="40" height="32" aria-hidden="true"><use xlink:href="#bootstrap"></use></svg> 
+              -->
+              <img src="../../images/logo-sm.png"/>
+              <span class="fs-4">Fettermann Aikidô</span>
+          </a> 
+
+          <%- include('partials/menu_principal') %>
+      </header>
+  </div>
+  <main>
+    <div class="container pt-3 w-75">
+      <div class="card">
+        <div class="card-header"><%= title %></div>
+        <div class="card-body">
+          <form id="formulario" name="formulario" action="<%= action %>" 
+            method="POST">
+
+            <!-- Info Alert -->
+            <div class="alert alert-info alert-dismissible fade show">
+              <strong>Info!</strong> O '*'' indica os campos obrigatórios.
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div id="mensagem-topo" class="alert alert-danger alert-dismissible d-none" >
+              <span id="texto-mensagem"></span>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Pessoa -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="id_pessoa" class="col-form-label">*Pessoa</label>
+              </div>
+              <div class="col-3">
+                <select id="id_pessoa" name="id_pessoa" class="form-select" aria-label="Pessoa"
+                data-obrigatorio="Por favor, selecione a pessoa.">
+                  <option value="" selected>Selecione</option>
+                  <% docs_pessoas.forEach(function(pessoa) { %>
+                  <option value="<%= pessoa._id %>" <%= pessoa._id == doc.id_pessoa?'selected':''%>>
+                      <%= pessoa.nome %>
+                  </option>
+                  <% }) %>
+                </select>
+              </div>
+            </div>
+
+            <!-- Taxa -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="id_taxa" class="col-form-label">*Taxa</label>
+              </div>
+              <div class="col-6">
+                <select id="id_taxa" name="id_taxa" class="form-select" aria-label="Taxa"
+                data-obrigatorio="Por favor, selecione a taxa.">
+                  <option value="" selected>Selecione</option>
+                  <% docs_taxas.forEach(function(taxa) { %>
+                  <option value="<%= taxa._id %>" <%= taxa._id == doc.id_taxa?'selected':''%>>
+                      <%= taxa.descricao %>
+                  </option>
+                  <% }) %>
+                </select>
+              </div>
+            </div>
+
+            <!-- Descricao -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="descricao" class="col-form-label">*Descrição</label>
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" id="descricao" 
+                name="descricao" value="<%= doc.descricao %>"
+                placeholder="Descrição da taxa" aria-colcount="10" 
+                data-toggle="tooltip" data-placement="top" 
+                title="Descrição da cobrança" data-obrigatorio="Por favor, informe a descrição'.">
+              </div>
+            </div>
+
+            <!-- Valor -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="valor" class="col-form-label">*Valor devido (R$)</label>
+              </div>
+              <div class="col-1">
+                <input type="text" class="form-control" id="valor" name="valor" 
+                value="<%= doc.valor %>"
+                placeholder="O valor da cobrança" 
+                aria-colcount="10" data-toggle="tooltip" data-placement="top" 
+                title="O valor da cobrança" data-obrigatorio="Por favor, informe o valor.">
+              </div>
+            </div>
+
+            <!-- Data de emissao -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="data_emissao" class="col-form-label">*Data de emissão (dd/mm/aaaa)</label>
+              </div>
+              <div class="col-2">
+                <input type="text" class="form-control" id="data_emissao" 
+                name="data_emissao" value="<%= doc.data_emissao %>"
+                placeholder="A date de emissão da cobrança" 
+                aria-colcount="10" data-toggle="tooltip" data-placement="top" 
+                title="A data de emissão da cobrança" 
+                data-obrigatorio="Por favor, informe a data de emissão.">
+              </div>
+            </div>
+
+            <!-- Data de vencimento -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="data_vencimento" class="col-form-label">*Data de vencimento (dd/mm/aaaa)</label>
+              </div>
+              <div class="col-2">
+                <input type="text" class="form-control" id="data_vencimento" 
+                name="data_vencimento" value="<%= doc.data_vencimento %>"
+                placeholder="A data de vencimento da cobrança" 
+                aria-colcount="10" data-toggle="tooltip" data-placement="top" 
+                title="A data de venvimento da cobrança" 
+                data-obrigatorio="Por favor, informe a data de vencimento.">
+              </div>
+            </div>
+
+              <!--Situacao-->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="situacao" class="form-label">Situação</label>
+              </div>
+              <div class="col-2">
+                <select id="situacao" name="situacao" class="form-select" aria-label="Situacao">
+                  <option value="" selected>Situação</option>
+                  <option value="cancelada" <%= doc.situacao=="cancelada"?'selected':''%>>
+                    Cancelada
+                  </option>
+                  <option value="pendente" <%= doc.situacao=="pendente"?'selected':''%>>
+                    Pendente
+                  </option>
+                  <option value="pago" <%= doc.situacao=="pago"?'selected':''%>>
+                    Pago
+                  </option>
+                  <option value="vencida" <%= doc.situacao=="vencida"?'selected':''%>>
+                    Vencida
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Periodo de referencia -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="periodo_referencia" class="col-form-label">*Período de referência</label>
+              </div>
+              <div class="col-2">
+                <input type="text" class="form-control" id="periodo_referencia" 
+                name="periodo_referencia" value="<%= doc.periodo_referencia %>"
+                placeholder="O período de referência da cobrança" 
+                aria-colcount="10" data-toggle="tooltip" data-placement="top" 
+                title="O período de referência da cobrança" 
+                data-obrigatorio="Por favor, informe o período de referência.">
+              </div>
+            </div>
+
+            <!-- Observacoes -->
+            <div class="form-group row mb-3">
+              <div class="col-3">
+                <label for="observacoes" class="col-form-label">Obervações</label>
+              </div>
+              <div class="col-6">
+                <input type="text" class="form-control" id="observacoes" 
+                name="observacoes" value="<%= doc.observacoes %>"
+                placeholder="Observações sobre a cobrança" 
+                aria-colcount="10" data-toggle="tooltip" data-placement="top" 
+                title="Observações sobre a cobrança" />
+              </div>
+            </div>
+
+            <div class="col-12">
+              <input id="botao_grava" name="botao_grava" class="btn btn-primary" type="submit" value="Grava" />
+              <a id="botao_cancela" name="botao_cancela" class="btn btn-primary" href="/cobrancas">Cancela</a>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="container"> 
+      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
+          <div class="col-md-4 d-flex align-items-center"> 
+              <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.01 - Cobranças - Fettermann Aikidô</span>
+            </div> 
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
+      </footer> 
+  </div>
+
+  <script src="/js/verifica_campos_obrigatorios.js"></script>
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+  integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+  crossorigin="anonymous"></script>
+</body>
+
+</html>

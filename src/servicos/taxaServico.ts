@@ -23,12 +23,18 @@ async function get(token: any, url: string): Promise<any> {
     });
 }
 
-export function formata(osDados: any): any {
-    osDados.forEach((element: any) => {        
-        if (element.valor_padrao) {
-            element.valor_padrao = formataValorComDecimais(
-                element.valor_padrao.$numberDecimal.replace('.', ','));
-        }
+export function formata(doc: any): any {
+    if (doc.valor_padrao) {
+        doc.valor_padrao = formataValorComDecimais(
+            doc.valor_padrao.$numberDecimal.replace('.', ','));
+    }
+
+    return doc;
+}
+
+export function formataLista(osDados: any): any {
+    osDados.forEach((doc: any) => {        
+        formata(doc);
     });
 
     osDados.sort((a: { tipo: string, nome: string; }, b: { tipo: string, nome: string; }) => {

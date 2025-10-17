@@ -8,10 +8,10 @@ import pessoaRouter from './routers/pessoaRoute';
 import dojoRouter from './routers/dojoRoute';
 import graduacaoRouter from './routers/graduacaoRoute';
 import taxaRouter from './routers/taxaRoute';
+import cobrancaRouter from './routers/cobrancaRoute';
 import path from 'path';
 import { requireAuth } from './middleware/auth';
 import cookieParser from 'cookie-parser';
-import { authMiddleware } from './middleware/tokenManager';
 
 const app = express();
 
@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   res.setHeader(
     "Content-Security-Policy",
-    "script-src 'self' https://cdn.jsdelivr.net"
+    "script-src 'self' https://cdn.jsdelivr.net https://ajax.googleapis.com",
   );
   next();
 });
@@ -50,6 +50,7 @@ app.use('/dojos/', requireAuth, dojoRouter);
 app.use('/graduacoes/', requireAuth, graduacaoRouter);
 app.use('/pessoas', requireAuth, pessoaRouter);
 app.use('/taxas/', requireAuth, taxaRouter);
+app.use('/cobrancas/', requireAuth, cobrancaRouter);
 app.use('/consulta', consultaRouter);
 
 

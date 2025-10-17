@@ -17,7 +17,8 @@ async function get(token: any, url: string): Promise<any> {
 
 export async function buscaTodos(token: any): Promise<any> {
     const url = `${API_URL}/api/graduacoes/lista/todos`;
-    return await get(token, url);
+    const resposta: any = await get(token, url);
+    return resposta;
 }
 
 export async function busca(token: any, id: string): Promise<any> {
