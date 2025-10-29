@@ -47,7 +47,6 @@ router.get('/novo', authMiddleware, async (req, res, next) => {
         }
 
         const respostaPessoas: any = await pessoaServico.buscaProfessores(token);
-        console.log(respostaPessoas.data)
         const docs_pessoas = respostaPessoas.data;
 
         res.render('dojo',
@@ -168,7 +167,6 @@ router.post('/altera/:id', authMiddleware, async (req, res, next) => {
         mensagem = 'Dojo alterado com sucesso!';
         res.redirect('/dojos');
     } catch (err: any) {
-        console.error(">>>>>>>>>>> " + err);
         console.error('ERRO COMPLETO:');
         console.error('Status:', err.response?.status);
         console.error('Data:', err.response?.data);

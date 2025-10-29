@@ -27,6 +27,11 @@ export async function buscaTodos(token: any): Promise<any> {
     return await get(token, url);
 }
 
+export async function buscaAtivos(token: any): Promise<any> {
+    const url = `${API_URL}/api/dojos/lista/ativos`;
+    return await get(token, url);
+}
+
 export async function busca(token: any, id: string): Promise<any> {
     const url = `${API_URL}/api/dojos/busca/`+id;
     return await get(token, url);

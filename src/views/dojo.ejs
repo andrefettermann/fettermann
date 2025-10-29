@@ -179,6 +179,16 @@
               </div>
             </div>
 
+            <!-- Ativo? -->
+            <div class="form-group row mb-3">
+              <div class="col-2">
+                <label for="is_ativo" class="form-label">Ativo?</label>
+              </div>
+              <div class="col-2">
+                <input class="form-check-input" type="checkbox" id="is_ativo" name="is_ativo" <%= doc.is_ativo?'checked':''%>>
+              </div>
+            </div>
+
             <div class="col-12">
               <input id="botao_grava" name="botao_grava" class="btn btn-primary" type="submit" value="Grava" />
               <a id="botao_cancela" name="botao_cancela" class="btn btn-primary" href="/dojos">Cancela</a>

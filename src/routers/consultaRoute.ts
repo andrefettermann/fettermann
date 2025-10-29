@@ -21,7 +21,7 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-/* Busca todos os dojos */
+/* Busca todos os dojos ativos */
 router.get('/dojos', authMiddleware, async (req, res, next) => {
     try {
         //const result: any = await dojoServico.buscaTodos();
@@ -30,7 +30,7 @@ router.get('/dojos', authMiddleware, async (req, res, next) => {
             return res.status(401).json({ message: 'Token não fornecido' });
         }
 
-        const resposta: any = await dojoServico.buscaTodos(token);
+        const resposta: any = await dojoServico.buscaAtivos(token);
         const docs = resposta.data;
 
         res.render('consulta_dojos',
