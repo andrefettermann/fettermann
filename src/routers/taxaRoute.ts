@@ -17,130 +17,155 @@ var mensagem = "";
 const pageAtiva = 'financeiro';
 
 router.get('/', authMiddleware, async (req, res, next) => {
-    try {
-        //const response = await taxaServico.buscaTodos();
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
-        const resposta: any = await taxaServico.buscaTodos(token);
-        const docs = taxaServico.formataLista(resposta.data);
+    try {
+        const response = await taxaServico.buscaTodos(token);
         res.render('taxas',
             {
-                docs,
-                total: docs.length,
+                'docs': response,
+                'total': response.length,
                 mensagem,
                 pageAtiva
             }
         );
         mensagem = "";
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao buscar todas as taxas:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
+
         next(err);
     }
 });
 
-router.get('/novo', async (req, res, next) => {
+router.get('/novo', authMiddleware, async (req, res, next) => {
     const doc = {
         "valor_padrao": 0,
     }
     try {
         res.render('taxa',
             {
-                title: 'Dados da taxa (Inclusão)',
-                doc,
-                action: '/taxas/inclui/',
+                'title': 'Dados da taxa (Inclusão)',
+                'doc': doc,
+                'action': '/taxas/inclui/',
                 pageAtiva
             }
         );
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao exibir a pagina de inclusao de taxa:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
+
         next(err);
     }
 });
 
 router.get('/edita/:id', authMiddleware, async (req, res, next) => {
-    const id = req.params.id;
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const { id } = req.params;
+    const token = req.headers.authorization;
 
-        const resposta: any = await taxaServico.busca(token, id);
-        const doc = taxaServico.formata(resposta.data);
-        console.log(doc)
+    try {
+        const response = await taxaServico.busca(token, id);
         res.render('taxa',
             {
-                title: 'Dados da taxa (Edição)',
-                doc,
-                action: '/taxas/altera/' + id,
+                'title': 'Dados da taxa (Edição)',
+                'doc': response,
+                'action': `/taxas/altera/${id}`,
                 pageAtiva
             }
         );
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao buscar a taxa:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                id
+            });
+        }
+
         next(err);
     }
 });
 
 router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
     const id = req.params.id;
-    try {        
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
-        const resposta_cobrancas: any = 
+    try {
+        const responseCobrancas = 
                         await cobrancaServico.buscaPorTaxa(token, id);
-        const docs_cobrancas = 
-                    cobrancaServico.formataLista(resposta_cobrancas.data);
+        const docsCobrancas = 
+                    cobrancaServico.formataLista(responseCobrancas);
 
-        const resposta: any = await taxaServico.busca(token, id);
-        const doc = resposta.data;
+        const response = await taxaServico.busca(token, id);
         res.render('taxa_detalhes',
             {
-                title: 'Dados da taxa (Consulta)',
-                doc,
-                docs_cobrancas,
+                'title': 'Dados da taxa (Consulta)',
+                'doc': response,
+                'docs_cobrancas': docsCobrancas,
                 pageAtiva
             }
         );
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao buscar a taxa:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                id
+            });
+        }
+
         next(err);
     }
 });
 
 router.post('/inclui', authMiddleware, async (req, res, next) => {
     const dados = req.body;
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
+    try {
         await taxaServico.inclui(token, dados);
 
         mensagem = 'Taxa incluída com sucesso!';
         res.redirect('/taxas');
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao incluir uma taxa:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
+
         next(err);
     }
 });
 
 router.post('/altera/:id', authMiddleware, async (req, res, next) => {
-    const id = req.params.id;
+    const { id } = req.params;
     const dados = req.body;
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
+    try {
         await taxaServico.atualiza(token, id, dados);
 
         mensagem = 'Taxa alterada com sucesso!';
         res.redirect('/taxas');
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao atualizar a taxa:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                id
+            });
+        }
+
         next(err);
     }
 })

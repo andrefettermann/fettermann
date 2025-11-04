@@ -12,120 +12,111 @@ var mensagem = '';
 
 /* Busca todos os dojos */
 router.get('/', authMiddleware, async (req, res, next) => {
+    const token = req.headers.authorization;
+
     try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
-
-        const resposta: any = await dojoServico.buscaTodos(token);
-        const docs = resposta.data;
-
+        const response = await dojoServico.buscaTodos(token);
         res.render('dojos',
             {
-                docs: docs,
-                total: docs.length,
+                'docs': response,
+                'total': response.length,
                 mensagem,
                 pageAtiva
             }
         );
-        mensagem = "";
+        mensagem = '';
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro na busca de dojos:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 });
 
 router.get('/novo', authMiddleware, async (req, res, next) => {
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
-        const respostaPessoas: any = await pessoaServico.buscaProfessores(token);
-        const docs_pessoas = respostaPessoas.data;
+    try {
+        const response = await pessoaServico.buscaProfessores(token);
+        const docs = response.data.docs;
 
         res.render('dojo',
             {
-                title: 'Dados do dojo (Inclusão)',
-                doc: "",
-                docs_pessoas,
-                action: '/dojos/inclui/',
+                'title': 'Dados do dojo (Inclusão)',
+                'doc': "",
+                'docs_pessoas': response,
+                'action': '/dojos/inclui/',
                 mensagem,
                 pageAtiva
             }
         );
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro na busca de dojos:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 });
 
 router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
-    const id = req.params.id;
+    const { id } = req.params;
+    const token = req.headers.authorization;
+
     try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+        const responseGraduacoes = await graduacaoServico.buscaTodos(token);
+        const response = await dojoServico.busca(token, id);
 
-        const respostaGraduacoes = await graduacaoServico.buscaTodos(token);
-
-        const resposta: any = await dojoServico.busca(token, id);
-        const doc = resposta.data;
         res.render('dojo_detalhes',
             {
-                title: 'Dados do dojo (Consulta)',
-                doc,
-                docs_graduacoes: respostaGraduacoes.data,
-                action: '/dojos/altera/' + id,
+                'title': 'Dados do dojo (Consulta)',
+                'doc': response,
+                'docs_graduacoes': responseGraduacoes,
                 pageAtiva
             }
         );
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro na busca do dojo:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                id
+            });
+        }
         next(err);
     }
 });
 
 router.get('/edita/:id', authMiddleware, async (req, res, next) => {
-    const id = req.params.id;
+    const { id } = req.params;
+    const token = req.headers.authorization;
+
     try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+        const responsePessoas = await pessoaServico.buscaProfessores(token);
+        const responseDojo = await dojoServico.busca(token, id);
 
-        const respostaPessoas: any = 
-            await pessoaServico.buscaProfessores(token);
-        const docs_pessoas = respostaPessoas.data;
-
-        const resposta: any = await dojoServico.busca(token, id);
-        const doc = resposta.data;
         res.render('dojo',
             {
-                title: 'Dados do dojo (Edição)',
-                doc,
-                docs_pessoas,
-                action: '/dojos/altera/' + id,
+                'title': 'Dados do dojo (Edição)',
+                'doc': responseDojo,
+                'docs_pessoas': responsePessoas,
+                'action': `/dojos/altera/${id}`,
                 pageAtiva
             }
         );
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro na busca do dojo:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                id
+            });
+        }
 
         next(err);
     }
@@ -133,44 +124,41 @@ router.get('/edita/:id', authMiddleware, async (req, res, next) => {
 
 router.post('/inclui', authMiddleware, async (req, res, next) => {
     var dados = req.body;
-    try {
-        //await dojoServico.inclui(dados);
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
+    try {
         await dojoServico.inclui(token, dados);
 
         mensagem = 'Dojo incluído com sucesso!';
         res.redirect('/dojos');
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro na inclusao do dojo:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 });
 
 router.post('/altera/:id', authMiddleware, async (req, res, next) => {
-    const id = req.params.id;
+    const { id } = req.params;
     const dados = req.body;
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
+    try {
         await dojoServico.atualiza(token, id, dados);
 
         mensagem = 'Dojo alterado com sucesso!';
         res.redirect('/dojos');
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro na inclusao do dojo:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 })

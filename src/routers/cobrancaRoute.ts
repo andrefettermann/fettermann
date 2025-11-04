@@ -18,258 +18,250 @@ var mensagem = "";
 const pageAtiva = 'financeiro';
 
 router.get('/', authMiddleware, async (req, res, next) => {
+    const token = req.headers.authorization;
     try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
-
-        const resposta: any = await cobrancaServico.buscaTodos(token);
-        const docs = cobrancaServico.formataLista(resposta.data);
+        const response = await cobrancaServico.buscaTodos(token);
         res.render('cobrancas',
             {
-                docs,
-                total: docs.length,
+                'docs': response,
+                'total': response.length,
                 mensagem,
                 pageAtiva
-            }
-        );
-        mensagem = "";
-    } catch (err) {
+            });
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao buscar todas as cobrancas:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
+
         next(err);
     }
 });
 
 router.get('/novo', authMiddleware , async (req, res, next) => {
-//    const doc = {
-//        "valor_padrao": 0,
-//    }
-
     const token = req.headers.authorization;
-    if (!token) {
-        return res.status(401).json({ message: 'Token não fornecido' });
-    }
-
-    const resposta_pessoas: any = await pessoaServico.buscaTodos(token);
-    const docs_pessoas = resposta_pessoas.data;
-
-    const resposta_taxas: any = await taxaServico.buscaTodos(token);
-    const docs_taxas = resposta_taxas.data;
 
     try {
+        const responsePessoas: any = await pessoaServico.buscaTodos(token);
+        const docsPessoas = responsePessoas.data;
+    
+        const responseTaxas: any = await taxaServico.buscaTodos(token);
+
         res.render('cobranca',
             {
                 title: 'Dados da cobranca (Inclusão)',
                 doc: '',
-                docs_pessoas,
-                docs_taxas,
+                docs_pessoas: docsPessoas,
+                'docs_taxas': responseTaxas,
                 action: '/cobrancas/inclui/',
                 pageAtiva
             }
         );
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao exibir a pagina de inclusao:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
+
         next(err);
     }
 });
 
 router.get('/pagamento/novo/:id', authMiddleware , async (req, res, next) => {
-    const doc = {
-        valor_pago: 0
-    }
+    const doc = { valor_pago: 0 };
     const token = req.headers.authorization;
-    const id = req.params.id;
-    if (!token) {
-        return res.status(401).json({ message: 'Token não fornecido' });
-    }
-
-    const resposta_cobranca: any = await cobrancaServico.busca(token, id);
-    const doc_cobranca = resposta_cobranca.data;
+    const { id } = req.params;
 
     try {
+        const response = await cobrancaServico.busca(token, id);
         res.render('pagamento',
             {
-                title: 'Dados de pagamento (Inclusão)',
-                id_cobranca: id,
-                id_pagamento: '',
+                'title': 'Dados de pagamento (Inclusão)',
+                'id_cobranca': id,
+                'id_pagamento': '',
                 doc,
-                doc_cobranca,
-                action: '/cobrancas/pagamento/inclui',
+                'doc_cobranca': response,
+                'action': '/cobrancas/pagamento/inclui',
                 pageAtiva
             }
         );
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao exibir a pagina de inclusao de um pagamento:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
+
         next(err);
     }
 });
 
 router.get('/edita/:id', authMiddleware, async (req, res, next) => {
-    const id = req.params.id;
+    const { id } = req.params;
+    const token = req.headers.authorization;
+
     try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
-
-        const resposta_pessoas: any = await pessoaServico.buscaTodos(token);
-        const docs_pessoas = resposta_pessoas.data;
-
-        const resposta_taxas: any = await taxaServico.buscaTodos(token);
-        const docs_taxas = resposta_taxas.data;
-
-        const resposta: any = await cobrancaServico.busca(token, id);
-        const doc = cobrancaServico.formata(resposta.data);
+        const responsePessoas = await pessoaServico.buscaTodos(token);
+        const responseTaxas = await taxaServico.buscaTodos(token);
+        const response = await cobrancaServico.busca(token, id);
 
         res.render('cobranca',
             {
-                title: 'Dados da cobrança (Edição)',
-                doc,
-                docs_pessoas,
-                docs_taxas,
-                action: '/cobrancas/altera/' + id,
+                'title': 'Dados da cobrança (Edição)',
+                'doc': response,
+                'docs_pessoas': responsePessoas,
+                'docs_taxas': responseTaxas,
+                'action': '/cobrancas/altera/' + id,
                 pageAtiva
             }
         );
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
-
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao exibir a pagina de edicao de uma cobranca:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 });
 
 router.get('/pagamento/edita/:id', authMiddleware , async (req, res, next) => {
     const token = req.headers.authorization;
-    const idPagamento = req.params.id;
-    if (!token) {
-        return res.status(401).json({ message: 'Token não fornecido' });
-    }
+    const { id } = req.params;
     
     try {
-        const resposta_cobranca: any = 
-                        await cobrancaServico.buscaPorPagamento(token, idPagamento);
-        const doc_cobranca = cobrancaServico.formata(resposta_cobranca.data);
-
+        const response = await cobrancaServico.buscaPorPagamento(token, id);
         res.render('pagamento',
             {
-                title: 'Dados de pagamento (Edição)',
-                id_cobranca: doc_cobranca._id,
-                id_pagamento: idPagamento,
-                doc: doc_cobranca.pagamentos[0],
-                doc_cobranca,
-                action: '/cobrancas/pagamento/altera',
+                'title': 'Dados de pagamento (Edição)',
+                'id_cobranca': response._id,
+                'id_pagamento': id,
+                'doc': response[0].pagamentos[0],
+                'doc_cobranca': response[0],
+                'action': '/cobrancas/pagamento/altera',
                 pageAtiva
             }
         );
-    } catch (err) {
-        console.log(err)
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao exibir a pagina de edicao de um pagamento:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 });
 
 router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
-    const id = req.params.id;
+    const { id } = req.params;
+    const token = req.headers.authorization;
     try {        
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
-
-        const resposta: any = await cobrancaServico.busca(token, id);
-        const doc = cobrancaServico.formata(resposta.data);
+        const response = await cobrancaServico.busca(token, id);
 
         res.render('cobranca_detalhes',
             {
-                title: 'Dados da cobrança (Consulta)',
-                doc,
+                'title': 'Dados da cobrança (Consulta)',
+                'doc': response,
                 pageAtiva
             }
         );
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao exibir a pagina de detalhes de uma cobranca:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
+        
         next(err);
     }
 });
 
 router.post('/inclui', authMiddleware, async (req, res, next) => {
     const dados = req.body;
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
+    try {
         await cobrancaServico.inclui(token, dados);
 
         mensagem = 'Cobrança incluída com sucesso!';
         res.redirect('/cobrancas');
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao incluir uma cobranca:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 });
 
 router.post('/pagamento/inclui', authMiddleware, async (req, res, next) => {
-    //const id = req.body.id_cobranca;
     const dados = req.body;
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
+    try {
         await cobrancaServico.incluiPagamento(token, dados);
 
         mensagem = 'Pagamento incluído com sucesso!';
         res.redirect('/cobrancas');
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao incluir um pagamento:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
 
         next(err);
     }
 });
 
 router.post('/altera/:id', authMiddleware, async (req, res, next) => {
-    const id = req.params.id;
+    const { id } = req.params;
     const dados = req.body;
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
+    try {
         await cobrancaServico.atualiza(token, id, dados);
 
         mensagem = 'Cobrança alterada com sucesso!';
         res.redirect('/cobrancas');
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao alterar uma cobranca:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                id
+            });
+        }
         next(err);
     }
 })
 
 router.post('/pagamento/altera', authMiddleware, async (req, res, next) => {
     const dados = req.body;
+    const token = req.headers.authorization;
     try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
-
         await cobrancaServico.atualizaPagamento(token, dados);
 
         mensagem = 'Pagamento alterado com sucesso!';
         res.redirect('/cobrancas');
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao alterar um pagamento:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 })

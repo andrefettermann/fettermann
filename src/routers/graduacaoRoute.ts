@@ -8,30 +8,33 @@ var mensagem = "";
 const pageAtiva = 'graduacoes';
 
 router.get('/', authMiddleware, async (req, res, next) => {
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
-        const resposta: any = await graduacaoServico.buscaTodos(token);
-        const docs = resposta.data;
+    try {
+        const response = await graduacaoServico.buscaTodos(token);
         res.render('graduacoes',
             {
-                title: 'Graduações cadastradas',
-                docs,
-                total: docs.length,
+                'title': 'Graduações cadastradas',
+                'docs': response,
+                'total': response.length,
                 mensagem,
                 pageAtiva
             }
         );
         mensagem = "";
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao buscar todas as graduacoes:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
+
         next(err);
     }
 });
 
-router.get('/novo', async (req, res, next) => {
+router.get('/novo', authMiddleware, async (req, res, next) => {
     try {
         res.render('graduacao',
             {
@@ -42,87 +45,108 @@ router.get('/novo', async (req, res, next) => {
                 pageAtiva
             }
         );
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao exibir a pagina de inclusao de graducao:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 });
 
 router.get('/edita/:id', authMiddleware, async (req, res, next) => {
     const id = req.params.id;
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
+    try {
         const response = await graduacaoServico.busca(token, id);
-        const doc = response.data;
         res.render('graduacao',
             {
-                title: 'Dados da graduação (Edição)',
-                doc,
-                total_tecnicas: doc.tecnicas?doc.tecnicas.length:0,
-                action: '/graduacoes/altera/' + id,
+                'title': 'Dados da graduação (Edição)',
+                'doc': response,
+                'total_tecnicas': response.tecnicas?response.tecnicas.length:0,
+                'action': `/graduacoes/altera/${id}`,
                 pageAtiva
             }
         );
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao buscar a graduacao:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                id
+            });
+        }
         next(err);
     }
 });
 
 router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
-    const id = req.params.id;
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const { id } = req.params;
+    const token = req.headers.authorization;
 
+    try {
         const response = await graduacaoServico.busca(token, id);
-        const doc = response.data;
         res.render('graduacao_detalhes',
             {
-                title: 'Dados da graduação (Consulta)',
-                doc,
-                action: '/graduacoes/altera/' + id,
+                'title': 'Dados da graduação (Consulta)',
+                'doc': response,
+                'action': `/graduacoes/altera/${id}`,
                 pageAtiva
             }
         );
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao buscar a graduacao:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                id
+            });
+        }
+
         next(err);
     }
 });
 
 router.post('/inclui', authMiddleware, async (req, res, next) => {
     const dados = req.body;
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
+    try {
         await graduacaoServico.inclui(token, dados);
         mensagem = 'Graduação incluída com sucesso!';
         res.redirect('/graduacoes');
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao incluirma graduacao:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
+
         next(err);
     }
 });
 
 router.post('/altera/:id', authMiddleware, async (req, res, next) => {
-    const id = req.params.id;
+    const { id } = req.params;
     const dados = req.body;
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
+    try {
         await graduacaoServico.atualiza(token, id, dados);
         mensagem = 'Graduação alterada com sucesso!';
         res.redirect('/graduacoes');
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao atualizar uma graduacao:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
+
         next(err);
     }
 })

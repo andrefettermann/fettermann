@@ -64,12 +64,14 @@ export function formataLista(osDados: any): any {
 
 export async function buscaTodos(token: any): Promise<any> {
     const url = `${API_URL}/api/taxas/lista/todos`;
-    return await get(token, url);
+    const response = await get(token, url);
+    return formataLista(response.data.docs);
 }
 
 export async function busca(token: any, id: string): Promise<any> {
     const url = `${API_URL}/api/taxas/busca/${id}`;
-    return await get(token, url);
+    const response = await get(token, url);
+    return formata(response.data.doc);
 }
 
 export async function inclui(token: any, osDados: any): Promise<any> {

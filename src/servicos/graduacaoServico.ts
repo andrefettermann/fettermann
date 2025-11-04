@@ -16,14 +16,19 @@ async function get(token: any, url: string): Promise<any> {
 }
 
 export async function buscaTodos(token: any): Promise<any> {
-    const url = `${API_URL}/api/graduacoes/lista/todos`;
-    const resposta: any = await get(token, url);
-    return resposta;
+    try {
+        const url = `${API_URL}/api/graduacoes/lista/todos`;
+        const response = await get(token, url);
+        return response.data.docs;
+    } catch (error) {
+        throw error;
+    }
 }
 
 export async function busca(token: any, id: string): Promise<any> {
     const url = `${API_URL}/api/graduacoes/busca/${id}`;
-    return await get(token, url);
+    const response = await get(token, url);
+    return response.data.doc;
 }
 
 export async function inclui(token: any, osDados: any): Promise<any> {

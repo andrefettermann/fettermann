@@ -21,112 +21,114 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-/* Busca todos os dojos ativos */
+/**
+* Busca todos os dojos ativos.
+* 
+* @author Andre Fettermann
+*/
 router.get('/dojos', authMiddleware, async (req, res, next) => {
+    const token = req.headers.authorization;
+
     try {
-        //const result: any = await dojoServico.buscaTodos();
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
-
-        const resposta: any = await dojoServico.buscaAtivos(token);
-        const docs = resposta.data;
-
+        const response = await dojoServico.buscaAtivos(token);
         res.render('consulta_dojos',
             {
-                docs: docs,
-                total: docs.length,
-                mes: getCurrentMonth(),
-                pageAtiva: 'dojos'
+                'docs': response,
+                'total': response.length,
+                'mes': getCurrentMonth(),
+                'pageAtiva': 'dojos'
             }
         );
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro na consulta publica de dojos:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 });
 
-/** Busca todas as pessoas */
+/** 
+ * Busca os aniversariantes do mes.
+ * 
+ * @author Andre Fettermann
+ */
 router.get('/aniversariantes/:mes', authMiddleware, async (req, res, next) => {
     const mes = req.params.mes;
+    const token = req.headers.authorization;
+
     try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
-
-        const resposta: any = 
-            await pessoaServico.buscaAniversariantes(token, mes);
-        const docs = resposta.data;
-
+        const response = await pessoaServico.buscaAniversariantes(token, mes);
         res.render('consulta_aniversariantes',
             {
-                docs,
-                total: docs.length,
-                mes: getCurrentMonth(),
-                pageAtiva: 'aniversariantes'
+                'docs': response,
+                'total': response.length,
+                'mes': getCurrentMonth(),
+                'pageAtiva': 'aniversariantes'
             }
         );
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro na consulta publica de dojos:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 });
 
-/** Busca todas as graduacoes */
+/** 
+ * Busca todas as graduacoes.
+ * 
+ * @author Andre Fettermann
+ */
 router.get('/graduacoes', authMiddleware, async (req, res, next) => {
+    const token = req.headers.authorization;
     try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
-
-        const resposta = await graduacaoServico.buscaTodos(token);
-        const docs = resposta.data;
-
+        const response = await graduacaoServico.buscaTodos(token);
         res.render('consulta_graduacoes',
             {
-                docs,
-                total: docs.length,
-                mes: getCurrentMonth(),
-                pageAtiva: 'graduacoes'
+                'docs': response,
+                'total': response.length,
+                'mes': getCurrentMonth(),
+                'pageAtiva': 'graduacoes'
             }
         );
-    } catch (err) {
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro na consulta publica de dojos:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 });
 
 /** Busca todas as taxas */
 router.get('/taxas', authMiddleware, async (req, res, next) => {
-    try {
-        const token = req.headers.authorization;
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
+    const token = req.headers.authorization;
 
-        const resposta: any = await taxaServico.buscaTodos(token);
-        const docs = taxaServico.formataLista(resposta.data);
+    try {
+        const response = await taxaServico.buscaTodos(token);
         res.render('consulta_taxas',
             {
-                docs: docs,
-                total: docs.length,
-                mes: getCurrentMonth(),
-                pageAtiva: 'taxas'
+                'docs': response,
+                'total': response.length,
+                'mes': getCurrentMonth(),
+                'pageAtiva': 'taxas'
             }
         );
     } catch (err: any) {
-        console.error('ERRO COMPLETO:');
-        console.error('Status:', err.response?.status);
-        console.error('Data:', err.response?.data);
-        console.error('Headers enviados:', err.config?.headers);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro na consulta publica de dojos:', {
+                status: err.response?.status,
+                data: err.response?.data,
+            });
+        }
         next(err);
     }
 });

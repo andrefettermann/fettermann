@@ -26,12 +26,10 @@ async function get(token: any, url: string): Promise<any> {
 
 export function formata(doc: any): any {
     let totalPago: number = 0;
-
     doc.valor = formataValorComDecimais(
         doc.valor.$numberDecimal.replace('.', ','));
     doc.data_vencimento = formatDateDDMMAAAA(new Date(doc.data_vencimento));
     doc.data_emissao = formatDateDDMMAAAA(new Date(doc.data_emissao));
-
     if (doc.pagamentos) {
         doc.pagamentos.forEach((p: any) => {
             p.data_pagamento = formatDateDDMMAAAA(new Date(p.data_pagamento));
@@ -46,17 +44,16 @@ export function formata(doc: any): any {
             totalPago = totalPago + parseFloat(p.valor_pago);
         });
     }
-
     if (totalPago == parseFloat(doc.valor)) {
         doc.situacao = 'pago';
     } else {
         doc.situacao = 'pendente';
     }
-
     return doc;
 }
+
 export function formataLista(osDados: any): any {
-    osDados.forEach((doc: any) => {        
+    osDados.forEach((doc: any) => {
         doc = formata(doc)
     });
 
@@ -64,32 +61,53 @@ export function formataLista(osDados: any): any {
 }
 
 export async function buscaTodos(token: any): Promise<any> {
-    const url = `${API_URL}/api/cobrancas/lista/todos`;
-    return await get(token, url);
+    try {
+        const url = `${API_URL}/api/cobrancas/lista/todos`;
+        const response = await get(token, url);
+        return formataLista(response.data.docs);
+    } catch (error) {
+        throw error;
+    }
 }
 
 export async function busca(token: any, id: string): Promise<any> {
-    const url = `${API_URL}/api/cobrancas/busca/${id}`;
-    const resposta: any = await get(token, url);
-    return resposta;
+    try {
+        const url = `${API_URL}/api/cobrancas/busca/${id}`;
+        const resposta = await get(token, url);
+        return formata(resposta.data.doc);
+    } catch (error) {
+        throw error;
+    }
 }
 
 export async function buscaPorPessoa(token: any, id_pessoa: string): Promise<any> {
-    const url = `${API_URL}/api/cobrancas/lista/pessoa/${id_pessoa}`;
-    const resposta: any = await get(token, url);
-    return resposta;
+    try {
+        const url = `${API_URL}/api/cobrancas/lista/pessoa/${id_pessoa}`;
+        const resposta = await get(token, url);
+        return formataLista(resposta.data.docs);
+    } catch (error) {
+        throw error;
+    }
 }
 
 export async function buscaPorTaxa(token: any, id_taxa: string): Promise<any> {
-    const url = `${API_URL}/api/cobrancas/lista/taxa/${id_taxa}`;
-    const resposta: any = await get(token, url);
-    return resposta;
+    try {
+        const url = `${API_URL}/api/cobrancas/lista/taxa/${id_taxa}`;
+        const resposta = await get(token, url);
+        return formataLista(resposta.data.docs);
+    } catch (error) {
+        throw error;
+    }
 }
 
 export async function buscaPorPagamento(token: any, id_pagamento: string): Promise<any> {
-    const url = `${API_URL}/api/cobrancas/pagamento/busca/${id_pagamento}`;
-    const resposta: any = await get(token, url);
-    return resposta;
+    try {
+        const url = `${API_URL}/api/cobrancas/pagamento/busca/${id_pagamento}`;
+        const resposta = await get(token, url);
+        return formataLista(resposta.data.doc);
+    } catch (error){
+        throw error;
+    }
 }
 
 export async function inclui(token: any, osDados: any): Promise<any> {
