@@ -47,7 +47,7 @@ export async function inclui(token: any, osDados: any): Promise<any> {
 
 export async function atualiza(token: any, id: string, osDados: any): Promise<any> {
     const url = `${API_URL}/api/graduacoes/altera/${id}`;
-    await axios.patch(url, 
+    return await axios.patch(url, 
         osDados, 
         {
             headers: { 
@@ -59,6 +59,21 @@ export async function atualiza(token: any, id: string, osDados: any): Promise<an
     );
 }
 
-/*
+export async function exclui(token: any, id: string): Promise<any> {
+    const url = `${API_URL}/api/graduacoes/exclui/${id}`;
+    try {
+        const response = await axios.delete(url, 
+            {
+                headers: { 
+                    'Authorization': token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json', // ✅ permitido e seguro
+                }
+            }
+        );
 
-*/
+        return response.data;
+    } catch (erro: any) {
+        throw erro;
+    }
+}

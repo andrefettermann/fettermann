@@ -112,7 +112,7 @@ export async function buscaPorPagamento(token: any, id_pagamento: string): Promi
 
 export async function inclui(token: any, osDados: any): Promise<any> {
     const url = `${API_URL}/api/cobrancas/inclui`;
-    return await axios.post(url, 
+    const response = await axios.post(url, 
         osDados, 
         {
             headers: { 
@@ -122,11 +122,13 @@ export async function inclui(token: any, osDados: any): Promise<any> {
             }
         }
     );
+
+    return response.data;
 }
 
 export async function incluiPagamento(token: any, osDados: any): Promise<any> {
     const url = `${API_URL}/api/cobrancas/pagamento/inclui`;
-    return await axios.post(url, 
+    const response = await axios.post(url, 
         osDados, 
         {
             headers: { 
@@ -136,11 +138,12 @@ export async function incluiPagamento(token: any, osDados: any): Promise<any> {
             }
         }
     );
+    return response.data;
 }
 
 export async function atualiza(token: any, id: string, osDados: any): Promise<any> {
     const url = `${API_URL}/api/cobrancas/altera/${id}`;
-    await axios.patch(url, 
+    const response = await axios.patch(url, 
         osDados, 
         {
             headers: { 
@@ -150,11 +153,13 @@ export async function atualiza(token: any, id: string, osDados: any): Promise<an
             }
         }
     );
+
+    return response.data;
 }
 
 export async function atualizaPagamento(token: any, osDados: any): Promise<any> {
     const url = `${API_URL}/api/cobrancas/pagamento/altera`;
-    await axios.patch(url, 
+    const response = await axios.patch(url, 
         osDados, 
         {
             headers: { 
@@ -164,4 +169,21 @@ export async function atualizaPagamento(token: any, osDados: any): Promise<any> 
             }
         }
     );
+
+    return response.data;
+}
+
+export async function excluiPagamento(token: any, idCobranca: string, idPagamento: string): Promise<any> {
+    const url = `${API_URL}/api/cobrancas/pagamento/exclui/${idCobranca}/${idPagamento}`;
+    const response = await axios.delete(url, 
+        {
+            headers: { 
+                'Authorization': token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json', // ✅ permitido e seguro
+            }
+        }
+    );
+
+    return response.data;
 }

@@ -28,6 +28,7 @@ router.get('/', authMiddleware, async (req, res, next) => {
                 mensagem,
                 pageAtiva
             });
+        mensagem = "";
     } catch (err: any) {
         if (process.env.NODE_ENV === 'development') {
             console.error('Erro ao buscar todas as cobrancas:', {
@@ -169,9 +170,11 @@ router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
             {
                 'title': 'Dados da cobrança (Consulta)',
                 'doc': response,
+                'mensagem': mensagem,
                 pageAtiva
             }
         );
+        mensagem = '';
     } catch (err: any) {
         if (process.env.NODE_ENV === 'development') {
             console.error('Erro ao exibir a pagina de detalhes de uma cobranca:', {
@@ -265,5 +268,40 @@ router.post('/pagamento/altera', authMiddleware, async (req, res, next) => {
         next(err);
     }
 })
+
+router.delete('/pagamento/exclui/:id_cobranca/:id_pagamento', authMiddleware, async (req, res, next) => {
+    const { id_cobranca } = req.params;
+    const { id_pagamento } = req.params;
+    const token = req.headers.authorization;
+
+    try {
+        const response = await cobrancaServico.excluiPagamento(token, id_cobranca, id_pagamento);
+        
+        if (!response || !response.sucesso) {
+            // Retorna erro como JSON
+            return res.status(201).json({ 
+                success: false, 
+                message: response.mensagem 
+            });
+        }
+        
+        // Retorna sucesso como JSON
+        res.json({ 
+            success: true, 
+            message: 'Pagamento excluído com sucesso!' 
+        });
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao excluir um pagamento:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                id_cobranca,
+                id_pagamento
+            });
+        }
+
+        next(err);        
+    }
+});
 
 export default router;

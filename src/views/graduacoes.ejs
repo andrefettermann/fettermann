@@ -9,6 +9,7 @@
     rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
     crossorigin="anonymous">
     <link rel="stylesheet" href="../css/consulta-menu.css">
+    <link rel="stylesheet" href="../css/exclusao.css">
     <link rel="icon" href="../images/logo-sm.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -54,7 +55,7 @@
 
                                 <ul id="lista" class="list-group mb-2">
                             <% docs.forEach(function(doc){ %>
-                                    <li class="list-group-item">
+                                    <li class="list-group-item" data-id="<%= doc._id %>">
                                         <h5>
                                             <%= doc.nome %>
                                             (Faixa <%= doc.faixa %> - <%= doc.categoria %>)
@@ -63,12 +64,21 @@
                                         <%= doc.minimo_horas_treino_exame %> horas de treino na faixa atual para exame<br/>
                                         <%= doc.minimo_tempo_exame %> meses de treino na faixa atual para exame<br/>
                                         <br/>
-                                        Ações: 
-                                        <a href="/graduacoes/detalhes/<%= doc._id %>">Detalhes</a>
-                                        &nbsp;|&nbsp;
-                                        <a href="/graduacoes/edita/<%= doc._id %>">Editar</a>
-                                    </li>                                
-
+                                        
+                                        <div class="actions">
+                                            Ações: 
+                                        <a href="/graduacoes/detalhes/<%= doc._id %>" class="px-2"> Detalhes </a>
+                                          |  
+                                        <a href="/graduacoes/edita/<%= doc._id %>" class="px-2"> Editar </a>
+                                         | 
+                                         <a class="delete-link" data-action="show-confirm" data-id="<%= doc._id %>">Excluir</a>
+                                         <div class="confirm-section" id="confirm-<%= doc._id %>">
+                                           <span class="confirm-message">Confirmar exclusão?</span>
+                                           <button class="btn btn-yes" data-action="confirm-delete-graduacao" data-id="<%= doc._id %>">Sim</button>
+                                           <button class="btn btn-no" data-action="hide-confirm" data-id="<%= doc._id %>">Não</button>
+                                         </div>
+                                        </div>
+                                    </li> 
                             <% }); %>
                                 </ul>
                         </div>
@@ -92,6 +102,7 @@
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
     crossorigin="anonymous"></script>
     <script src="/js/filtra_lista.js"></script>
+    <script src="/js/exclusao.js"></script>
 </body>
 
 </html>

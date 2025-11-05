@@ -35,13 +35,17 @@ router.get('/', authMiddleware, async (req, res, next) => {
 });
 
 router.get('/novo', authMiddleware, async (req, res, next) => {
+    const doc = {
+        'minimo_horas_treino_exame': 0,
+        'minimo_tempo_exame': 0
+    }
     try {
         res.render('graduacao',
             {
-                title: 'Dados da graduação (Inclusão)',
-                doc: "",
-                total_tecnicas: 0,
-                action: '/graduacoes/inclui/',
+                'title': 'Dados da graduação (Inclusão)',
+                doc,
+                'total_tecnicas': 0,
+                'action': '/graduacoes/inclui/',
                 pageAtiva
             }
         );
@@ -150,5 +154,38 @@ router.post('/altera/:id', authMiddleware, async (req, res, next) => {
         next(err);
     }
 })
+
+router.delete('/exclui/:id', authMiddleware, async (req, res, next) => {
+    const { id } = req.params;
+    const token = req.headers.authorization;
+
+    try {
+        const response = await graduacaoServico.exclui(token, id);
+
+        if (!response.sucesso) {
+            // Retorna erro como JSON
+            return res.status(201).json({ 
+                success: false, 
+                message: response.mensagem 
+            });
+        }
+        
+        // Retorna sucesso como JSON
+        res.json({ 
+            success: true, 
+            message: 'Graduação excluída com sucesso!' 
+        });
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao excluir uma graduacao:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                id
+            });
+        }
+
+        next(err);        
+    }
+});
 
 export default router;

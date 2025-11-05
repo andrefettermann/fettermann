@@ -101,15 +101,13 @@ router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
     try {
         const responseCobrancas = 
                         await cobrancaServico.buscaPorTaxa(token, id);
-        const docsCobrancas = 
-                    cobrancaServico.formataLista(responseCobrancas);
-
         const response = await taxaServico.busca(token, id);
+
         res.render('taxa_detalhes',
             {
                 'title': 'Dados da taxa (Consulta)',
                 'doc': response,
-                'docs_cobrancas': docsCobrancas,
+                'docs_cobrancas': responseCobrancas,
                 pageAtiva
             }
         );

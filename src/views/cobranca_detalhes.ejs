@@ -9,6 +9,7 @@
     rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
     crossorigin="anonymous">
     <link rel="stylesheet" href="../../css/consulta-menu.css">
+    <link rel="stylesheet" href="../../css/exclusao.css">
     <link rel="icon" href="../../images/logo-sm.png" type="image/png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -37,12 +38,14 @@
       <div class="card">
         <div class="card-header">Dados da cobrança (Consulta)</div>
         <div class="card-body">
+          
           <div class="row pt-2">
             <div class="col">
                 <span class="fw-bold">Pessoa: </span>
                 <span id="pessoa" name="pessoa"><%= doc.pessoa.nome %></span>
             </div>
           </div>
+
           <div class="row pt-2">
             <div class="col">
                 <span class="fw-bold">Taxa: </span>
@@ -95,10 +98,20 @@
           <div class="card mb-3 mt-2">
             <div class="card-header fw-bold">Pagamentos</div>
             <div class="card-body">    
-              <ol id="cobrancas" name="cobrancas" class="list-group list-group-flush">
+              <div class="col-12">
+              <% if (mensagem) { %>
+                  <div id="mensagem-topo" class="alert alert-info alert-dismissible" >
+                      <span id="texto-mensagem"><%= mensagem %></span>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                  </div>
+              <% } %>
+
+
+
+              <ol id="lista" name="lista" class="list-group list-group-flush">
                 <% if (doc.pagamentos) { %>
                   <% doc.pagamentos.forEach(function(pagamento) { %>
-                    <li class="list-group-item">
+                    <li class="list-group-item" data-id="<%= pagamento._id %>">
                       <a href="/cobrancas/pagamento/edita/<%= pagamento._id %>">
                       Pagamento de R$ <%= pagamento.valor_pago %> efetuado em <%= pagamento.data_pagamento %>
                       através de <%= pagamento.forma_pagamento %>.
@@ -109,15 +122,36 @@
                       <% if (pagamento.juros>0) { %>
                         <p>Juros aplicados: <%= pagamento.juros %></p>
                       <% } %>
+
+                      <div class="actions">
+                        Ações: 
+                        <a class="delete-link" 
+                          data-action="show-confirm" 
+                          data-cobranca-id="<%= doc._id %>" 
+                          data-id="<%= pagamento._id %>">Excluir</a>
+                        
+                        <div class="confirm-section" id="confirm-<%= pagamento._id %>">
+                          <span class="confirm-message">Confirmar exclusão?</span>
+                          <button class="btn btn-yes" 
+                                  data-action="confirm-delete-pagamento" 
+                                  data-cobranca-id="<%= doc._id %>" 
+                                  data-id="<%= pagamento._id %>">Sim</button>
+                          <button class="btn btn-no" 
+                                  data-action="hide-confirm" 
+                                  data-cobranca-id="<%= doc._id %>" 
+                                  data-id="<%= pagamento._id %>">Não</button>
+                        </div>
+                      </div>
                     </li>
                   <% }); %>
                 <% } else {%>
                   <p>Nenhum pagamento registrado.</p>
                 <% } %>
               </ol>
+              </div>
             </div>
           </div>
-
+          
         </div>
       </div>
     </div>
@@ -136,6 +170,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
   integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
   crossorigin="anonymous"></script>
+  <script src="/js/exclusao.js"></script>
 </body>
 
 </html>
