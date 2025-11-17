@@ -39,7 +39,7 @@
                             name="lista-aniversariantes">
                             <% docs.forEach(function(doc){ %>
                                 <li class="list-group-item">
-                                    <%= doc.aniversario + " - " + doc.nome + " (" + doc.dojo[0].nome + ")"%>
+                                    <%= doc.aniversario %>  - <%= doc.nome %> ( <%= doc.dojo?doc.dojo.nome:'N/A' %> )
                                 </li>
                             <% }); %>
                             </ul>

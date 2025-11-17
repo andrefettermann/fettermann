@@ -85,17 +85,18 @@
               </div>
             </div>
 
-            <!--Gradaucao atual-->
+            <!--Graduacao atual-->
             <div class="form-group row mb-3">
               <div class="col-2">
                 <label for="graduacao_atual" class="col-form-label">*Graduação atual</label>
               </div>
               <div class="col-2">
-                <select id="id_graduacao" name="id_graduacao" class="form-select" aria-label="Graduação atual" data-obrigatorio="Por favor, selecione a graduação atual da pessoa.">
+                <select id="id_graduacao" name="id_graduacao" class="form-select" aria-label="Graduação atual" 
+                data-obrigatorio="Por favor, selecione a graduação atual da pessoa.">
                   <option value="" selected>Selecione</option>
                   <% docs_graduacoes.forEach(function(graduacao) { %>
                   <option value="<%= graduacao._id %>"  
-                    <%= graduacao._id == doc.id_graduacao ? 'selected' : '' %> > 
+                    <%= graduacao._id == doc.graduacao._id ? 'selected' : '' %> > 
                     <%= graduacao.nome + ' - ' + graduacao.faixa %>
                   </option>
                   <% }) %>
@@ -106,10 +107,11 @@
             <!--Situacao-->
             <div class="form-group row mb-3">
               <div class="col-2">
-                <label for="situacao" class="form-label">Situação</label>
+                <label for="situacao" class="form-label">*Situação</label>
               </div>
               <div class="col-2">
-                <select id="situacao" name="situacao" class="form-select" aria-label="Situacao">
+                <select id="situacao" name="situacao" class="form-select" aria-label="Situacao"
+                data-obrigatorio="Por favor, selecione a situação da pessoa.">
                   <option value="" selected>Situação</option>
                   <option value="Inativo" <%= doc.situacao=="Inativo"?'selected':''%>>
                     Inativo
@@ -136,10 +138,10 @@
             <!-- Data inicio -->
             <div class="form-group row mb-3">
               <div class="col-2">
-                <label for="data_inicio" class="col-form-label">Data de início</label>
+                <label for="data_inicio_aikido" class="col-form-label">Data de início</label>
               </div>
               <div class="col-2">
-                <input type="text" class="form-control" id="data_inicio" name="data_inicio" value="<%= doc.data_inicio_aikido %>"
+                <input type="text" class="form-control" id="data_inicio_aikido" name="data_inicio_aikido" value="<%= doc.data_inicio_aikido %>"
                 placeholder="A data de início no aikidô" size="10" data-toggle="tooltip" data-placement="top" 
                 title="A data de início no aikidô">
               </div>
@@ -161,11 +163,12 @@
               <!--Tipo-->
             <div class="form-group row mb-3">
               <div class="col-2">
-                <label for="tipo" class="form-label">Tipo</label>
+                <label for="tipo" class="form-label">*Tipo</label>
               </div>
               <div class="col-2">
 
-                <select id="tipo" name="tipo" class="form-select" aria-label="Tipo">
+                <select id="tipo" name="tipo" class="form-select" aria-label="Tipo"
+                 data-obrigatorio="Por favor, selecione o tipo da pessoa.">
                   <option value="">Selecione</option>
                   <option value="aluno" <%= doc.tipo=="aluno"?'selected':''%>>
                     Aluno
@@ -187,7 +190,7 @@
                 <select id="id_dojo" name="id_dojo" class="form-select" aria-label="Dojo">
                   <option value="">Selecione</option>
                   <% docs_dojos.forEach(function(dojo) { %>
-                    <option value="<%= dojo._id %>" <%= dojo._id == doc.id_dojo?'selected':'' %>>
+                    <option value="<%= dojo._id %>" <%= dojo._id == doc.dojo._id?'selected':'' %>>
                       <%= dojo.nome %>
                     </option>
                   <% }) %>

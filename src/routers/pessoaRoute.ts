@@ -128,7 +128,11 @@ router.get('/professores', authMiddleware, async (req, res, next) => {
 
 /** Abre a tela de inclusao dos dados da pessoa*/
 router.get('/novo', authMiddleware, async (req, res, next) => {
-    const token = req.cookies?.authToken;
+    const token = req.headers.authorization;
+    const doc = {
+        graduacao: {},
+        dojo: {}
+    }
 
     try {
         const responseDojos = await dojoServico.buscaTodos(token);
@@ -137,7 +141,7 @@ router.get('/novo', authMiddleware, async (req, res, next) => {
         res.render('pessoa',
             {
                 'title': 'Dados da pessoa (Inclusão)',
-                'doc': "",
+                'doc': doc,
                 'docs_dojos': responseDojos,
                 'docs_graduacoes': responseGraduacoes,
                 'total_promocoes': 0,
@@ -147,12 +151,12 @@ router.get('/novo', authMiddleware, async (req, res, next) => {
             }
         );
     } catch (err: any) {
-        if (process.env.NODE_ENV === 'development') {
+        //if (process.env.NODE_ENV === 'development') {
             console.error('Erro ao exibir o formulario de novo dojo:', {
                 status: err.response?.status,
                 data: err.response?.data,
             });
-        }
+        //}
 
         next(err);
     }
@@ -235,12 +239,10 @@ router.post('/inclui', authMiddleware, async (req, res, next) => {
         mensagem = 'Pessoa incluída com sucesso!';
         res.redirect('/pessoas');
     } catch (err: any) {
-        if (process.env.NODE_ENV === 'development') {
-            console.error('Erro ao incluir a pessoa:', {
-                status: err.response?.status,
-                data: err.response?.data,
-            });
-        }
+        console.error('Erro ao incluir a pessoa:', {
+            status: err.response?.status,
+            data: err.response?.data,
+        });
 
         next(err);
     }

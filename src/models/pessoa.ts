@@ -1,4 +1,4 @@
-// Pessoa.ts
+// src/models/pessoa.ts
 import * as mongodb from 'mongodb';
 import { Decimal128, model, ObjectId, Schema } from "mongoose";
 
@@ -15,20 +15,11 @@ interface IPessoa {
     cpf: string,
     data_inicio_aikido: string,
     data_matricula: string,
-    is_professor: boolean,
     id_dojo: ObjectId,
     id_graduacao: ObjectId,
-    pagamentos : [{
-        data: Date,
-        valor_devido: Decimal128,
-        valor_pago: Decimal128,
-        descricao: String,
-        observacoes: String
-    }],
     promocoes: [{
-        data: Date,
-        //graduacao: string,
-        id_graduacao: ObjectId
+        data: string,
+        id_graduacao: string,
     }]
 };
 
@@ -67,10 +58,6 @@ const PessoaSchema = new Schema<IPessoa>({
         type: String,
         required: false
     },
-    is_professor: {
-        type: Boolean,
-        required: false
-    },
     id_dojo: {
         type: mongodb.ObjectId,
         default: null,
@@ -81,40 +68,12 @@ const PessoaSchema = new Schema<IPessoa>({
         default: null,
         required: false
     },
-    pagamentos: [
-        {
-            data: {
-                type: Date,
-                required: true
-            },
-            valor_devido: {
-                type: Number,
-                required: false
-            },
-            valor_pago: {
-                type: Number,
-                required: true
-            },
-            descricao: {
-                type: String,
-                required: false
-            },
-            observacoes: {
-                type: String,
-                required: false
-            },
-        }
-    ],
     promocoes: [
         {
             data: {
                 type: Date,
                 required: true
             },
-//            graduacao: {
-//                type: String,
-//                required: true
-//            },
             id_graduacao: {
                 type: mongodb.ObjectId,
                 default: null,
