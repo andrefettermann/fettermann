@@ -1,5 +1,5 @@
 // taxaServico.ts
-import { formataValorComDecimais } from '../utils/formata_decimal';
+import { formataMoeda, formataValorComDecimais } from '../utils/formata_decimal';
 import axios from 'axios';
 import dotenv from 'dotenv'
 
@@ -23,14 +23,18 @@ async function get(token: any, url: string): Promise<any> {
     });
 }
 
+
 export function formata(doc: any): any {
     if (doc.valor_padrao) {
-        doc.valor_padrao = formataValorComDecimais(
-            doc.valor_padrao.$numberDecimal.replace('.', ','));
+        doc.valor_padrao = formataMoeda(doc.valor_padrao);
+//        doc.valor_padrao = formataValorComDecimais(
+//            doc.valor_padrao.$numberDecimal.replace('.', ','));
     }
 
     return doc;
 }
+
+
 
 export function formataLista(osDados: any): any {
     osDados.forEach((doc: any) => {        
@@ -71,7 +75,7 @@ export async function buscaTodos(token: any): Promise<any> {
 export async function busca(token: any, id: string): Promise<any> {
     const url = `${API_URL}/api/taxas/busca/${id}`;
     const response = await get(token, url);
-    return formata(response.data.doc);
+    return response.data.doc;
 }
 
 export async function inclui(token: any, osDados: any): Promise<any> {

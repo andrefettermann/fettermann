@@ -7,8 +7,8 @@ export function formataValorComDecimais(num: number): string {
 
 export function formataMoeda(
   value: number,
-  locale: string = 'en-US',
-  currencyCode: string = 'USD',
+  locale: string = 'pt-BR',
+  currencyCode: string = 'BRL',
 ): string {
   return new Intl.NumberFormat(locale, {
     style: 'currency',

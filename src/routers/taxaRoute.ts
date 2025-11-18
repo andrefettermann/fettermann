@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import { authMiddleware } from '../middleware/tokenManager';
 import * as taxaServico from '../servicos/taxaServico';
 import * as cobrancaServico from '../servicos/cobrancaServico';
+import { formataMoeda } from '../utils/formata_decimal';
 
 /**
  * Router de taxas.
@@ -102,6 +103,8 @@ router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
         const responseCobrancas = 
                         await cobrancaServico.buscaPorTaxa(token, id);
         const response = await taxaServico.busca(token, id);
+
+        response.valor_padrao = formataMoeda(response.valor_padrao);
 
         res.render('taxa_detalhes',
             {

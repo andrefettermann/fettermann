@@ -54,13 +54,13 @@
                                     <li class="list-group-item">
                                         <h5><%= doc.descricao %></h5>
                                         <p class="fs-6 text-secondary">
-                                            Valor padrão: R$ <%= doc.valor_padrao %>
+                                            Valor padrão: <%= doc.valor_padrao %>
                                             | Ativa? <%= doc.is_ativa?'Sim':'Não' %>
                                         </p>
                                         Ações: 
-                                        <a href="/taxas/detalhes/<%= doc._id %>">Detalhes</a>
+                                        <a href="/taxas/detalhes/<%= doc.id %>">Detalhes</a>
                                         &nbsp;|&nbsp;
-                                        <a href="/taxas/edita/<%= doc._id %>">Editar</a>
+                                        <a href="/taxas/edita/<%= doc.id %>">Editar</a>
                                     </li>                                
                             <% }); %>
                                 </ul>
@@ -74,7 +74,7 @@
     <div class="container"> 
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
             <div class="col-md-4 d-flex align-items-center"> 
-                <span class="mb-3 mb-md-0 text-body-secondary">v. 2025.04 - Taxas - Fettermann Aikidô</span>
+                <span class="mb-3 mb-md-0 text-body-secondary">2025 - Fettermann Aikidô</span>
                 </div> 
                 <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"></ul> 
         </footer> 
