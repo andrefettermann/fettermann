@@ -29,12 +29,10 @@ router.get('/', authMiddleware, async (req, res, next) => {
             }
         );
     } catch (err: any) {
-        if (process.env.NODE_ENV === 'development') {
-            console.error('Erro ao buscar todas as pessoas:', {
-                status: err.response?.status,
-                data: err.response?.data,
-            });
-        }
+        console.error('Erro ao buscar todas as pessoas:', {
+            status: err.response?.status,
+            data: err.response?.data,
+        });
         next(err);
     }
 });
@@ -234,7 +232,7 @@ router.post('/inclui', authMiddleware, async (req, res, next) => {
     const token = req.headers.authorization;
 
     try {
-        await pessoaServico.inclui(token, dados);        
+        await pessoaServico.inclui(token, dados);     
 
         mensagem = 'Pessoa incluída com sucesso!';
         res.redirect('/pessoas');

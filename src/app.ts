@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import authRouter from './routers/loginRoute';
+import authRouter from './routers/login.route';
 import consultaRouter from './routers/consultaRoute';
 import pessoaRouter from './routers/pessoaRoute';
 import dojoRouter from './routers/dojoRoute';
@@ -31,6 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// libera o uso de scripts externas
 app.use((req, res, next) => {
   res.setHeader(
     "Content-Security-Policy",
@@ -41,7 +42,7 @@ app.use((req, res, next) => {
 
 // Verificar configuração
 app.use((req, res, next) => {
-  console.log('Renderizando:', req.path);
+  //console.log('Renderizando:', req.path);
   next();
 });
 

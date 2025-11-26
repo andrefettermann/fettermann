@@ -38,15 +38,19 @@ router.get('/', authMiddleware, async (req, res, next) => {
 
 router.get('/novo', authMiddleware, async (req, res, next) => {
     const token = req.headers.authorization;
+    const doc = {
+        professor: {
+            id: '',
+            nome: ''
+        }
+    }
 
     try {
         const response = await pessoaServico.buscaProfessores(token);
-        const docs = response.data.docs;
-
         res.render('dojo',
             {
                 'title': 'Dados do dojo (Inclusão)',
-                'doc': "",
+                doc,
                 'docs_pessoas': response,
                 'action': '/dojos/inclui/',
                 mensagem,

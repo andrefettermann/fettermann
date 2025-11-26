@@ -60,8 +60,8 @@
                                                     <%= doc.bairro %>  - <%= doc.cidade %>
                                                 </p>
                                                 <p>
-                                                    <% if (doc.professor[0]) { %>
-                                                        <%=  doc.professor[0].nome  %> <br/>
+                                                    <% if (doc.professor) { %>
+                                                        <%=  doc.professor.nome  %> <br/>
                                                     <% } %>
                                                     <%= doc.horarios %>
                                                 </p>
