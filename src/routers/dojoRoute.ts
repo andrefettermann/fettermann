@@ -2,7 +2,7 @@
 import express from 'express';
 import * as dojoServico from '../servicos/dojoServico';
 import * as pessoaServico from '../servicos/pessoaServico';
-import * as graduacaoServico from '../servicos/graduacaoServico';
+import * as graduacaoServico from '../servicos/graduacao.servico';
 import { authMiddleware } from '../middleware/tokenManager';
 
 const router = express.Router();

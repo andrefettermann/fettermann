@@ -55,7 +55,7 @@
 
                                 <ul id="lista" class="list-group mb-2">
                             <% docs.forEach(function(doc){ %>
-                                    <li class="list-group-item" data-id="<%= doc._id %>">
+                                    <li class="list-group-item" data-id="<%= doc.id %>">
                                         <h5>
                                             <%= doc.nome %>
                                             (Faixa <%= doc.faixa %> - <%= doc.categoria %>)
@@ -67,15 +67,15 @@
                                         
                                         <div class="actions">
                                             Ações: 
-                                        <a href="/graduacoes/detalhes/<%= doc._id %>" class="px-2"> Detalhes </a>
+                                        <a href="/graduacoes/detalhes/<%= doc.id %>" class="px-2"> Detalhes </a>
                                           |  
-                                        <a href="/graduacoes/edita/<%= doc._id %>" class="px-2"> Editar </a>
+                                        <a href="/graduacoes/edita/<%= doc.id %>" class="px-2"> Editar </a>
                                          | 
                                          <a class="delete-link" data-action="show-confirm" data-id="<%= doc._id %>">Excluir</a>
-                                         <div class="confirm-section" id="confirm-<%= doc._id %>">
+                                         <div class="confirm-section" id="confirm-<%= doc.id %>">
                                            <span class="confirm-message">Confirmar exclusão?</span>
-                                           <button class="btn btn-yes" data-action="confirm-delete-graduacao" data-id="<%= doc._id %>">Sim</button>
-                                           <button class="btn btn-no" data-action="hide-confirm" data-id="<%= doc._id %>">Não</button>
+                                           <button class="btn btn-yes" data-action="confirm-delete-graduacao" data-id="<%= doc.id %>">Sim</button>
+                                           <button class="btn btn-no" data-action="hide-confirm" data-id="<%= doc.id %>">Não</button>
                                          </div>
                                         </div>
                                     </li> 

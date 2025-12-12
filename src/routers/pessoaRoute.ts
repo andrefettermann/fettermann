@@ -2,7 +2,7 @@
 import express from 'express';
 import { getCurrentMonth } from '../utils/date';
 import * as pessoaServico from '../servicos/pessoaServico';
-import * as graduacaoServico from '../servicos/graduacaoServico';
+import * as graduacaoServico from '../servicos/graduacao.servico';
 import * as dojoServico from '../servicos/dojoServico';
 import * as cobrancaServico from '../servicos/cobrancaServico';
 import { authMiddleware } from '../middleware/tokenManager';

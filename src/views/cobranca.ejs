@@ -56,7 +56,7 @@
                 data-obrigatorio="Por favor, selecione a pessoa.">
                   <option value="" selected>Selecione</option>
                   <% docs_pessoas.forEach(function(pessoa) { %>
-                  <option value="<%= pessoa._id %>" <%= pessoa._id == doc.id_pessoa?'selected':''%>>
+                  <option value="<%= pessoa.id %>" <%= pessoa.id == doc.id_pessoa?'selected':''%>>
                       <%= pessoa.nome %>
                   </option>
                   <% }) %>
@@ -74,7 +74,7 @@
                 data-obrigatorio="Por favor, selecione a taxa.">
                   <option value="" selected>Selecione</option>
                   <% docs_taxas.forEach(function(taxa) { %>
-                  <option value="<%= taxa._id %>" <%= taxa._id == doc.id_taxa?'selected':''%>>
+                  <option value="<%= taxa.id %>" <%= taxa.id == doc.id_taxa?'selected':''%>>
                       <%= taxa.descricao %>
                   </option>
                   <% }) %>

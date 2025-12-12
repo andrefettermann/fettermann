@@ -1,5 +1,5 @@
 import { db, close } from "../db";
-import * as servico from "../servicos/graduacaoServico";
+import * as servico from "../servicos/graduacao.servico";
 
 
 describe('Graduacoes service', () => {

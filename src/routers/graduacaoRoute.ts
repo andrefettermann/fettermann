@@ -1,5 +1,5 @@
 import express from 'express';
-import * as graduacaoServico from '../servicos/graduacaoServico';
+import * as graduacaoServico from '../servicos/graduacao.servico';
 import { authMiddleware } from '../middleware/tokenManager';
 
 const router = express.Router();

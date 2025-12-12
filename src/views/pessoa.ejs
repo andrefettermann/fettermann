@@ -95,8 +95,8 @@
                 data-obrigatorio="Por favor, selecione a graduação atual da pessoa.">
                   <option value="" selected>Selecione</option>
                   <% docs_graduacoes.forEach(function(graduacao) { %>
-                  <option value="<%= graduacao._id %>"  
-                    <%= graduacao._id == doc.graduacao._id ? 'selected' : '' %> > 
+                  <option value="<%= graduacao.id %>"  
+                    <%= graduacao.id == doc.graduacao._id ? 'selected' : '' %> > 
                     <%= graduacao.nome + ' - ' + graduacao.faixa %>
                   </option>
                   <% }) %>
@@ -190,7 +190,7 @@
                 <select id="id_dojo" name="id_dojo" class="form-select" aria-label="Dojo">
                   <option value="">Selecione</option>
                   <% docs_dojos.forEach(function(dojo) { %>
-                    <option value="<%= dojo._id %>" <%= dojo._id == doc.dojo._id?'selected':'' %>>
+                    <option value="<%= dojo.id %>" <%= dojo.id == doc.dojo._id?'selected':'' %>>
                       <%= dojo.nome %>
                     </option>
                   <% }) %>
@@ -221,9 +221,9 @@
                         <div class="col-3">
                         <select id="id_graduacao_promocao_<%= index+1 %>" name="id_graduacao_promocao_<%= index+1 %>" 
                           class="form-select" aria-label="Graduação" required>
-                          <option value="" selected>Selecione</option>
+                          <option value="">Selecione</option>
                           <% docs_graduacoes.forEach(function(graduacao) { %>
-                            <option value="<%= graduacao._id %>" <%= graduacao._id == promocao.id_graduacao?'selected':''%>>
+                            <option value="<%= graduacao.id %>" <%= graduacao.id == promocao.id_graduacao?'selected':''%>>
                               <%= graduacao.nome + ' - ' + graduacao.faixa %>
                             </option>
                           <% }) %>

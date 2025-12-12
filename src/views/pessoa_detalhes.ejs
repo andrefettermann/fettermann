@@ -106,7 +106,7 @@
                 <% if (doc.promocoes) { %>
                       <% doc.promocoes.forEach(function(promocao){ %>
                         <% docs_graduacoes.forEach(function(g) { %>
-                          <% if (promocao.id_graduacao && g._id == promocao.id_graduacao) { %>
+                          <% if (promocao.id_graduacao && g.id == promocao.id_graduacao) { %>
                             <li class="list-group-item"><%= promocao.data_formatada + " - " + g.nome %></li>
                           <% } %>
                         <% }); %>

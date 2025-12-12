@@ -43,19 +43,19 @@ router.get('/', authMiddleware, async (req, res, next) => {
 
 router.get('/novo', authMiddleware , async (req, res, next) => {
     const token = req.headers.authorization;
+    const doc = {};
 
     try {
-        const responsePessoas: any = await pessoaServico.buscaTodos(token);
-        const docsPessoas = responsePessoas.data;
+        const pessoas: any = await pessoaServico.buscaTodos(token);
     
-        const responseTaxas: any = await taxaServico.buscaTodos(token);
+        const taxas: any = await taxaServico.buscaTodos(token);
 
         res.render('cobranca',
             {
                 title: 'Dados da cobranca (Inclusão)',
-                doc: '',
-                docs_pessoas: docsPessoas,
-                'docs_taxas': responseTaxas,
+                doc,
+                docs_pessoas: pessoas,
+                docs_taxas: taxas,
                 action: '/cobrancas/inclui/',
                 pageAtiva
             }
