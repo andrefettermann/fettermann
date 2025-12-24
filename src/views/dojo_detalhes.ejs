@@ -53,12 +53,6 @@
           </div>
           <div class="row pt-2">
             <div class="col">
-                <span class="fw-bold">Horários: </span>
-                <span id="horarios" name="horarios"><%= doc.horarios %></span>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col">
                 <span class="fw-bold">Endereço: </span>
                 <span id="endereco" name="endereco"><%= doc.endereco %></span>
             </div>
@@ -101,12 +95,35 @@
           </div>
           <div class="row pt-2">
             <div class="col">
-                <span class="fw-bold">Professor: </span>
-                <span id="professor" name="professor">
-                      <% if (doc.professor) { %>
-                      <%=  doc.professor.nome  %>
-                      <% } %>
-                </span>
+                <span class="fw-bold">Situação: </span>
+                <span id="situacao" name="situacao"><%= doc.is_ativo?'Ativo':'Inativo' %></span>
+            </div>
+          </div>
+
+          <div class="card mb-3 mt-4">
+            <div class="card-header fw-bold">Professores e horários</div>
+            <div class="card-body">
+              <div class="d-flex">
+                <a class="btn btn-primary btn-sm" href="/dojos/novo_professor/<%= doc._id %>">Novo</a>
+              </div>
+
+              <ol id="professores" name="professores" class="list-group list-group-flush">
+              <% if (doc.professores) { %>
+                <% doc.professores.forEach(function(professor){ %>
+                <li class="list-group-item">
+                  <%= professor.nome + " - " + professor.horarios %>
+                  <a class="btn btn-danger btn-sm float-end" 
+                  href="/dojos/remove_professor/<%= doc._id %>/<%= professor.id_professor %>" 
+                  title="Remover professor">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                      <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                    </svg>
+                  </a>
+                </li>
+                <% }) %>
+              <% }; %>
+              </ol>
             </div>
           </div>
 
@@ -118,7 +135,7 @@
                       <% doc.alunos.forEach(function(pessoa){ %>
                         <li class="list-group-item">
                           <% docs_graduacoes.forEach(function(g) { %>
-                            <% if (g._id && g._id == pessoa.id_graduacao) { %>
+                            <% if (g.id && g.id == pessoa.id_graduacao) { %>
                               <%= pessoa.nome + " (" + g.nome + ") (" + pessoa.situacao + ")" %>
                             <% } %>
                           <% }) %>

@@ -143,7 +143,6 @@ router.get('/novo', authMiddleware, async (req, res, next) => {
                 'docs_dojos': responseDojos,
                 'docs_graduacoes': responseGraduacoes,
                 'total_promocoes': 0,
-                'total_pagamentos': 0,
                 'action': '/pessoas/inclui/',
                 pageAtiva
             }

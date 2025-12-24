@@ -58,17 +58,20 @@
                                     <li class="list-group-item">
                                         <h5><%= doc.nome %></h5>
                                         <hr>
-                                        <% if (doc.professor) { %>
-                                            <%=  doc.professor.nome  %> <br/>
+                                        
+                                        <% if (doc.professores) { %>
+                                            <% doc.professores.forEach(function(professor) { %>
+                                                <%= professor.nome + " - " + professor.horarios %> <br/>
+                                            <% }); %>   
                                         <% } %>
-
+                                        <br/>
                                         <%= doc.endereco %> <br/>
                                         <%= doc.cidade + " - " + doc.uf %>
                                         <p>
                                         Ações: 
-                                        <a href="/dojos/detalhes/<%= doc.id %>">Detalhes</a>
+                                        <a href="/dojos/detalhes/<%= doc._id %>">Detalhes</a>
                                         &nbsp;|&nbsp;
-                                        <a href="/dojos/edita/<%= doc.id %>">Editar</a>
+                                        <a href="/dojos/edita/<%= doc._id %>">Editar</a>
                                         </p>
                                     </li>                                
                             <% }); %>

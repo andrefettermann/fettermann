@@ -64,3 +64,27 @@ export async function atualiza(token: any, id: string, dados: any): Promise<any>
     });
     return resposta;
 }
+
+export async function incluiProfessor(token: any, id_dojo: string, dados: any): Promise<any> {
+    const url = `${API_URL}/api/dojos/${id_dojo}/inclui/professor`;
+    const resposta = await axios.patch(url, 
+        dados, 
+        {headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+        }
+    });
+    return resposta;
+}
+
+export async function removeProfessor(token: any, id_dojo: string, id_pessoa: string): Promise<any> {
+    const url = `${API_URL}/api/dojos/${id_dojo}/remove/professor/${id_pessoa}`;
+    await axios.delete(url, 
+        {headers: { 
+            'Authorization': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', // ✅ permitido e seguro
+        }
+    });    
+}

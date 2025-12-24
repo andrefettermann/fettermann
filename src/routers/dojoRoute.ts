@@ -46,13 +46,14 @@ router.get('/novo', authMiddleware, async (req, res, next) => {
     }
 
     try {
-        const response = await pessoaServico.buscaProfessores(token);
+        //const response = await pessoaServico.buscaProfessores(token);
         res.render('dojo',
             {
                 'title': 'Dados do dojo (Inclusão)',
                 doc,
-                'docs_pessoas': response,
+          //      'docs_professores': response,
                 'action': '/dojos/inclui/',
+                //'total_professores': 0,
                 mensagem,
                 pageAtiva
             }
@@ -68,6 +69,34 @@ router.get('/novo', authMiddleware, async (req, res, next) => {
     }
 });
 
+router.get('/novo_professor/:id', authMiddleware, async (req, res, next) => {
+    const { id } = req.params;
+    const token = req.headers.authorization;
+
+    try {
+        const professores = await pessoaServico.buscaProfessores(token);
+        const dojo = await dojoServico.busca(token, id);
+        res.render('professor',
+            {
+                title: 'Novo professor para dojo',
+                docs_professores: professores,
+                doc: dojo,
+                action: `/dojos/inclui_professor/${id}`,
+                pageAtiva
+            }
+        );
+    } catch (err: any) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro na busca do professor:', {
+                status: err.response?.status,
+                data: err.response?.data,
+                id
+            });
+        }
+        next(err);
+    }
+});
+
 router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
     const { id } = req.params;
     const token = req.headers.authorization;
@@ -75,7 +104,6 @@ router.get('/detalhes/:id', authMiddleware, async (req, res, next) => {
     try {
         const responseGraduacoes = await graduacaoServico.buscaTodos(token);
         const response = await dojoServico.busca(token, id);
-
         res.render('dojo_detalhes',
             {
                 'title': 'Dados do dojo (Consulta)',
@@ -101,15 +129,16 @@ router.get('/edita/:id', authMiddleware, async (req, res, next) => {
     const token = req.headers.authorization;
 
     try {
-        const responsePessoas = await pessoaServico.buscaProfessores(token);
-        const responseDojo = await dojoServico.busca(token, id);
+        //const professores = await pessoaServico.buscaProfessores(token);
+        const dojo = await dojoServico.busca(token, id);
 
         res.render('dojo',
             {
                 'title': 'Dados do dojo (Edição)',
-                'doc': responseDojo,
-                'docs_pessoas': responsePessoas,
+                'doc': dojo,
+          //      'docs_professores': professores,
                 'action': `/dojos/altera/${id}`,
+            //    'total_professores': dojo.professores.length,
                 pageAtiva
             }
         );
@@ -166,5 +195,24 @@ router.post('/altera/:id', authMiddleware, async (req, res, next) => {
         next(err);
     }
 })
+
+router.post('/inclui_professor/:id', authMiddleware, async (req, res, next) => {
+    const { id } = req.params;
+    const dados = req.body;
+    const token = req.headers.authorization;
+
+    try {
+        await dojoServico.incluiProfessor(token, id, dados);
+
+        mensagem = 'Professor incluído com sucesso!';
+        res.redirect(`/dojos/detalhes/${id}`);
+    } catch (err: any) {
+        console.error('Erro na inclusao do professor:', {
+            status: err.response?.status,
+            data: err.response?.data,
+        });
+        next(err);
+    }
+});
 
 export default router;

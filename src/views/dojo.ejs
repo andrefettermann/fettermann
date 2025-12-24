@@ -34,6 +34,7 @@
         <div class="card-header"><%= title %></div>
         <div class="card-body">
           <form id="formulario" name="formulario" action="<%= action %>" method="POST">
+
             <!-- Info Alert -->
             <div class="alert alert-info alert-dismissible fade show">
               <strong>Info!</strong> O '*'' indica os campos obrigatórios.
@@ -159,23 +160,6 @@
                 <input type="text" class="form-control" id="email" name="email" value="<%= doc.email %>"
                 placeholder="O e-mail" data-toggle="tooltip" data-placement="top" 
                 title="O e-mail">
-              </div>
-            </div>
-
-            <!-- Professor -->
-            <div class="form-group row mb-3">
-              <div class="col-2">
-                <label for="pessoa" class="col-form-label">Professor</label>
-              </div>
-              <div class="col-4">
-                <select id="id_professor" name="id_professor" class="form-select" aria-label="Professor">
-                  <option value="">Selecione</option>
-                  <% docs_pessoas.forEach(function(pessoa) { %>
-                    <option value="<%= pessoa.id %>" <%= pessoa.id == doc.professor.id?'selected':''%>>
-                      <%= pessoa.nome %>
-                    </option>
-                  <% }) %>
-                </select>
               </div>
             </div>
 

@@ -60,10 +60,11 @@
                                                     <%= doc.bairro %>  - <%= doc.cidade %>
                                                 </p>
                                                 <p>
-                                                    <% if (doc.professor) { %>
-                                                        <%=  doc.professor.nome  %> <br/>
+                                                    <% if (doc.professores) { %>
+                                                        <% doc.professores.forEach(function(professor) { %>
+                                                            <%= professor.nome + " - " + professor.horarios %> <br/>
+                                                        <% }); %>
                                                     <% } %>
-                                                    <%= doc.horarios %>
                                                 </p>
                                             </div>
                                         </div>
